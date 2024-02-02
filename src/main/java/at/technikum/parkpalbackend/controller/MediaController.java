@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.MediaDto;
+import at.technikum.parkpalbackend.model.Country;
 import at.technikum.parkpalbackend.model.MediaCategory;
 import at.technikum.parkpalbackend.model.User;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,10 @@ public class MediaController {
     @GetMapping
     public List<MediaDto> getAllMedia() {
         List<MediaDto> media = new ArrayList<>();
-        User user = new User();
+        Country Austria = new Country("Austria",  "2345");
+        User user = new User("111", "mr", "username", "firstname",
+                "lastname", "email@sample.com", "12345", "authToken",
+                Austria);
         media.add(new MediaDto("1",user ,MediaCategory.PICTURE ));
         media.add(new MediaDto("2",user, MediaCategory.VIDEO));
         return media;

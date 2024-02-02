@@ -15,14 +15,11 @@ import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 public class Country {
-    @Id
-    @UuidGenerator
-    @NotNull(message = "name cant be null")
-    private String countryId;
 
     @NotBlank(message = "Country-Name not found")
     private String name;
-
-    @NotEmpty(message = "Country iso2Code not found")
+    @Id
+    @UuidGenerator
+    @NotNull(message = "Country iso2Code not found")
     private String iso2Code;
 }
