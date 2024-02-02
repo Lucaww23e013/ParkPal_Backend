@@ -68,6 +68,7 @@ class Address <<(V, #FF7700) value-object>> {
 }
 
 entity Country {
+    - countryId : String
     - name : String
     - iso2Code : String
 }
