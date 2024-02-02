@@ -3,6 +3,8 @@
 
 hide empty methods
 
+'entity Comment {}
+
 entity User {
     - userID : String
     - salutation : String
@@ -11,6 +13,7 @@ entity User {
     - lastName : String
     - email : String
     - password: String
+    - AuthToken : String
     - country : Country
     }
 
@@ -38,7 +41,7 @@ entity EventTag {
 }
 
 entity Media {
-    - assetID : String
+    - mediaID : String
     - user : User
     - mediaCategory : MediaCategory
 }
@@ -71,33 +74,15 @@ entity Country {
 
 User "1..n" --> UserJoinEvent
 Event "1..n" -->  UserJoinEvent
-Address "0..n" --> Country
+Address "0..n" -> Country
 Media --> MediaCategory
-EventTag --* "1..n" Event : has <
-Event --> "1..n" Park : has <
+EventTag -left-* "1..n" Event : has <
+Event -up-> "1..n" Park : has <
 Media <-- "1..n" Event
-Event -left-> User : created by
+Event "1..1" -left-> User : created by
 Park "1..n" -right- Media
 Country "1..n" -- User
 Park --> "0..1" Address
-'entity Comment {}
-
-'Album "0..n" o.up.o "0..n" Photo
-'Album "1" *-- "1..n" AlbumPhoto
-'Photo <-- "1..n" AlbumPhoto : references <
-'Photographer -up-|> AbstractPerson
-'Person -right-|> AbstractPerson
-'Photographer "0..1" -left- "0..n" Photo : taken by <
-'Photographer --> "0..1" Address : studioAddress
-'Photographer --> "0..1" Address : billingAddress
-'Photographer -right-> PhoneNumber : mobilePhone
-'Photographer -up-> "0..1" PhoneNumber : businessPhone
-'Photographer *--> "0..n" Email : has >
-'PersonTag -right-> Person : tags >
-'PersonTag --> Photo : describes >
-'Email -right-> EmailType
-'Address "0..n" -left-> Country
-'Photo --> Orientation
 
 
 @enduml

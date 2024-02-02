@@ -28,7 +28,7 @@ class User {
   -username: String
   -email: String
   -password: String
-
+  - AuthToken : String
   +login(): void
   +logout(): void
   +createAccount(): void

@@ -6,23 +6,23 @@
 
     <property name="fileExtensions" value="java"/>
 
-    <!-- Check for appropriate line  length -->
+    &lt;!&ndash; Check for appropriate line  length &ndash;&gt;
     <module name="LineLength">
         <property name="max" value="100"/>
     </module>
 
     <module name="TreeWalker">
-        <!-- Check for appropriate method length -->
+        &lt;!&ndash; Check for appropriate method length &ndash;&gt;
         <module name="MethodLength">
             <property name="max" value="30"/>
         </module>
 
-        <!-- Check for proper indentation and braces placement -->
+        &lt;!&ndash; Check for proper indentation and braces placement &ndash;&gt;
         <module name="Indentation"/>
         <module name="LeftCurly"/>
         <module name="RightCurly"/>
 
-        <!-- Check for appropriate naming conventions -->
+        &lt;!&ndash; Check for appropriate naming conventions &ndash;&gt;
         <module name="ConstantName"/>
         <module name="IllegalIdentifierName"/>
         <module name="LocalVariableName"/>
@@ -33,7 +33,7 @@
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
 
-        <!-- Check for unused imports and variables -->
+        &lt;!&ndash; Check for unused imports and variables &ndash;&gt;
         <module name="UnusedImports"/>
         <module name="UnusedLocalVariable"/>
     </module>
