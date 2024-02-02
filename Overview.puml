@@ -1,0 +1,98 @@
+@startuml
+
+class Park {
+  +showMap(): void
+}
+
+class ParkPage {
+  +listEvents(): void
+}
+
+class Event {
+  -name: String
+  -location: String
+  -creator: User
+  -description: String
+  -images: List<Image>
+  -videos: List<Video>
+
+  +displayDetails(): void
+}
+
+class HomePage {
+  -map: Map
+  +showHomePage(): void
+}
+
+class User {
+  -username: String
+  -email: String
+  -password: String
+
+  +login(): void
+  +logout(): void
+  +createAccount(): void
+  +resetPassword(): void
+}
+
+class UserProfilePage {
+  -user: User
+  +displayUserEvents(): void
+  +editUserData(): void
+  +resetUserPassword(): void
+}
+
+class CreateEventPage {
+  +createEvent(): void
+}
+
+class LoginPage {
+  +login(): void
+}
+
+class SignUpPage {
+  +createAccount(): void
+}
+
+class Image {
+  -path: String
+}
+
+class Video {
+  -url: String
+}
+
+class Map {
+  -parks: List<Park>
+  +showMap(): void
+}
+
+HomePage -- Park
+HomePage -- LoginPage
+HomePage -- UserProfilePage
+HomePage -- CreateEventPage
+HomePage -- ParkPage
+
+ParkPage -- Event
+ParkPage -- LoginPage
+ParkPage -- UserProfilePage
+ParkPage -- CreateEventPage
+
+Event -- LoginPage
+Event -- UserProfilePage
+Event -- CreateEventPage
+
+User -- LoginPage
+User -- UserProfilePage
+User -- SignUpPage
+
+UserProfilePage -- LoginPage
+UserProfilePage -- CreateEventPage
+
+CreateEventPage -- Event
+
+LoginPage -- SignUpPage
+
+@enduml
+
+
