@@ -18,6 +18,7 @@ entity User {
     }
 
 entity UserJoinEvent {
+    -userJoinEventId : String
     - user : User
     - event : Event
 
@@ -32,6 +33,7 @@ entity Event {
     - eventAssets : List<Media>
     - park : Park
     - creator : User
+    - joinedUsers : List<User>
     - eventTags : List<EventTag>
 }
 
@@ -53,11 +55,11 @@ enum MediaCategory {
 
 entity Park {
     - parkID : String
-    - title : String
+    - name : String
     - description : String
-    - address : Address
-    - events : List<Event>
-    - media : List<Media>
+    - parkAddress : Address
+    - parkEvents : List<Event>
+    - parkMedia : List<Media>
 }
 
 class Address <<(V, #FF7700) value-object>> {

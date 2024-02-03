@@ -2,7 +2,9 @@ package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -32,6 +34,7 @@ public class User {
     private String lastName;
 
     @NotBlank(message = "Email-Address not found. User must add an Email-Address")
+    @Email(message = "Email must be valid Email-Address")
     private String email;
 
     @NotNull(message = "Password not found. User must add a Passowrd")
@@ -40,6 +43,8 @@ public class User {
     @NotNull(message = "Authentication Failed")
     private String authToken;
 
+    @ManyToOne
+    @JoinColumn(name = "country_iso_2_code")
     private Country country;
 
 
