@@ -15,14 +15,14 @@ entity User {
     - password: String
     - AuthToken : String
     - country : Country
-    }
+    - isAdmin : Boolean
+    - joinedEvents : List<Event>
+}
 
-entity UserJoinEvent {
-    -userJoinEventId : String
+/'entity UserJoinEvent {
     - user : User
     - event : Event
-
-}
+}'/
 
 entity Event {
     - eventID : String
@@ -74,14 +74,17 @@ entity Country {
     - iso2Code : String
 }
 
-User "1..n" --> UserJoinEvent
-Event "1..n" -->  UserJoinEvent
+'User "1..n" --> UserJoinEvent
+'Event "1..n" -->  UserJoinEvent
 Address "0..n" -> Country
-Media --> MediaCategory
-EventTag -left-* "1..n" Event : has <
+Media --right> MediaCategory
+EventTag -right-* "1..n" Event : has <
 Event -up-> "1..n" Park : has <
 Media <-- "1..n" Event
-Event "1..1" -left-> User : created by
+User -- Event : User create
+Event -down- "1..n" User : joined By
+User "1..1"  -left- Event : created by
+Event -[hidden]- User
 Park "1..n" -right- Media
 Country "1..n" -- User
 Park --> "0..1" Address

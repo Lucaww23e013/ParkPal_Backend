@@ -4,7 +4,9 @@ import at.technikum.parkpalbackend.model.MediaCategory;
 import at.technikum.parkpalbackend.model.User;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder

@@ -6,32 +6,34 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.engine.internal.Cascade;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 
-@Entity
+@Embeddable
 public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @NotNull(message = "addressId not found")
-    private String addressId;
 
     @NotEmpty(message = "Street and Number not found")
+    @Column(length = 64)
     private String streetNumber;
 
     @NotEmpty(message = "Zip Code not found")
     @Min(value = 4, message = "Zip Code cant be less than 4 Characters")
     @Max(value = 10, message = "Zip Code cant be more than 10 Characters")
+    @Column(length = 10)
     private String zipCode;
 
     @NotEmpty(message= "City not found")
+    @Column(length = 64)
     private String city;
 
-    @ManyToOne
-    @JoinColumn(name = "country_iso_2_code")
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "country_id")
     private Country country;
 
 }

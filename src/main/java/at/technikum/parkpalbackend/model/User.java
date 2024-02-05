@@ -1,25 +1,26 @@
 package at.technikum.parkpalbackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
-@Data
+import java.util.List;
+
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 
 @Entity
 public class User {
+
     @Id
-    @UuidGenerator
-    @NotNull(message = "userId not found")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
 
     @NotBlank(message = "Salutation not found. User must add a Salutation")
@@ -44,8 +45,14 @@ public class User {
     private String authToken;
 
     @ManyToOne
-    @JoinColumn(name = "country_iso_2_code")
+    @JoinColumn(name = "country_id")
     private Country country;
+
+    private Boolean isAdmin;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ToString.Exclude
+    private List<Event> joinedEvents;
 
 
 }

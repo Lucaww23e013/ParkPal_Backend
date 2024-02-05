@@ -8,20 +8,24 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 
 @Entity
 public class Event {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @NotNull(message = "eventId must not be null")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String eventId;
+
 
     @NotEmpty(message = "Event title not found")
     private String title;
+
 
     private String description;
 
@@ -34,6 +38,7 @@ public class Event {
     private LocalDateTime endTS;
 
     @OneToMany
+    @ToString.Exclude
     private List<Media> eventMedia;
 
     @ManyToOne
@@ -45,6 +50,7 @@ public class Event {
     private User creator;
 
     @OneToMany
+    @ToString.Exclude
     private List<User> joinedUsers;
 
 

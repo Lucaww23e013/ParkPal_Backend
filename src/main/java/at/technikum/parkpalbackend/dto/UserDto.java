@@ -3,7 +3,9 @@ package at.technikum.parkpalbackend.dto;
 import at.technikum.parkpalbackend.model.Country;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
