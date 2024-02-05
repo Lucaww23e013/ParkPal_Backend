@@ -2,21 +2,21 @@ package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
 
 @Entity
 public class Country {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @UuidGenerator
+    @Column(name = "country_Id")
     private String countryID;
 
 
@@ -25,4 +25,9 @@ public class Country {
 
     @Column(length = 3)
     private String iso2Code;
+
+    public Country(String name, String iso2Code) {
+        this.name = name;
+        this.iso2Code = iso2Code;
+    }
 }

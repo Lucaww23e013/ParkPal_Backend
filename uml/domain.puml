@@ -3,91 +3,84 @@
 
 hide empty methods
 
-'entity Comment {}
-
 entity User {
-    - userID : String
-    - salutation : String
-    - username : String
-    - firstName : String
-    - lastName : String
-    - email : String
+    - userID: String
+    - salutation: String
+    - username: String
+    - firstName: String
+    - lastName: String
+    - email: String
     - password: String
-    - AuthToken : String
-    - country : Country
-    - isAdmin : Boolean
-    - joinedEvents : List<Event>
+    - AuthToken: String
+    - country: Country
+    - isAdmin: Boolean
+    - joinedEvents: List<Event>
 }
 
-/'entity UserJoinEvent {
-    - user : User
-    - event : Event
-}'/
-
 entity Event {
-    - eventID : String
+    - eventID: String
     - title: String
-    - description : String
-    - startTS : LocalDateTime
-    - endTS : LocalDateTime
-    - eventAssets : List<Media>
-    - park : Park
-    - creator : User
-    - joinedUsers : List<User>
-    - eventTags : List<EventTag>
+    - description: String
+    - startTS: LocalDateTime
+    - endTS: LocalDateTime
+    - eventAssets: List<Media>
+    - park: Park
+    - creator: User
+    - joinedUsers: List<User>
+    - eventTags: List<EventTag>
+    - eventMedia: List<Media>
 }
 
 entity EventTag {
-    - eventTagID : String
-    - name : String
+    - eventTagID: String
+    - name: String
 }
 
 entity Media {
-    - mediaID : String
-    - user : User
-    - mediaCategory : MediaCategory
+    - mediaID: String
+    - user: User
+    - mediaCategory: MediaCategory
 }
 
 enum MediaCategory {
     PICTURE
+    AUDIO
     VIDEO
 }
 
 entity Park {
-    - parkID : String
-    - name : String
-    - description : String
-    - parkAddress : Address
-    - parkEvents : List<Event>
-    - parkMedia : List<Media>
+    - parkID: String
+    - name: String
+    - description: String
+    - parkAddress: Address
+    - parkEvents: List<Event>
+    - parkMedia: List<Media>
 }
 
 class Address <<(V, #FF7700) value-object>> {
-    - streetNumber : String
-    - zipCode : String
-    - city : String
-    - country : Country
+    - streetNumber: String
+    - zipCode: String
+    - city: String
+    - country: Country
 }
 
 entity Country {
-    - name : String
-    - iso2Code : String
+    - name: String
+    - iso2Code: String
 }
 
-'User "1..n" --> UserJoinEvent
-'Event "1..n" -->  UserJoinEvent
-Address "0..n" -> Country
-Media --right> MediaCategory
-EventTag -right-* "1..n" Event : has <
-Event -up-> "1..n" Park : has <
-Media <-- "1..n" Event
-User -- Event : User create
-Event -down- "1..n" User : joined By
-User "1..1"  -left- Event : created by
+User "1..1" -- Event : created by
 Event -[hidden]- User
-Park "1..n" -right- Media
-Country "1..n" -- User
-Park --> "0..1" Address
-
+Event --> "1..n" Park : has <
+Event -left- "1..n" User : joined By
+EventTag --* "1..n" Event : has <
+Media "1..n" <-- Event
+User "1..n" -- Media : User create Media
+User -- Event : User create
+Park "1..n" -- Media
+User -- Country
+Address - Country
+Park -left> "0..1" Address
+Media -left-> MediaCategory
 
 @enduml

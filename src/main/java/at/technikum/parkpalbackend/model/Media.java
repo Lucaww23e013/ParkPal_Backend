@@ -1,9 +1,7 @@
 package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -11,18 +9,18 @@ import org.hibernate.annotations.UuidGenerator;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
 
 @Entity
-public class Media{
+public class Media {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @UuidGenerator
+    @Column(name = "media_id")
     private String mediaId;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
     @NotEmpty(message="Media must belong to a User. Pls add a User")
     private User user;
@@ -30,5 +28,9 @@ public class Media{
     @Enumerated(EnumType.STRING)
     private MediaCategory mediaCategory;
 
+    public Media(User user, MediaCategory mediaCategory) {
+        this.user = user;
+        this.mediaCategory = mediaCategory;
+    }
 
 }

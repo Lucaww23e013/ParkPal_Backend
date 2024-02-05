@@ -1,25 +1,30 @@
 package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timestamp;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
 
 @Entity
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @UuidGenerator
+    @Column(name = "event_Id")
     private String eventId;
 
 
@@ -30,16 +35,14 @@ public class Event {
     private String description;
 
     @Timestamp
+    @FutureOrPresent
     @NotNull(message="Event Start Time not found. All Events need to have a Start and End Time")
     private LocalDateTime startTS;
 
     @Timestamp
+    @FutureOrPresent
     @NotNull(message="Event End Time not found. All Events need to have a Start and End Time")
     private LocalDateTime endTS;
-
-    @OneToMany
-    @ToString.Exclude
-    private List<Media> eventMedia;
 
     @ManyToOne
     @NotEmpty(message = "Park not found. All Events need to take place in a Park")
@@ -49,9 +52,41 @@ public class Event {
     @NotEmpty(message = "Creator not found. All Events need to have been created by an User")
     private User creator;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
-    private List<User> joinedUsers;
+    private List<User> joinedUsers = new ArrayList<>();
 
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
+    // check if should also delete this if the event is deleted
+    @ToString.Exclude
+    private List<EventTag> eventTags = new ArrayList<>();
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
+    @ToString.Exclude
+    private List<Media> eventMedia = new ArrayList<>();
+
+    public Event(String title, String description, LocalDateTime startTS, LocalDateTime endTS, Park park, User creator) {
+        this.title = title;
+        this.description = description;
+        this.startTS = startTS;
+        this.endTS = endTS;
+        this.park = park;
+        this.creator = creator;
+    }
+
+    public Event addJoinedUsers(User... users) {
+        Arrays.stream(users).forEach(user -> this.joinedUsers.add(user));
+        return this;
+    }
+
+    public Event addEventTags(EventTag... eventTags) {
+        Arrays.stream(eventTags).forEach(eventTag -> this.eventTags.add(eventTag));
+        return this;
+    }
+
+    public Event addEventMedia(Media... media) {
+        Arrays.stream(media).forEach(m -> this.eventMedia.add(m));
+        return this;
+    }
 
 }

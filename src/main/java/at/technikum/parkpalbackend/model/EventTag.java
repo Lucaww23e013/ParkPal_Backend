@@ -4,23 +4,28 @@ package at.technikum.parkpalbackend.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
 
 
 @Entity
 public class EventTag {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @UuidGenerator
+    @Column(name = "event_tag_id")
     private String eventTagId;
-
 
     @NotBlank(message = "Event Tag cannot be empty.")
     private String tagName;
+
+    public EventTag(String tagName) {
+        this.tagName = tagName;
+    }
+
 }

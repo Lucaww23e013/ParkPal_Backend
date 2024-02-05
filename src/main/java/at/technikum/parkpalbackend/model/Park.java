@@ -2,28 +2,26 @@ package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
 
 @Entity
 public class Park {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @NotNull(message = "parkId not found. All parks need to have an parkId")
+    @UuidGenerator
+    @Column(name = "park_id")
     private String parkId;
-
-
 
     @NotBlank(message="Park name not found. All parks need a name")
     private String name;
@@ -35,11 +33,26 @@ public class Park {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
-    private List<Event> parkEvents;
+    private List<Event> parkEvents = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
-    private List<Media> parkMedia;
+    private List<Media> parkMedia = new ArrayList<>();
 
+    public Park(String name, String description, Address parkAddress) {
+        this.name = name;
+        this.description = description;
+        this.parkAddress = parkAddress;
+    }
+
+    public Park addParkEvents(Event... events) {
+        Arrays.stream(events).forEach(event -> this.parkEvents.add(event));
+        return this;
+    }
+
+    public Park addParkMedia(Media... media) {
+        Arrays.stream(media).forEach(med -> this.parkMedia.add(med));
+        return this;
+    }
 
 }
