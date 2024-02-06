@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+////@Builder
 
 @Entity
 public class Event {

@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+//@Builder
 public class EventTagDto {
 
     private String eventTagId;

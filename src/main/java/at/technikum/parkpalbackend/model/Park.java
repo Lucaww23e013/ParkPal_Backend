@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+
 
 @Entity
 public class Park {

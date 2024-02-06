@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+//@Builder
 public class EventDto {
     private String eventId;
 

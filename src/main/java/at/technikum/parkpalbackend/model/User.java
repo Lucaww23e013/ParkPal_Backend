@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+////@Builder
 
 @Entity
 public class User {
@@ -30,7 +30,7 @@ public class User {
     private String salutation;
 
     @NotBlank(message = "Username not found. User must add a Username")
-    private String username;
+    private String userName;
 
 
     private String firstName;
@@ -41,13 +41,13 @@ public class User {
     @Email(message = "Email must be valid Email-Address")
     private String email;
 
-    @NotNull(message = "Password not found. User must add a Passowrd")
+    @NotNull(message = "Password not found. User must add a Password")
     private String password;
 
     @NotNull(message = "Authentication Failed")
     private String authToken;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "country_id")
     private Country country;
 
@@ -60,7 +60,7 @@ public class User {
 
     public User(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Country country, Boolean isAdmin) {
         this.salutation = salutation;
-        this.username = username;
+        this.userName = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

@@ -13,7 +13,7 @@ import org.hibernate.engine.internal.Cascade;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+////@Builder
 
 @Embeddable
 public class Address {

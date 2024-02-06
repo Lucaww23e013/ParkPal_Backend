@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+//@Builder
 public class MediaDto {
 
     private String mediaId;
