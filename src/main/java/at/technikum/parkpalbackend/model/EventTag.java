@@ -11,11 +11,12 @@ import org.hibernate.annotations.UuidGenerator;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-////@Builder
-
+@AllArgsConstructor
+@Builder
 
 @Entity
 public class EventTag {
+
     @Id
     @UuidGenerator
     @Column(name = "event_tag_id")
@@ -23,9 +24,5 @@ public class EventTag {
 
     @NotBlank(message = "Event Tag cannot be empty.")
     private String tagName;
-
-    public EventTag(String tagName) {
-        this.tagName = tagName;
-    }
 
 }

@@ -27,4 +27,15 @@ public class EventService {
     public Event findByEventId(String eventId) {
         return eventRepository.findByEventId(eventId).orElseThrow(EntityNotFoundException::new);
     }
+
+    public List<Event> findAllEventsByPark(String parkId) {
+        return eventRepository.findAllByPark_ParkId(parkId);
+    }
+
+    public List<Event> findAllEventsByUser(String userId) {
+        List<Event> events = eventRepository.findAllByCreator_UserId(userId);
+        // check if even the user exists
+        // if the User has not created any Event ??!!
+        return events;
+    }
 }

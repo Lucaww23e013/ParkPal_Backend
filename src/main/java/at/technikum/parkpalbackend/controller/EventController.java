@@ -35,12 +35,31 @@ public class EventController {
                 .toList();
     }
 
+    @GetMapping("/{parkId}")
+    public List<EventDto> getAllEventsByParkId(@PathVariable String parkId) {
+        List<Event> events = eventService.findAllEventsByPark(parkId);
+        return events.stream()
+                .map(event -> eventMapper.toDto(event))
+                .toList();
+    }
+
+    @GetMapping("/{userId}")
+    public List<EventDto> getAllEventsByUserId(@PathVariable String userId) {
+        List<Event> events = eventService.findAllEventsByUser(userId);
+        return events.stream()
+                .map(event -> eventMapper.toDto(event))
+                .toList();
+    }
+
     @GetMapping("/{eventId}")
     public EventDto getEventByID(@PathVariable String eventId) {
         return eventMapper.toDto(eventService.findByEventId(eventId));
     }
 
-    @PostMapping
+
+
+    //@PostMapping ????
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public CreateEventDto createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
         Event event = eventMapper.toEntityCreateEvent(createEventDto);

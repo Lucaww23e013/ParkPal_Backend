@@ -1,26 +1,51 @@
 package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.EventTagDto;
-import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import at.technikum.parkpalbackend.mapper.EventTagMapper;
+import at.technikum.parkpalbackend.model.EventTag;
+import at.technikum.parkpalbackend.service.EventTagService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-
+@RequestMapping("/event-tags")
 @CrossOrigin
 
 
-
 public class EventTagController {
-    @GetMapping
-    public List<EventTagDto> getAll() {
-        List<EventTagDto> eventTags = new ArrayList<>();
 
-        return eventTags;
-    } //WIP copied from Osama; needs to have more functionality
+    private final EventTagService eventTagService;
+
+    private final EventTagMapper eventTagMapper;
+
+    public EventTagController(EventTagService eventTagService, EventTagMapper eventTagMapper) {
+        this.eventTagService = eventTagService;
+        this.eventTagMapper = eventTagMapper;
+    }
+
+    @GetMapping
+    public List<EventTagDto> getAllTags() {
+        List<EventTag> eventTags = eventTagService.findAllTags();
+        return eventTags.stream()
+                .map(eventTag -> eventTagMapper.toDto(eventTag))
+                .toList();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public EventTagDto createEventTag(@RequestBody @Valid EventTagDto eventTagDto) {
+        EventTag eventTag = eventTagMapper.toEntity(eventTagDto);
+        eventTag = eventTagService.save(eventTag);
+
+        return eventTagMapper.toDto(eventTag);
+    }
+
+    @GetMapping("/{eventTagId}")
+    public EventTagDto getEventTagById(@RequestBody @Valid String eventTagId) {
+        EventTag eventTag = eventTagService.findTagById(eventTagId);
+        return eventTagMapper.toDto(eventTag);
+    }
 }
