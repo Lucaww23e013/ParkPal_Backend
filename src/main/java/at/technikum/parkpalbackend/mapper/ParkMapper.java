@@ -1,9 +1,7 @@
 package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.dto.ParkDto;
-import at.technikum.parkpalbackend.dto.UserDto;
 import at.technikum.parkpalbackend.model.Park;
-import at.technikum.parkpalbackend.model.User;
 import org.springframework.stereotype.Component;
 
 @Component

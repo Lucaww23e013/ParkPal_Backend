@@ -32,10 +32,12 @@ public class Park {
     private Address parkAddress;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Setter(AccessLevel.NONE)
     @ToString.Exclude
     private List<Event> parkEvents = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Setter(AccessLevel.NONE)
     @ToString.Exclude
     private List<Media> parkMedia = new ArrayList<>();
 
@@ -54,9 +56,20 @@ public class Park {
         return this;
     }
 
+    public Park removeParkEvents(Event... events) {
+        Arrays.stream(events).forEach(event -> this.parkEvents.remove(event));
+        return this;
+    }
+
     public Park addParkMedia(Media... media) {
         Arrays.stream(media).forEach(med -> this.parkMedia.add(med));
         return this;
     }
+
+    public Park removeParkMedia(Media... media) {
+        Arrays.stream(media).forEach(med -> this.parkMedia.remove(med));
+        return this;
+    }
+
 
 }

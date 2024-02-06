@@ -1,17 +1,13 @@
 package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.ParkDto;
-import at.technikum.parkpalbackend.dto.UserDto;
 import at.technikum.parkpalbackend.mapper.ParkMapper;
 import at.technikum.parkpalbackend.model.Park;
-import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.ParkService;
 import jakarta.validation.Valid;
-import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -29,6 +25,22 @@ public class ParkController {
         this.parkMapper = parkMapper;
     }
 
+    @PostMapping("/parks")
+    //@Preauthorize with Spring security later
+    @ResponseStatus(HttpStatus.CREATED)
+    public ParkDto addParks(@RequestBody @Valid ParkDto parkDto){
+        Park park = parkMapper.toEntity(parkDto);
+        park = parkService.save(park);
+        return parkMapper.toDto(park);
+    }
+
+    @PutMapping("/parks/{parkId}")
+    public ParkDto updatePark(@PathVariable String parkId, @RequestBody ParkDto parkDto){
+        Park park = parkMapper.toEntity(parkDto);
+        park = parkService.updatePark(parkId, park);
+        return parkMapper.toDto(park);
+    }
+
     @GetMapping("/parks")
     public List<ParkDto> getAllParks() {
         List<Park> allParks = parkService.findAllParks();
@@ -41,8 +53,13 @@ public class ParkController {
         return parkMapper.toDto(park);
     }
 
-   /*@GetMapping("parks/{eventId}")
-    public ParkDto getParkByEventId(){}*/
+   @GetMapping("parks/{eventId}")
+    public ParkDto getParkByEventId(@PathVariable @Valid String eventId){
+        Park park = parkService.findParkByEventId(eventId);
+        return parkMapper.toDto(park);
+   }
+
+
 
 
 }
