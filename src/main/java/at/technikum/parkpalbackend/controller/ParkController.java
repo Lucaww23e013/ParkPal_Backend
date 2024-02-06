@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,16 +29,20 @@ public class ParkController {
         this.parkMapper = parkMapper;
     }
 
-    /*@GetMapping("/parks")
-    public List<ParkDto> getAllParks(@PathVariable String parkId) {
+    @GetMapping("/parks")
+    public List<ParkDto> getAllParks() {
+        List<Park> allParks = parkService.findAllParks();
+        return allParks.stream().map(park -> parkMapper.toDto(park)).toList();
+    }
 
-        return ;
-    }*/
-
-    @GetMapping("parks/{parkName}")
-    public ParkDto getUserByName(@PathVariable @Valid String parkName) {
-        Park park = parkService.findParkByParkName(parkName);
+    @GetMapping("parks/{parkId}")
+    public ParkDto getParkByParkId(@PathVariable @Valid String parkId) {
+        Park park = parkService.findParkByParkId(parkId);
         return parkMapper.toDto(park);
     }
+
+   /*@GetMapping("parks/{eventId}")
+    public ParkDto getParkByEventId(){}*/
+
 
 }

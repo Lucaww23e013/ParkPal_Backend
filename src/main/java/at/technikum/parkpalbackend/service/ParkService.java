@@ -6,6 +6,8 @@ import at.technikum.parkpalbackend.repository.ParkRepository;
 import at.technikum.parkpalbackend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ParkService {
     private final ParkRepository parkRepository;
@@ -14,8 +16,11 @@ public class ParkService {
         this.parkRepository = parkRepository;
     }
 
-    public Park findParkByParkName(String parkName) {
-        return parkRepository.findParkByParkName(parkName).orElseThrow();
+    public Park findParkByParkId(String parkId) {
+        return parkRepository.findParkByParkId(parkId).orElseThrow();
     }
 
+    public List<Park> findAllParks() {
+        return parkRepository.findAll();
+    }
 }

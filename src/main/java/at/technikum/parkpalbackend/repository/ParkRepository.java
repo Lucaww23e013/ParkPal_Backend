@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface ParkRepository extends JpaRepository<Park, String> {
-    Optional<Park> findParkByParkName(String parkName);
+    Optional<Park> findParkByParkId(String parkId);
 
 }
