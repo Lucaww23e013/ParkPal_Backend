@@ -1,9 +1,10 @@
-package at.technikum.parkpalbackend.dto;
+package at.technikum.parkpalbackend.dto.event;
 
 import at.technikum.parkpalbackend.model.Media;
 import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.model.User;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +14,9 @@ import java.util.List;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-//@Builder
+@Builder
+
+@Component
 public class EventDto {
     private String eventId;
 
