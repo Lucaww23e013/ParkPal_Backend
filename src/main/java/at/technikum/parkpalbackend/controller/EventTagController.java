@@ -11,17 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/parks")
+
 @CrossOrigin
 
-//@AllArgsConstructor
-@NoArgsConstructor
+
+
 public class EventTagController {
     @GetMapping
     public List<EventTagDto> getAll() {
         List<EventTagDto> eventTags = new ArrayList<>();
-        eventTags.add(new EventTagDto("1", "park pro"));
-        eventTags.add(new EventTagDto("2", "park luca"));
+
         return eventTags;
     } //WIP copied from Osama; needs to have more functionality
 }

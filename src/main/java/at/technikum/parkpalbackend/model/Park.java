@@ -24,7 +24,7 @@ public class Park {
     private String parkId;
 
     @NotBlank(message="Park name not found. All parks need a name")
-    private String name;
+    private String parkName;
 
     private String description;
 
@@ -39,11 +39,15 @@ public class Park {
     @ToString.Exclude
     private List<Media> parkMedia = new ArrayList<>();
 
-    public Park(String name, String description, Address parkAddress) {
-        this.name = name;
+    public Park(String parkId, String parkName, String description, Address parkAddress,List<Event> parkEvents,List<Media> parkMedia ) {
+        this.parkId = parkId;
+        this.parkName = parkName;
         this.description = description;
         this.parkAddress = parkAddress;
+        this.parkEvents = parkEvents;
+        this.parkMedia = parkMedia;
     }
+
 
     public Park addParkEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.parkEvents.add(event));
