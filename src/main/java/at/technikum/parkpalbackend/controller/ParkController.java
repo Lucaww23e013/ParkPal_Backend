@@ -47,19 +47,20 @@ public class ParkController {
         return allParks.stream().map(park -> parkMapper.toDto(park)).toList();
     }
 
-    @GetMapping("parks/{parkId}")
+    @GetMapping("/parks/{parkId}")
     public ParkDto getParkByParkId(@PathVariable @Valid String parkId){
         Park park = parkService.findParkByParkId(parkId);
         return parkMapper.toDto(park);
     }
 
-   @GetMapping("parks/{eventId}")
+   @GetMapping("/parks/{eventId}")
     public ParkDto getParkByEventId(@PathVariable @Valid String eventId){
         Park park = parkService.findParkByEventId(eventId);
         return parkMapper.toDto(park);
    }
 
    @DeleteMapping("/parks/{parkId}")
+   //@Preauthorize with Spring security later
     public ParkDto deleteParkByParkById(@PathVariable @Valid String parkId){
         Park park = parkService.deleteParkByParkId(parkId);
         return null;

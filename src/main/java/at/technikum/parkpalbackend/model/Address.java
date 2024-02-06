@@ -12,11 +12,14 @@ import org.hibernate.engine.internal.Cascade;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+//@AllArgsConstructor
 ////@Builder
 
 @Embeddable
 public class Address {
+    @Id
+    @NotEmpty(message = "Address-Id not found")
+    private String addressId;
 
     @NotEmpty(message = "Street and Number not found")
     @Column(length = 64)
@@ -36,4 +39,11 @@ public class Address {
     @JoinColumn(name = "country_id")
     private Country country;
 
+    public Address(String addressId, String streetNumber, String zipCode, String city, Country country) {
+        this.addressId = addressId;
+        this.streetNumber = streetNumber;
+        this.zipCode = zipCode;
+        this.city = city;
+        this.country = country;
+    }
 }

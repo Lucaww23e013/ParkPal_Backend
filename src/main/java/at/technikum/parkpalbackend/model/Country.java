@@ -17,8 +17,7 @@ public class Country {
     @Id
     @UuidGenerator
     @Column(name = "country_Id")
-    private String countryID;
-
+    private String countryId;
 
     @NotBlank(message = "Country-Name not found")
     private String name;
@@ -26,7 +25,8 @@ public class Country {
     @Column(length = 3)
     private String iso2Code;
 
-    public Country(String name, String iso2Code) {
+    public Country(String countryId, String name, String iso2Code) {
+        this.countryId = countryId;
         this.name = name;
         this.iso2Code = iso2Code;
     }

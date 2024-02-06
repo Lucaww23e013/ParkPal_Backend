@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend.repository;
 
+import at.technikum.parkpalbackend.model.Country;
 import at.technikum.parkpalbackend.model.Park;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ParkRepository extends JpaRepository<Park, String> {
-    Optional<Park> findParkByParkId(String parkId);
+public interface CountryRepository extends JpaRepository<Country, String> {
 
-    Optional<Park>findParkByEventId(String eventId);
+    Optional<Country>findCountryByCountryId(String countryId);
 
-    Optional<Park>updatePark(String parkId, Park park);
+    Optional<Country>findCountryByName(String name);
+
 }
