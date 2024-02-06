@@ -26,6 +26,7 @@ public class Park {
     @NotBlank(message="Park name not found. All parks need a name")
     private String parkName;
 
+    @Setter
     private String description;
 
     @Embedded
@@ -70,6 +71,5 @@ public class Park {
         Arrays.stream(media).forEach(med -> this.parkMedia.remove(med));
         return this;
     }
-
 
 }

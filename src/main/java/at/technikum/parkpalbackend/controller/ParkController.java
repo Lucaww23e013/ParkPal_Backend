@@ -35,10 +35,10 @@ public class ParkController {
     }
 
     @PutMapping("/parks/{parkId}")
-    public ParkDto updatePark(@PathVariable String parkId, @RequestBody ParkDto parkDto){
-        Park park = parkMapper.toEntity(parkDto);
-        park = parkService.updatePark(parkId, park);
-        return parkMapper.toDto(park);
+    public ParkDto updatePark(@PathVariable String parkId, @RequestBody ParkDto updatedParkDto){
+        Park updatedPark = parkMapper.toEntity(updatedParkDto);
+        updatedPark = parkService.updatePark(parkId, updatedPark);
+        return parkMapper.toDto(updatedPark);
     }
 
     @GetMapping("/parks")
@@ -48,7 +48,7 @@ public class ParkController {
     }
 
     @GetMapping("parks/{parkId}")
-    public ParkDto getParkByParkId(@PathVariable @Valid String parkId) {
+    public ParkDto getParkByParkId(@PathVariable @Valid String parkId){
         Park park = parkService.findParkByParkId(parkId);
         return parkMapper.toDto(park);
     }
@@ -57,6 +57,12 @@ public class ParkController {
     public ParkDto getParkByEventId(@PathVariable @Valid String eventId){
         Park park = parkService.findParkByEventId(eventId);
         return parkMapper.toDto(park);
+   }
+
+   @DeleteMapping("/parks/{parkId}")
+    public ParkDto deleteParkByParkById(@PathVariable @Valid String parkId){
+        Park park = parkService.deleteParkByParkId(parkId);
+        return null;
    }
 
 

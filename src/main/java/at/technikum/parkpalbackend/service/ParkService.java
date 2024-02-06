@@ -1,9 +1,7 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.model.Park;
-import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.repository.ParkRepository;
-import at.technikum.parkpalbackend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,8 +30,20 @@ public class ParkService {
         return parkRepository.save(park);
     }
 
-    /*public Park updatePark(String parkId, Park park) {
+    public Park updatePark(String parkId, Park updatedPark) {
         Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
 
-    }*/
+        park.setParkId(updatedPark.getParkId());
+        park.setParkName(updatedPark.getParkName());
+        park.setDescription(updatedPark.getDescription());
+        park.setParkAddress(updatedPark.getParkAddress());
+
+        return parkRepository.save(park);
+    }
+
+    public Park deleteParkByParkId(String parkId) {
+        Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
+        parkRepository.delete(park);
+        return null;
+    }
 }
