@@ -27,15 +27,15 @@ public class UserController {
     }
 
     @GetMapping("/{userName}")
-    public User read(@PathVariable String userName) {
+    public UserDto getUserByName(@PathVariable String userName) {
         User user = userService.findByUserName(userName);
 
-        return user;
+        return userMapper.toDto(user);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@RequestBody @Valid UserDto userDto) {
+    public UserDto createUser(@RequestBody @Valid UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         user = userService.save(user);
 
