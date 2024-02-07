@@ -6,7 +6,6 @@ import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.repository.ParkRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
