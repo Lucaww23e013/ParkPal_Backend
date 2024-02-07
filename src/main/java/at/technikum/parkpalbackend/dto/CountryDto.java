@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.dto;
 
 import jakarta.persistence.Id;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.UuidGenerator;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
 //@Builder
+@Valid
 public class CountryDto {
     @Id
     @UuidGenerator

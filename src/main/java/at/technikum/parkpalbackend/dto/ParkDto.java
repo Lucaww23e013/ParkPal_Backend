@@ -4,6 +4,7 @@ import at.technikum.parkpalbackend.model.Address;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.Media;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 //@Builder
+@Valid
 public class ParkDto {
     private String parkId;
 
