@@ -24,14 +24,6 @@ public class ParkService {
         return parkRepository.findParkByParkId(parkId).orElseThrow();
     }
 
-//    public Park findParkByEventId(String eventId){
-//        List<Event> events = new ArrayList<>(1);
-//        Event event =  Event.builder().eventId(eventId).build();
-//        events.add(event);
-//        return parkRepository.findByParkEvents(events).orElseThrow();
-//    }
-
-
     public Park save(Park park) {
         return parkRepository.save(park);
     }
