@@ -53,12 +53,6 @@ public class ParkController {
         return parkMapper.toDto(park);
     }
 
-   @GetMapping("/parks/{eventId}")
-    public ParkDto getParkByEventId(@PathVariable @Valid String eventId){
-        Park park = parkService.findParkByEventId(eventId);
-        return parkMapper.toDto(park);
-   }
-
    @DeleteMapping("/parks/{parkId}")
    //@Preauthorize with Spring security later
     public ParkDto deleteParkByParkById(@PathVariable @Valid String parkId){

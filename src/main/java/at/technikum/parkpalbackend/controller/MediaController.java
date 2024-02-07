@@ -1,24 +1,12 @@
 package at.technikum.parkpalbackend.controller;
 
-import at.technikum.parkpalbackend.dto.EventDto;
-import at.technikum.parkpalbackend.dto.MediaDto;
-import at.technikum.parkpalbackend.model.Country;
-import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.MediaCategory;
-import at.technikum.parkpalbackend.model.User;
 import lombok.NoArgsConstructor;
-import org.hibernate.grammars.hql.HqlParser;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
-@RequestMapping("/parks")
+@RequestMapping("/media")
 @CrossOrigin
 
 //@AllArgsConstructor

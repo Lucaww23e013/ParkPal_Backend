@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ParkRepository extends JpaRepository<Park, String> {
     Optional<Park> findParkByParkId(String parkId);
 
-    Optional<Park>findParkByEventId(String eventId);
+     // void findParkByParkEvents(List<Event> parkEvents);
 
-    Optional<Park>updatePark(String parkId, Park park);
+
 }

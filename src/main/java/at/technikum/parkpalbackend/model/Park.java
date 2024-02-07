@@ -35,12 +35,10 @@ public class Park {
     private Address parkAddress;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @Setter(AccessLevel.NONE)
     @ToString.Exclude
     private List<Event> parkEvents = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @Setter(AccessLevel.NONE)
     @ToString.Exclude
     private List<Media> parkMedia = new ArrayList<>();
 

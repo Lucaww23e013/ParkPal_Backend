@@ -17,7 +17,8 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-////@Builder
+@AllArgsConstructor
+@Builder
 
 @Entity
 public class Event {
@@ -53,26 +54,20 @@ public class Event {
     private User creator;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     @ToString.Exclude
     private List<User> joinedUsers = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     // check if should also delete this if the event is deleted
+    @Builder.Default
     @ToString.Exclude
     private List<EventTag> eventTags = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
+    @Builder.Default
     @ToString.Exclude
     private List<Media> eventMedia = new ArrayList<>();
-
-    public Event(String title, String description, LocalDateTime startTS, LocalDateTime endTS, Park park, User creator) {
-        this.title = title;
-        this.description = description;
-        this.startTS = startTS;
-        this.endTS = endTS;
-        this.park = park;
-        this.creator = creator;
-    }
 
     public Event addJoinedUsers(User... users) {
         Arrays.stream(users).forEach(user -> this.joinedUsers.add(user));

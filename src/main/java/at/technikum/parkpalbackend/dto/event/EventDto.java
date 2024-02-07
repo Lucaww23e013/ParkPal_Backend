@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend.dto.event;
 
+import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.model.Media;
 import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.model.User;
@@ -28,11 +29,13 @@ public class EventDto {
 
     private LocalDateTime endTS;
 
-    private List<Media> eventMedia;
-
     private Park park;
 
     private User creator;
 
     private List<User> joinedUsers;
+
+    private List<Media> eventMedia;
+
+    private List<EventTag> eventTags;
 }

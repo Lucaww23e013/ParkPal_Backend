@@ -21,9 +21,12 @@ public class ParkService {
         return parkRepository.findParkByParkId(parkId).orElseThrow();
     }
 
-    public Park findParkByEventId(String eventId){
-        return parkRepository.findParkByEventId(eventId).orElseThrow();
-    }
+//    public Park findParkByEventId(String eventId){
+//        List<Event> events = new ArrayList<>(1);
+//        Event event =  Event.builder().eventId(eventId).build();
+//        events.add(event);
+//        return parkRepository.findByParkEvents(events).orElseThrow();
+//    }
 
 
     public Park save(Park park) {
@@ -37,6 +40,8 @@ public class ParkService {
         park.setParkName(updatedPark.getParkName());
         park.setDescription(updatedPark.getDescription());
         park.setParkAddress(updatedPark.getParkAddress());
+        park.setParkEvents(updatedPark.getParkEvents());
+        park.setParkMedia(updatedPark.getParkMedia());
 
         return parkRepository.save(park);
     }

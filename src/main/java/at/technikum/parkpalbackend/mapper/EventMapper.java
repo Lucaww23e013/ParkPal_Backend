@@ -5,8 +5,6 @@ import at.technikum.parkpalbackend.dto.event.EventDto;
 import at.technikum.parkpalbackend.model.Event;
 import org.springframework.stereotype.Component;
 
-
-
 @Component
 public class EventMapper {
 
