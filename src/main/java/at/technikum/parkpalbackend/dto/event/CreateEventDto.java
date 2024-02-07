@@ -6,7 +6,6 @@ import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.model.User;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timestamp;
 import lombok.*;
@@ -41,21 +40,21 @@ public class CreateEventDto {
     @NotNull(message = "Event End Time not found. All Events need to have a Start and End Time")
     private LocalDateTime endTS;
 
-    @NotEmpty(message = "Park not found. All Events need to take place in a Park")
+    @NotNull(message = "Park not found. All Events need to take place in a Park")
     private Park park;
 
-    @NotEmpty(message = "Creator not found. All Events need to have been created by an User")
+    @NotNull(message = "Creator not found. All Events need to have been created by an User")
     private User creator;
 
-    @ToString.Exclude
-    @Setter(AccessLevel.NONE)
+////    @ToString.Exclude
+////    // @Setter(AccessLevel.NONE)
     private List<User> joinedUsers;
-
-    @ToString.Exclude
-    @Setter(AccessLevel.NONE)
+////
+////    @ToString.Exclude
+////    // @Setter(AccessLevel.NONE)
     private List<EventTag> eventTags;
-
-    @ToString.Exclude
-    @Setter(AccessLevel.NONE)
+////
+////    @ToString.Exclude
+////    // @Setter(AccessLevel.NONE)
     private List<Media> eventMedia;
 }

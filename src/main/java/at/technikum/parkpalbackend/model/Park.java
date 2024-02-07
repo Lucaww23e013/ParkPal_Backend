@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,10 +24,9 @@ public class Park {
     private String parkId;
 
     @NotBlank(message="Park name not found. All parks need a name")
-    @UniqueElements(message = "Park name already exists. Park must have unique name, pls choose different Name.")
+    @Column(unique = true)
     private String parkName;
 
-    @Setter
     private String description;
 
     @Embedded

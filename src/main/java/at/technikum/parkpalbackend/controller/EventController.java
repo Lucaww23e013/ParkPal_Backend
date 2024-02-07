@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.event.CreateEventDto;
+import at.technikum.parkpalbackend.dto.event.DeleteEventDto;
 import at.technikum.parkpalbackend.dto.event.EventDto;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.Event;
@@ -68,7 +69,11 @@ public class EventController {
         return eventMapper.toDtoCreateEvent(event);
     }
 
-
-
+    @DeleteMapping("/{eventID}")
+    @ResponseStatus(HttpStatus.OK)
+    public DeleteEventDto deleteEventDto(@PathVariable @Valid String eventID) {
+        Event event = eventService.deleteEventById(eventID);
+        return null;
+    }
 
 }

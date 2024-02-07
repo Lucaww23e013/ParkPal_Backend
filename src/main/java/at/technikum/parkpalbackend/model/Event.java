@@ -46,11 +46,11 @@ public class Event {
     private LocalDateTime endTS;
 
     @ManyToOne
-    @NotEmpty(message = "Park not found. All Events need to take place in a Park")
+    @NotNull(message = "Park not found. All Events need to take place in a Park")
     private Park park;
 
     @ManyToOne
-    @NotEmpty(message = "Creator not found. All Events need to have been created by an User")
+    @NotNull(message = "Creator not found. All Events need to have been created by an User")
     private User creator;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -74,13 +74,28 @@ public class Event {
         return this;
     }
 
+    public Event removeJoinedUsers(User... users) {
+        Arrays.stream(users).forEach(user -> this.joinedUsers.remove(user));
+        return this;
+    }
+
     public Event addEventTags(EventTag... eventTags) {
         Arrays.stream(eventTags).forEach(eventTag -> this.eventTags.add(eventTag));
         return this;
     }
 
+    public Event removeEventTags(EventTag... eventTags) {
+        Arrays.stream(eventTags).forEach(eventTag -> this.eventTags.remove(eventTag));
+        return this;
+    }
+
     public Event addEventMedia(Media... media) {
         Arrays.stream(media).forEach(m -> this.eventMedia.add(m));
+        return this;
+    }
+
+    public Event removeEventMedia(Media... media) {
+        Arrays.stream(media).forEach(m -> this.eventMedia.remove(m));
         return this;
     }
 

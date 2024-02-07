@@ -38,4 +38,10 @@ public class EventService {
         // if the User has not created any Event ??!!
         return events;
     }
+
+    public Event deleteEventById(String eventID) {
+        Event eventToDelete = eventRepository.findByEventId(eventID).orElseThrow(EntityNotFoundException::new);
+        eventRepository.delete(eventToDelete);
+        return eventToDelete;
+    }
 }
