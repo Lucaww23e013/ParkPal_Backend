@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.dto;
+package at.technikum.parkpalbackend.dto.parkdtos;
 
 import at.technikum.parkpalbackend.model.Address;
 import at.technikum.parkpalbackend.model.Event;
@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.validator.constraints.UUID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.List;
 //@Builder
 @Valid
 public class ParkDto {
+    @Id
+    @UuidGenerator
     private String parkId;
 
     @NotBlank(message = "Park name not found. All parks need a name")

@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.controller;
 
-import at.technikum.parkpalbackend.dto.ParkDto;
+import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
+import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.mapper.ParkMapper;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.Park;
@@ -34,13 +35,14 @@ public class ParkController {
     @PostMapping("/parks")
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.CREATED)
-    public ParkDto addParks(@RequestBody @Valid ParkDto parkDto){
-        Park park = parkMapper.toEntity(parkDto);
+    public CreateParkDto createPark(@RequestBody @Valid CreateParkDto createParkDto){
+        Park park = parkMapper.CreateParkDtoToEntity(createParkDto);
         park = parkService.save(park);
-        return parkMapper.toDto(park);
+        return parkMapper.toCreateParkDto(park);
     }
 
     @PutMapping("/parks/{parkId}")
+    //@Preauthorize with Spring security later
     public ParkDto updatePark(@PathVariable String parkId, @RequestBody ParkDto updatedParkDto){
         Park updatedPark = parkMapper.toEntity(updatedParkDto);
         updatedPark = parkService.updatePark(parkId, updatedPark);

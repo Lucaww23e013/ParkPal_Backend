@@ -22,7 +22,7 @@ public class Country {
     @NotBlank(message = "Country-Name not found")
     private String name;
 
-    @Column(length = 3)
+    //@Column(length = 3, unique = true)
     private String iso2Code;
 
     public Country(String countryId, String name, String iso2Code) {

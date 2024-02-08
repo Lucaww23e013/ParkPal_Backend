@@ -20,7 +20,7 @@ public class Park {
 
     @Id
     @UuidGenerator
-    @Column(name = "park_id")
+    @Column(name = "park_id", unique = true)
     private String parkId;
 
     @NotBlank(message="Park name not found. All parks need a name")
