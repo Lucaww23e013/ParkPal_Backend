@@ -72,6 +72,10 @@ public class UserDto {
         this(salutation,username,firstName, lastName,email,password,authToken,country,false);
     }
 
+    public UserDto(String userId) {
+        this.userId = userId;
+    }
+
     public UserDto addJoinedEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.joinedEvents.add(event));
         return this;

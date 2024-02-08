@@ -27,7 +27,9 @@ public class EventTag {
     @JoinColumn(name = "event_id")
     private Event event;
 
+
     @NotBlank(message = "Event Tag cannot be empty.")
     private String tagName;
+
 
 }

@@ -69,6 +69,10 @@ public class Event {
     @ToString.Exclude
     private List<Media> eventMedia = new ArrayList<>();
 
+    public Event(String string) {
+        this.eventId = eventId;
+    }
+
     public Event addJoinedUsers(User... users) {
         Arrays.stream(users).forEach(user -> this.joinedUsers.add(user));
         return this;
