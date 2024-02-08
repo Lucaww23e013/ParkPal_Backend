@@ -41,11 +41,11 @@ public class EventMapper {
                 .description(event.getDescription())
                 .startTS(event.getStartTS())
                 .endTS(event.getEndTS())
-                .park(event.getPark())
-                .creator(event.getCreator())
-                .joinedUsers(event.getJoinedUsers())
-                .eventTags(event.getEventTags())
-                .eventMedia(event.getEventMedia())
+                .parkId(event.getPark().getParkId())
+                .creatorUserId(event.getCreator().getUserId())
+//                .joinedUsers(event.getJoinedUsers())
+//                .eventTags(event.getEventTags())
+//                .eventMedia(event.getEventMedia())
                 .build();
     }
 
@@ -80,11 +80,11 @@ public class EventMapper {
                 .description(eventDto.getDescription())
                 .startTS(eventDto.getStartTS())
                 .endTS(eventDto.getEndTS())
-                .park(eventDto.getPark())
-                .creator(eventDto.getCreator())
-                .joinedUsers(eventDto.getJoinedUsers())
-                .eventTags(eventDto.getEventTags())
-                .eventMedia(eventDto.getEventMedia())
+//                .park(eventDto.getPark())
+//                .creator(eventDto.getCreator())
+//                .joinedUsers(eventDto.getJoinedUsers())
+//                .eventTags(eventDto.getEventTags())
+//                .eventMedia(eventDto.getEventMedia())
                 .build();
     }
 

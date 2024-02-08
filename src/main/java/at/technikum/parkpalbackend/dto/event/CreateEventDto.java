@@ -1,9 +1,5 @@
 package at.technikum.parkpalbackend.dto.event;
 
-import at.technikum.parkpalbackend.model.EventTag;
-import at.technikum.parkpalbackend.model.Media;
-import at.technikum.parkpalbackend.model.Park;
-import at.technikum.parkpalbackend.model.User;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +8,6 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -40,21 +35,23 @@ public class CreateEventDto {
     @NotNull(message = "Event End Time not found. All Events need to have a Start and End Time")
     private LocalDateTime endTS;
 
-    @NotNull(message = "Park not found. All Events need to take place in a Park")
-    private Park park;
+    @NotBlank(message = "Park not found. All Events need to take place in a Park")
+    private String parkId;
+    // private Park park;
 
-    @NotNull(message = "Creator not found. All Events need to have been created by an User")
-    private User creator;
+    @NotBlank(message = "Creator not found. All Events need to have been created by an User")
+    private String creatorUserId;
+    //private User creator;
 
-////    @ToString.Exclude
-////    // @Setter(AccessLevel.NONE)
-    private List<User> joinedUsers;
-////
-////    @ToString.Exclude
-////    // @Setter(AccessLevel.NONE)
-    private List<EventTag> eventTags;
-////
-////    @ToString.Exclude
-////    // @Setter(AccessLevel.NONE)
-    private List<Media> eventMedia;
+//////    @ToString.Exclude
+//////    // @Setter(AccessLevel.NONE)
+//    private List<User> joinedUsers;
+//////
+//////    @ToString.Exclude
+//////    // @Setter(AccessLevel.NONE)
+//    private List<EventTag> eventTags;
+//////
+//////    @ToString.Exclude
+//////    // @Setter(AccessLevel.NONE)
+//    private List<Media> eventMedia;
 }

@@ -22,6 +22,11 @@ public class EventTag {
     @Column(name = "event_tag_id")
     private String eventTagId;
 
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "event_id")
+    private Event event;
+
     @NotBlank(message = "Event Tag cannot be empty.")
     private String tagName;
 

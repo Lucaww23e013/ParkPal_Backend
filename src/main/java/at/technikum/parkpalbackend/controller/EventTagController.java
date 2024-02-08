@@ -2,7 +2,9 @@ package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.EventTagDto;
 import at.technikum.parkpalbackend.mapper.EventTagMapper;
+import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.EventTag;
+import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.EventTagService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,13 @@ import java.util.List;
 public class EventTagController {
 
     private final EventTagService eventTagService;
+    private final EventService eventService;
 
     private final EventTagMapper eventTagMapper;
 
-    public EventTagController(EventTagService eventTagService, EventTagMapper eventTagMapper) {
+    public EventTagController(EventTagService eventTagService, EventService eventService, EventTagMapper eventTagMapper) {
         this.eventTagService = eventTagService;
+        this.eventService = eventService;
         this.eventTagMapper = eventTagMapper;
     }
 
@@ -34,12 +38,13 @@ public class EventTagController {
                 .toList();
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public EventTagDto createEventTag(@RequestBody @Valid EventTagDto eventTagDto) {
         EventTag eventTag = eventTagMapper.toEntity(eventTagDto);
+        Event event = eventService.findByEventId(eventTagDto.getEventID());
+        eventTag.setEvent(event);
         eventTag = eventTagService.save(eventTag);
-
         return eventTagMapper.toDto(eventTag);
     }
 

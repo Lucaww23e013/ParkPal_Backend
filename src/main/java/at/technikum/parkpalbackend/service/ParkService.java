@@ -20,7 +20,7 @@ public class ParkService {
         return parkRepository.findAll();
     }
     public Park findParkByParkId(String parkId) {
-        return parkRepository.findParkByParkId(parkId).orElseThrow();
+        return parkRepository.findParkByParkId(parkId).orElseThrow(EntityNotFoundException::new);
     }
 
     public Park save(Park park) {

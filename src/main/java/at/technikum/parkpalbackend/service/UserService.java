@@ -5,9 +5,6 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
-
 @Service
 public class UserService {
 
@@ -25,7 +22,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findUserByUserId(String userId) {
-        return userRepository.findUserByUserId(userId).orElseThrow();
+
+
+
+    public User findUserByUserId(String userID) {
+        return userRepository.findById(userID).orElseThrow(EntityNotFoundException::new);
     }
 }

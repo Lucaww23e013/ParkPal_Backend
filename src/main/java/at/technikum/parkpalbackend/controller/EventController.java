@@ -5,7 +5,11 @@ import at.technikum.parkpalbackend.dto.event.DeleteEventDto;
 import at.technikum.parkpalbackend.dto.event.EventDto;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.Event;
+import at.technikum.parkpalbackend.model.Park;
+import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.EventService;
+import at.technikum.parkpalbackend.service.ParkService;
+import at.technikum.parkpalbackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +23,17 @@ public class EventController {
 
     private final EventService eventService;
 
+    private final ParkService parkService;
+
+    private final UserService userService;
+
     private final EventMapper eventMapper;
 
 
-    public EventController(EventService eventService, EventMapper eventMapper) {
+    public EventController(EventService eventService, ParkService parkService, UserService userService, EventMapper eventMapper) {
         this.eventService = eventService;
+        this.parkService = parkService;
+        this.userService = userService;
         this.eventMapper = eventMapper;
     }
 
@@ -64,6 +74,11 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreateEventDto createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
         Event event = eventMapper.toEntityCreateEvent(createEventDto);
+        Park park = parkService.findParkByParkId(createEventDto.getParkId());
+        User user = userService.findUserByUserId(createEventDto.getCreatorUserId());
+        event.setPark(park);
+        event.setCreator(user);
+
         event = eventService.save(event);
 
         return eventMapper.toDtoCreateEvent(event);
