@@ -31,12 +31,10 @@ public class EventRepositoryTest {
     void whenEventCreate_saveToDateBase() {
         // when
         Event grillEvent = grilling;
-
-        // act
         Park park = grillEvent.getPark();
-        Park savedPark = parkRepository.save(park);
-
-        Event saved = eventRepository.save(grillEvent);
+        // act
+        Park savedPark = parkRepository.saveAndFlush(park);
+        Event saved = eventRepository.saveAndFlush(grillEvent);
         // then
         assumeThat(savedPark.getParkId()).isSameAs(park.getParkId());
         assumeThat(saved).isSameAs(grillEvent);

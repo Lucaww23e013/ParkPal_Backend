@@ -3,7 +3,6 @@ package at.technikum.parkpalbackend.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -44,10 +43,10 @@ public class User {
     @Email(message = "Email must be valid Email-Address")
     private String email;
 
-    @NotNull(message = "Password not found. User must add a Password")
+    @NotBlank(message = "Password not found. User must add a Password")
     private String password;
 
-    @NotNull(message = "Authentication Failed")
+    @NotBlank(message = "Authentication Failed")
     private String authToken;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
