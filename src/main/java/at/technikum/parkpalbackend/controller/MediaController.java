@@ -65,6 +65,7 @@ public class MediaController {
     }
     @DeleteMapping("/media/{mediaId}")
     //@Preauthorize with Spring security later
+    @ResponseStatus(HttpStatus.OK)
     public MediaDto deleteMediaByMediaId(@PathVariable @Valid String mediaId){
         Media media = mediaService.deleteMediaByMediaId(mediaId);
         return null;

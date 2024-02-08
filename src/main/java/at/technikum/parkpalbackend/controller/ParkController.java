@@ -72,6 +72,7 @@ public class ParkController {
 
    @DeleteMapping("/parks/{parkId}")
    //@Preauthorize with Spring security later
+   @ResponseStatus(HttpStatus.OK)
     public ParkDto deleteParkByParkById(@PathVariable @Valid String parkId){
         Park park = parkService.deleteParkByParkId(parkId);
         return null;

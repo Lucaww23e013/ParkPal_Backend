@@ -58,6 +58,7 @@ public class CountryController {
 
     @DeleteMapping("/countries/{countryId}")
     //@Preauthorize with Spring security later
+    @ResponseStatus(HttpStatus.OK)
     public CountryDto deleteCountrybyCountryId(@PathVariable @Valid String countryId){
         Country country = countryService.deleteCountryByCountryId(countryId);
         return null;
