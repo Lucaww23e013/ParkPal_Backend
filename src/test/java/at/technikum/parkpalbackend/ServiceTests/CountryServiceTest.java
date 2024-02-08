@@ -1,23 +1,37 @@
 package at.technikum.parkpalbackend.ServiceTests;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import at.technikum.parkpalbackend.model.Country;
+import at.technikum.parkpalbackend.repository.CountryRepository;
+import at.technikum.parkpalbackend.service.CountryService;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-class CountryServiceTest {
+public class CountryServiceTest {
 
-    @BeforeEach
+
+    private CountryService countryService;
+
+
+    private CountryRepository countryRepository;
+
+
     void setUp() {
+
     }
 
-    @AfterEach
     void tearDown() {
     }
 
     @Test
-    void save() {
+    void testSaveCountry() {
+        Country countryToSave = Country.builder()
+                .name("Austria")
+                .iso2Code("AT")
+                .build();
+
+        Country savedCountry = countryRepository.save(countryToSave);
+
+        //assert(savedCountry != null);
     }
 
     @Test

@@ -1,16 +1,16 @@
 package at.technikum.parkpalbackend.repository;
 
+import at.technikum.parkpalbackend.model.Media;
 import at.technikum.parkpalbackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface MediaRepository extends JpaRepository<Media, String> {
+    Optional<Media> findMediaByMediaId(String mediaId);
 
-    Optional<User> findUserByUserName(String userName);
+    Optional<Media> findMediaByUser(User user);
 
-    Optional<User> findUserByUserId(String userId);
 }

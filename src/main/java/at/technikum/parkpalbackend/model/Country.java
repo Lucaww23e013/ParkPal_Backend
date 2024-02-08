@@ -9,7 +9,8 @@ import org.hibernate.annotations.UuidGenerator;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-////@Builder
+@AllArgsConstructor
+@Builder
 
 @Entity
 public class Country {
@@ -25,9 +26,5 @@ public class Country {
     //@Column(length = 3, unique = true)
     private String iso2Code;
 
-    public Country(String countryId, String name, String iso2Code) {
-        this.countryId = countryId;
-        this.name = name;
-        this.iso2Code = iso2Code;
-    }
+
 }

@@ -74,6 +74,10 @@ public class User {
         this(salutation,username,firstName, lastName,email,password,authToken,country,false);
     }
 
+    public User(String userId) {
+        this.userId = userId;
+    }
+
     public User addJoinedEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.joinedEvents.add(event));
         return this;
