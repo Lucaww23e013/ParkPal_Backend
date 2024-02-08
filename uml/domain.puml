@@ -17,6 +17,12 @@ entity User {
     - joinedEvents: List<Event>
 }
 
+enum GenderCategory {
+    OTHER
+    FEMALE
+    MALE
+}
+
 entity Event {
     - eventID: String
     - title: String
@@ -82,5 +88,6 @@ User -- Country
 Address - Country
 Park -left> "0..1" Address
 Media -left-> MediaCategory
+User -left> GenderCategory
 
 @enduml
