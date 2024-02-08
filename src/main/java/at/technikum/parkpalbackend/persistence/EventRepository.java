@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.repository;
+package at.technikum.parkpalbackend.persistence;
 
 import at.technikum.parkpalbackend.model.Event;
 import org.springframework.data.jpa.repository.JpaRepository;

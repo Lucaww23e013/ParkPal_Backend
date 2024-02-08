@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.dto.event;
+package at.technikum.parkpalbackend.dto.eventdtos;
 
 import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.model.Media;

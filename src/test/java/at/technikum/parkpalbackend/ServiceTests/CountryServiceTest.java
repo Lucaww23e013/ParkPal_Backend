@@ -1,7 +1,7 @@
 package at.technikum.parkpalbackend.ServiceTests;
 
 import at.technikum.parkpalbackend.model.Country;
-import at.technikum.parkpalbackend.repository.CountryRepository;
+import at.technikum.parkpalbackend.persistence.CountryRepository;
 import at.technikum.parkpalbackend.service.CountryService;
 import org.junit.Test;
 

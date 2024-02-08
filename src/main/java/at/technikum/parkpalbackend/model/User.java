@@ -15,9 +15,12 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-////@Builder
+@AllArgsConstructor
+@Builder
 
-@Entity
+@Entity()
+//@Entity(name = "users") // Hibernate throws an error with user as Singular, user is a keyword there
+
 public class User {
 
     @Id

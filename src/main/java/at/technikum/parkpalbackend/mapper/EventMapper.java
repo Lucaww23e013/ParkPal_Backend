@@ -1,7 +1,7 @@
 package at.technikum.parkpalbackend.mapper;
 
-import at.technikum.parkpalbackend.dto.event.CreateEventDto;
-import at.technikum.parkpalbackend.dto.event.EventDto;
+import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
+import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Event;
 import org.springframework.stereotype.Component;
 

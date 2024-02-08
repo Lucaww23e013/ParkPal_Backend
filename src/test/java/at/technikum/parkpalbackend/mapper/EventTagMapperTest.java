@@ -25,7 +25,8 @@ class EventTagMapperTest {
     void whenDtoValue_toEventTagValue() {
         EventTagMapper eventTagMapper = new EventTagMapper();
         String eventTagId = UUID.randomUUID().toString();
-        Event event = new Event(UUID.randomUUID().toString());
+        //Event event = new Event(UUID.randomUUID().toString());
+        Event event = Event.builder().build();
         String tagName = "TagName";
 
         EventTag eventTag = new EventTag(eventTagId, event, tagName);

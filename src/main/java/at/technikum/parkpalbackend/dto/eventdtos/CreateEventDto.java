@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.dto.event;
+package at.technikum.parkpalbackend.dto.eventdtos;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;

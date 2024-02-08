@@ -13,7 +13,8 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
+@AllArgsConstructor
+@Builder
 
 @Entity
 public class Park {
@@ -40,14 +41,14 @@ public class Park {
     @ToString.Exclude
     private List<Media> parkMedia = new ArrayList<>();
 
-    public Park(String parkId, String parkName, String description, Address parkAddress,List<Event> parkEvents,List<Media> parkMedia ) {
-        this.parkId = parkId;
-        this.parkName = parkName;
-        this.description = description;
-        this.parkAddress = parkAddress;
-        this.parkEvents = parkEvents;
-        this.parkMedia = parkMedia;
-    }
+//    public Park(String parkId, String parkName, String description, Address parkAddress,List<Event> parkEvents,List<Media> parkMedia ) {
+//        this.parkId = parkId;
+//        this.parkName = parkName;
+//        this.description = description;
+//        this.parkAddress = parkAddress;
+//        this.parkEvents = parkEvents;
+//        this.parkMedia = parkMedia;
+//    }
 
 
     public Park addParkEvents(Event... events) {

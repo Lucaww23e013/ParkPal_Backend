@@ -1,7 +1,7 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.model.Country;
-import at.technikum.parkpalbackend.repository.CountryRepository;
+import at.technikum.parkpalbackend.persistence.CountryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

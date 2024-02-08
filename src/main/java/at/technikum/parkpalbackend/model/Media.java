@@ -9,7 +9,8 @@ import org.hibernate.annotations.UuidGenerator;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-////@Builder
+@AllArgsConstructor
+@Builder
 
 @Entity
 public class Media {
@@ -28,10 +29,10 @@ public class Media {
     @Enumerated(EnumType.STRING)
     private MediaCategory mediaCategory;
 
-    public Media(String mediaId, User user, MediaCategory mediaCategory) {
-        this.mediaId = mediaId;
-        this.user = user;
-        this.mediaCategory = mediaCategory;
-    }
+//    public Media(String mediaId, User user, MediaCategory mediaCategory) {
+//        this.mediaId = mediaId;
+//        this.user = user;
+//        this.mediaCategory = mediaCategory;
+//    }
 
 }

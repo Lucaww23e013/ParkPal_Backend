@@ -29,7 +29,6 @@ entity Event {
     - description: String
     - startTS: LocalDateTime
     - endTS: LocalDateTime
-    - eventAssets: List<Media>
     - park: Park
     - creator: User
     - joinedUsers: List<User>

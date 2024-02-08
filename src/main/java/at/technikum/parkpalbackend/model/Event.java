@@ -2,7 +2,7 @@ package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timestamp;
 import lombok.*;
@@ -29,10 +29,10 @@ public class Event {
     private String eventId;
 
 
-    @NotEmpty(message = "Event title not found")
+    @NotBlank(message = "Event title not Valid")
     private String title;
 
-
+    @NotBlank(message = "Event description not Valid")
     private String description;
 
     @Timestamp
@@ -69,9 +69,9 @@ public class Event {
     @ToString.Exclude
     private List<Media> eventMedia = new ArrayList<>();
 
-    public Event(String string) {
-        this.eventId = eventId;
-    }
+//    public Event(String string) {
+//        this.eventId = eventId;
+//    }
 
     public Event addJoinedUsers(User... users) {
         Arrays.stream(users).forEach(user -> this.joinedUsers.add(user));

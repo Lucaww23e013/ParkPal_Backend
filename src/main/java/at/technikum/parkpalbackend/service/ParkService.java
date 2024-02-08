@@ -3,7 +3,7 @@ package at.technikum.parkpalbackend.service;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.Park;
-import at.technikum.parkpalbackend.repository.ParkRepository;
+import at.technikum.parkpalbackend.persistence.ParkRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

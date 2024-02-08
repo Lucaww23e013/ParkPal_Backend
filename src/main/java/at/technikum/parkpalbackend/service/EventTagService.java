@@ -2,11 +2,10 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.EventTag;
-import at.technikum.parkpalbackend.repository.EventTagRepository;
+import at.technikum.parkpalbackend.persistence.EventTagRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EventTagService {

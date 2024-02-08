@@ -2,7 +2,7 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.model.Media;
 import at.technikum.parkpalbackend.model.User;
-import at.technikum.parkpalbackend.repository.MediaRepository;
+import at.technikum.parkpalbackend.persistence.MediaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

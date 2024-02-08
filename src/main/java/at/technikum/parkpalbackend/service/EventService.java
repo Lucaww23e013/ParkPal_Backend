@@ -2,13 +2,14 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.repository.EventRepository;
+import at.technikum.parkpalbackend.persistence.EventRepository;
+import at.technikum.parkpalbackend.service.interfaces.IEventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class EventService {
+public class EventService implements IEventService {
 
     private final EventRepository eventRepository;
 
