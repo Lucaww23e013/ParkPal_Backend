@@ -25,7 +25,6 @@ public class ParkDto {
     private String parkId;
 
     @NotBlank(message = "Park name not found. All parks need a name")
-    @Column(unique = true)
     private String parkName;
 
     private String description;
