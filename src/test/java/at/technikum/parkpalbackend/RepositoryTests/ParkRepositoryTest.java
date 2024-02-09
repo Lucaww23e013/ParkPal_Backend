@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.RepositoryTests;
 
 
-import at.technikum.parkpalbackend.model.Country;
 import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import org.assertj.core.api.Assertions;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.UUID;
 
 import static at.technikum.parkpalbackend.TestFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
