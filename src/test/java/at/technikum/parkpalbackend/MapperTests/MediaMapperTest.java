@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.MapperTests;
 
 import at.technikum.parkpalbackend.dto.MediaDto;
-import at.technikum.parkpalbackend.dto.UserDto;
 import at.technikum.parkpalbackend.mapper.MediaMapper;
 import at.technikum.parkpalbackend.model.Media;
 import at.technikum.parkpalbackend.model.MediaCategory;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
+import static at.technikum.parkpalbackend.TestFixtures.normalUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MediaMapperTest {
@@ -28,7 +28,7 @@ class MediaMapperTest {
     void whenDtoValue_thenMediaValue() {
         MediaMapper mediaMapper = new MediaMapper();
         String mediaId = UUID.randomUUID().toString();
-        User test = new User(UUID.randomUUID().toString());
+        User test = normalUser;
         MediaCategory mediaCategory = MediaCategory.AUDIO;
 
         Media media = new Media(mediaId, test, mediaCategory);

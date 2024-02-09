@@ -17,9 +17,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 
-@Entity
-//@Entity(name = "users") // Hibernate throws an error with user as Singular, user is a keyword there
-@Table(name = "users")
+
+@Entity(name = "users") // Hibernate throws an error with user as Singular, user is a keyword there
+
 public class User {
 
     @Id
