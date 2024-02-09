@@ -76,7 +76,7 @@ public class EventController {
     public CreateEventDto createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
         Event event = eventMapper.toEntityCreateEvent(createEventDto);
         Park park = parkService.findParkByParkId(createEventDto.getParkId());
-        User user = userService.findUserByUserId(createEventDto.getCreatorUserId());
+        User user = userService.findByUserId(createEventDto.getCreatorUserId());
         event.setPark(park);
         event.setCreator(user);
 

@@ -44,7 +44,7 @@ public class MediaController {
 
     @GetMapping("/media/{userId}")
     public List<MediaDto> getMediaByUserId(@PathVariable @Valid String userId){
-            User user = userService.findUserByUserId(userId);
+            User user = userService.findByUserId(userId);
             List<Media> selectedMedia = mediaService.getMediaByUser(user);
             return selectedMedia.stream().map(media -> mediaMapper.toDto(media)).toList();
     }

@@ -1,6 +1,6 @@
 package at.technikum.parkpalbackend.model;
 
-public enum GenderCategory {
+public enum Salutation {
     OTHER,
 
     FEMALE,

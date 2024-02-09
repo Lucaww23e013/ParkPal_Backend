@@ -84,12 +84,12 @@ public class TestFixtures {
 
     private static User createUser(String userName, String email, String firstName, String lastName, boolean isAdmin) {
         return User.builder()
-                .salutation("eng.")
+                .salutation(Salutation.MALE)
                 .userName(userName)
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
-                .password("secret")
+                .password("eyJhbGciOiJIUzI1NiIsInR5cCI32!")
                 .authToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
                 .country(austria)
                 .isAdmin(isAdmin)

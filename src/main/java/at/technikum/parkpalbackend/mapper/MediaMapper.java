@@ -19,7 +19,7 @@ public class MediaMapper {
     public Media toEntity(MediaDto mediaDto) {
         return new Media(
                 mediaDto.getMediaId(),
-                new User(mediaDto.getUserId()),
+                new User(mediaDto.getUserId(), null, null,null,null,null,null,null,null,false,null,null),
                 mediaDto.getMediaCategory()
         );
     }
