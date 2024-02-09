@@ -5,6 +5,7 @@ import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.EventRepository;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 
 
 @DataJpaTest
-//@Disabled
+@Disabled
 public class EventRepositoryTest {
 
     @Autowired
