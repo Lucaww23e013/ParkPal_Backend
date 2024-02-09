@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 
 
 @DataJpaTest
+//@Disabled
 public class EventRepositoryTest {
 
     @Autowired
