@@ -2,7 +2,6 @@ package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.EventTagDto;
 import at.technikum.parkpalbackend.mapper.EventTagMapper;
-import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.EventTagService;
@@ -42,8 +41,6 @@ public class EventTagController {
     @ResponseStatus(HttpStatus.CREATED)
     public EventTagDto createEventTag(@RequestBody @Valid EventTagDto eventTagDto) {
         EventTag eventTag = eventTagMapper.toEntity(eventTagDto);
-        Event event = eventService.findByEventId(eventTagDto.getEventID());
-        eventTag.setEvent(event);
         eventTag = eventTagService.save(eventTag);
         return eventTagMapper.toDto(eventTag);
     }

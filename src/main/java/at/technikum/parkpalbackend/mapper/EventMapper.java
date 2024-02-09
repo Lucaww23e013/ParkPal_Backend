@@ -3,6 +3,8 @@ package at.technikum.parkpalbackend.mapper;
 import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Event;
+import at.technikum.parkpalbackend.model.Park;
+import at.technikum.parkpalbackend.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -74,17 +76,14 @@ public class EventMapper {
                 .build();
     }
 
-    public Event toEntityCreateEvent(CreateEventDto eventDto) {
+    public Event toEntityCreateEvent(CreateEventDto createEventDto) {
         return Event.builder()
-                .title(eventDto.getTitle())
-                .description(eventDto.getDescription())
-                .startTS(eventDto.getStartTS())
-                .endTS(eventDto.getEndTS())
-//                .park(eventDto.getPark())
-//                .creator(eventDto.getCreator())
-//                .joinedUsers(eventDto.getJoinedUsers())
-//                .eventTags(eventDto.getEventTags())
-//                .eventMedia(eventDto.getEventMedia())
+                .title(createEventDto.getTitle())
+                .description(createEventDto.getDescription())
+                .startTS(createEventDto.getStartTS())
+                .endTS(createEventDto.getEndTS())
+                .creator(User.builder().userId(createEventDto.getCreatorUserId()).build())
+                .park(Park.builder().parkId(createEventDto.getParkId()).build())
                 .build();
     }
 

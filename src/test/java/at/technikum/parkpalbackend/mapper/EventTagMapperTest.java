@@ -1,20 +1,26 @@
 package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.dto.EventTagDto;
-import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.EventTag;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.UUID;
+import static org.assertj.core.api.Assumptions.assumeThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@SpringBootTest
 class EventTagMapperTest {
+
+    @Autowired
+    private EventTagMapper eventTagMapper;
+
 
     @BeforeEach
     void setUp() {
+        assumeThat(eventTagMapper).isNotNull();
     }
 
     @AfterEach
@@ -23,41 +29,27 @@ class EventTagMapperTest {
 
     @Test
     void whenDtoValue_toEventTagValue() {
-        EventTagMapper eventTagMapper = new EventTagMapper();
-        String eventTagId = UUID.randomUUID().toString();
-        //Event event = new Event(UUID.randomUUID().toString());
-        Event event = Event.builder().build();
-        String tagName = "TagName";
-
-        EventTag eventTag = new EventTag(eventTagId, event, tagName);
-
+        // given
+        String tagName = "Family";
+        EventTag eventTag = EventTag.builder()
+                .tagName(tagName)
+                .build();
+        // when
         EventTagDto eventTagDto = eventTagMapper.toDto(eventTag);
-
-        assertEquals(eventTagId, eventTagDto.getEventTagId());
+        // then
         assertEquals(tagName, eventTagDto.getTagName());
-
-        assertEquals(event.getEventId(), eventTagDto.getEventID());
-
     }
 
     @Test
     void whenEventTagValue_toDtoValue() {
-        EventTagMapper eventTagMapper = new EventTagMapper();
-        String eventId = UUID.randomUUID().toString();
-        String tagName = "TagName";
-
+        // given
+        String tagName = "Funky";
         EventTagDto eventTagDto = EventTagDto.builder()
-                .eventID(eventId)
                 .tagName(tagName)
                 .build();
-
-
+        // when
         EventTag eventTag = eventTagMapper.toEntity(eventTagDto);
-
-        assertEquals(eventTagDto.getEventTagId(), eventTag.getEventTagId());
+        // then
         assertEquals(tagName, eventTag.getTagName());
-
-        assertEquals(eventId,eventTag.getEvent().getEventId());
-
     }
 }

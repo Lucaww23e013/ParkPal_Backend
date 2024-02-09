@@ -78,9 +78,9 @@ User "1..1" -- Event : created by
 Event -[hidden]- User
 Event --> "1..n" Park : has <
 Event -left- "1..n" User : joined By
-EventTag --* "1..n" Event : has <
-Media "1..n" <-- Event
-User "1..n" -- Media : User create Media
+EventTag "n..m" --* Event : has <
+Media "n..m" <-- Event
+User -- "1..n" Media  : User create Media
 User -- Event : User create
 Park "1..n" -- Media
 User -- Country

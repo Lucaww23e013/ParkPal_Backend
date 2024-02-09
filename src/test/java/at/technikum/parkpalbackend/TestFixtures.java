@@ -38,7 +38,6 @@ public class TestFixtures {
 
     private static EventTag createEventTag(String eventTagName, Event event) {
         return EventTag.builder()
-                .event(event)
                 .tagName(eventTagName)
                 .build();
     }
