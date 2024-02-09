@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
-//@Builder
+@Builder
 @Valid
 public class CountryDto {
     @Id

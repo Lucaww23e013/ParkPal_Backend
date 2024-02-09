@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TestFixtures {
 
     public static Country austria = Country.builder().name("Austria").iso2Code("AT").build();
@@ -14,7 +15,12 @@ public class TestFixtures {
     public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", true);
     public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", false);
     public static Park parkAwesome = createParkWithOutEvents("Awesome Park");
+
+    public static Park parkWithEvents = createParkWithEvents("parkWithEvents");
+
     public static Park parkLuca = createParkWithOutEvents("Park only For Lucas");
+
+    public static Media testMedia = createMedia();
     public static List<Media> mediaList = createMediaList();
     public static List<User> userList = createUserlist();
     public static Event grilling = createEvent("grilling Biggest Steak Beef");
@@ -52,6 +58,13 @@ public class TestFixtures {
         return mediaList;
     }
 
+    private static List<Event> createEventList() {
+        List<Event> eventList = new ArrayList<>();
+        eventList.add(createEvent("EventTitle"));
+        eventList.add(createEvent("EventTitle"));
+        return eventList;
+    }
+
     private static Event createEvent(String title) {
         Event event = Event.builder()
                 .title(title)
@@ -72,6 +85,15 @@ public class TestFixtures {
                 .description("Park for Everybody")
                 .parkAddress(parkAddress)
                 .parkMedia(createMediaList())
+                .build();
+    }
+    private static Park createParkWithEvents(String parkName) {
+        return Park.builder()
+                .parkName(parkName)
+                .description("Park for Everybody")
+                .parkAddress(parkAddress)
+                .parkMedia(createMediaList())
+                .parkEvents(createEventList())
                 .build();
     }
 

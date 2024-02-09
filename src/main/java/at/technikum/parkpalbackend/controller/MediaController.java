@@ -14,8 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/media")
 @CrossOrigin
-
-//@AllArgsConstructor
 public class MediaController {
     private final MediaService mediaService;
 
