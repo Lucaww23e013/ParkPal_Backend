@@ -22,9 +22,18 @@ class ParkRepositoryTest {
     @Autowired
     private ParkRepository parkRepository;
 
+    Park park;
+    Park savedPark;
+
+
 
     @BeforeEach
     void setUp() {
+        park = parkWithEvents;
+        savedPark = parkRepository.save(park);
+        parkRepository.save(parkAwesome);
+
+
     }
 
     @AfterEach
@@ -33,24 +42,18 @@ class ParkRepositoryTest {
 
     @Test
     void ParkRepository_saveAllParks(){
-        Park park = parkAwesome;
-
-        Park savedPark = parkRepository.save(park);
-
         Assertions.assertThat(savedPark).isNotNull();
     }
 
     @Test
     void ParkRepository_findParkByParkId() {
-        Park testPark = parkAwesome;
-        parkRepository.save(parkAwesome);
 
-        Park foundPark = parkRepository.findParkByParkId(testPark.getParkId()).orElseThrow();
+        Park foundPark = parkRepository.findParkByParkId(park.getParkId()).orElseThrow();
 
-        assertEquals(foundPark.getParkId(),testPark.getParkId());
-        assertEquals(foundPark.getParkAddress().toString(),testPark.getParkAddress().toString());
-        assertEquals(foundPark.getParkName(),testPark.getParkName());
-        assertEquals(foundPark.getDescription(), testPark.getDescription());
+        assertEquals(foundPark.getParkId(),park.getParkId());
+        assertEquals(foundPark.getParkAddress().toString(),park.getParkAddress().toString());
+        assertEquals(foundPark.getParkName(),park.getParkName());
+        assertEquals(foundPark.getDescription(), park.getDescription());
 
         /*assertEquals(foundPark.getParkEvents().getFirst(), testPark.getParkEvents().getFirst());
         Assertions.assertThat(foundPark.getParkEvents()).isEqualTo(testPark.getParkEvents());
@@ -59,21 +62,18 @@ class ParkRepositoryTest {
 
     @Test
     void ParkRepository_findByParkEventsIn() {
-        Park testPark = parkWithEvents;
-        parkRepository.save(parkWithEvents);
+        parkRepository.save(park);
 
-        Park foundPark = parkRepository.findByParkEventsIn(testPark.getParkEvents()).orElseThrow();
+        Park foundPark = parkRepository.findByParkEventsIn(park.getParkEvents()).orElseThrow();
 
-        assertEquals(foundPark.getParkId(),testPark.getParkId());
-        assertEquals(foundPark.getParkAddress().toString(),testPark.getParkAddress().toString());
-        assertEquals(foundPark.getParkName(),testPark.getParkName());
-        assertEquals(foundPark.getDescription(), testPark.getDescription());
+        assertEquals(foundPark.getParkId(),park.getParkId());
+        assertEquals(foundPark.getParkAddress().toString(),park.getParkAddress().toString());
+        assertEquals(foundPark.getParkName(),park.getParkName());
+        assertEquals(foundPark.getDescription(), park.getDescription());
     }
 
     @Test
     void deleteParks() {
-        Park park = parkAwesome;
-
         parkRepository.save(park);
 
         parkRepository.delete(park);

@@ -26,8 +26,12 @@ class CountryRepositoryTest {
 
     private  CountryRepository countryRepository;
 
+    Country testCountry;
+
+
     @BeforeEach
     void setUp() {
+        testCountry = austria;
     }
 
     @AfterEach
@@ -36,9 +40,7 @@ class CountryRepositoryTest {
 
     @Test
     void saveCountries(){
-        Country country = austria;
-
-        Country savedCountry = countryRepository.save(country);
+        Country savedCountry = countryRepository.save(testCountry);
 
         Assertions.assertThat(savedCountry).isNotNull();
         Assertions.assertThat(savedCountry.getCountryId()).isNotNull();
@@ -47,7 +49,6 @@ class CountryRepositoryTest {
     }
     @Test
     void CountryRepository_findCountryByCountryId() {
-        Country testCountry = austria;
 
         countryRepository.save(austria);
 
@@ -62,26 +63,24 @@ class CountryRepositoryTest {
 
     @Test
     void CountryRepository_findCountryByName() {
-        Country expectedCountry = austria;
 
         countryRepository.save(austria);
 
-        Country foundCountry = countryRepository.findCountryByName(expectedCountry.getName()).orElseThrow();
+        Country foundCountry = countryRepository.findCountryByName(testCountry.getName()).orElseThrow();
 
-        assertEquals(foundCountry.getCountryId(), expectedCountry.getCountryId());
-        assertEquals(foundCountry.getName(), expectedCountry.getName());
-        assertEquals(foundCountry.getIso2Code(), expectedCountry.getIso2Code());
+        assertEquals(foundCountry.getCountryId(), testCountry.getCountryId());
+        assertEquals(foundCountry.getName(), testCountry.getName());
+        assertEquals(foundCountry.getIso2Code(), testCountry.getIso2Code());
     }
 
     @Test
     void deleteCountries() {
-        Country country = austria;
 
-        countryRepository.save(country);
+        countryRepository.save(testCountry);
 
-        countryRepository.delete(country);
+        countryRepository.delete(testCountry);
 
-        Country deletedCountry = countryRepository.findCountryByCountryId(country.getCountryId()).orElse(null);
+        Country deletedCountry = countryRepository.findCountryByCountryId(testCountry.getCountryId()).orElse(null);
         Assertions.assertThat(deletedCountry).isNull();
     }
 
