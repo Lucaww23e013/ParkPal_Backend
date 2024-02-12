@@ -22,6 +22,8 @@ public class TestFixtures {
 
     public static Media testMedia = createMedia();
     public static List<Media> mediaList = createMediaList();
+
+    public static List<Event> eventList = createEventList();
     public static List<User> userList = createUserlist();
     public static Event grilling = createEvent("grilling Biggest Steak Beef");
 

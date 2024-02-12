@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static at.technikum.parkpalbackend.TestFixtures.eventList;
+import static at.technikum.parkpalbackend.TestFixtures.mediaList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParkMapperTest {
@@ -101,6 +103,44 @@ class ParkMapperTest {
         CreateParkDto createParkDto = new CreateParkDto(parkId, parkName, description, parkAddress);
 
         Park park = parkMapper.CreateParkDtoToEntity(createParkDto);
+
+        assertEquals(parkId, park.getParkId());
+        assertEquals(parkName, park.getParkName());
+        assertEquals(description, park.getDescription());
+        assertEquals(parkAddress, park.getParkAddress());
+    }
+
+    @Test
+    void whenParkValue_thenParkDtoValue(){
+        ParkMapper parkMapper = new ParkMapper();
+        String parkId = UUID.randomUUID().toString();
+        String parkName = "Park";
+        String description = "Enter Description here:";
+        Country test = new Country(UUID.randomUUID().toString(), "test2", "007");
+        Address parkAddress = new Address("Streetnumber", "1220", "Wien", test);
+
+        Park park = new Park(parkId, parkName, description, parkAddress, null, null);
+
+        ParkDto parkDto = parkMapper.toDto(park);
+
+        assertEquals(parkId, parkDto.getParkId());
+        assertEquals(parkName, parkDto.getParkName());
+        assertEquals(description, parkDto.getDescription());
+        assertEquals(parkAddress, parkDto.getParkAddress());
+    }
+
+    @Test
+    void whenParkDtoValue_thenParkValue(){
+        ParkMapper parkMapper = new ParkMapper();
+        String parkId = UUID.randomUUID().toString();
+        String parkName = "Park";
+        String description = "Enter Description here:";
+        Country test = new Country(UUID.randomUUID().toString(), "test2", "007");
+        Address parkAddress = new Address("Streetnumber", "1220", "Wien", test);
+
+        ParkDto parkDto = new ParkDto(parkId, parkName, description, parkAddress, eventList, mediaList);
+
+        Park park = parkMapper.toEntity(parkDto);
 
         assertEquals(parkId, park.getParkId());
         assertEquals(parkName, park.getParkName());
