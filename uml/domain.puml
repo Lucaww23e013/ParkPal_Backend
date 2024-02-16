@@ -74,14 +74,12 @@ entity Country {
     - iso2Code: String
 }
 
-User "1..1" -- Event : created by
-Event -[hidden]- User
+Event "1..1" -- User : created by
 Event --> "1..n" Park : has <
-Event -left- "1..n" User : joined By
+Event -left- "n..m" User : joined By
 EventTag "n..m" --* Event : has <
 Media "n..m" <-- Event
 User -- "1..n" Media  : User create Media
-User -- Event : User create
 Park "1..n" -- Media
 User -- Country
 Address - Country
