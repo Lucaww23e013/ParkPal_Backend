@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
+@Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(name = "unique_username", columnNames = "user_name"),
         @UniqueConstraint(name = "unique_email", columnNames = "email")
 
@@ -68,8 +68,6 @@ public class User {
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<User> users = new ArrayList<>();
 
 
 //    public User(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Boolean isAdmin) {

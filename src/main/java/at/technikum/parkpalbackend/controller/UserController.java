@@ -61,11 +61,10 @@ public class UserController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserDto createUser(@RequestBody @Valid CreateUserDto userEssentialDto) {
-        User user = userMapper.toEntity(userEssentialDto);
+    public CreateUserDto createUser(@RequestBody @Valid CreateUserDto createUserDto) {
+        User user = userMapper.toEntity(createUserDto);
         user = userService.create(user);
-
-        return userMapper.toEssentialDto(user);
+        return userMapper.toCreateUserDto(user);
     }
 
     @PostMapping("/login")

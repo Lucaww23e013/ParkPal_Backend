@@ -43,7 +43,7 @@ public class UserMapper {
                     .build();
     }
 
-    public CreateUserDto toEssentialDto(User user) {
+    public CreateUserDto toCreateUserDto(User user) {
         return CreateUserDto.builder()
                 .userId(user.getUserId())
                 .salutation(user.getSalutation())
@@ -55,15 +55,15 @@ public class UserMapper {
                 .build();
     }
 
-    public User toEntity(CreateUserDto userEssentialDto) {
+    public User toEntity(CreateUserDto createUserDto) {
         return User.builder()
-                .userId(userEssentialDto.getUserId())
-                .salutation(userEssentialDto.getSalutation())
-                .userName(userEssentialDto.getUserName())
-                .firstName(userEssentialDto.getFirstName())
-                .lastName(userEssentialDto.getLastName())
-                .email(userEssentialDto.getEmail())
-                .password(userEssentialDto.getPassword())
+                .userId(createUserDto.getUserId())
+                .salutation(createUserDto.getSalutation())
+                .userName(createUserDto.getUserName())
+                .firstName(createUserDto.getFirstName())
+                .lastName(createUserDto.getLastName())
+                .email(createUserDto.getEmail())
+                .password(createUserDto.getPassword())
                 .build();
     }
 
