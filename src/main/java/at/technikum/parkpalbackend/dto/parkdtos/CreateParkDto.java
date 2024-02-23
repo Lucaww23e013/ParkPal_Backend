@@ -13,7 +13,7 @@ import org.hibernate.annotations.UuidGenerator;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@Builder
+@Builder
 @Valid
 public class CreateParkDto {
     @Id

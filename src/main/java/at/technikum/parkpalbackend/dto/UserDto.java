@@ -21,7 +21,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@Builder
+
 @Valid
 public class UserDto {
     private String userId;
@@ -56,7 +56,7 @@ public class UserDto {
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
-    public UserDto(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Country country, Boolean isAdmin) {
+   /* public UserDto(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Country country, Boolean isAdmin) {
         this.salutation = salutation;
         this.userName = username;
         this.firstName = firstName;
@@ -74,7 +74,7 @@ public class UserDto {
 
     public UserDto(String userId) {
         this.userId = userId;
-    }
+    }*/
 
     public UserDto addJoinedEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.joinedEvents.add(event));

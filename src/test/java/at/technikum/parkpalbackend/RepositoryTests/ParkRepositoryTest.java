@@ -16,7 +16,7 @@ import static at.technikum.parkpalbackend.TestFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Disabled
+
 class ParkRepositoryTest {
 
     @Autowired

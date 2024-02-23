@@ -11,10 +11,10 @@ entity User {
     - lastName: String
     - email: String
     - password: String
-    - AuthToken: String
     - country: Country
     - isAdmin: Boolean
     - joinedEvents: List<Event>
+    - profilePicture: Picture
 }
 
 enum GenderCategory {
@@ -41,16 +41,34 @@ entity EventTag {
     - name: String
 }
 
-entity Media {
-    - mediaID: String
-    - user: User
-    - mediaCategory: MediaCategory
+enum VideoFormatType {
+    MP4
+    WMV
 }
 
-enum MediaCategory {
-    PICTURE
-    AUDIO
-    VIDEO
+enum PictureFormatType {
+    JPG
+    PNG
+    GIF
+}
+
+abstract class Media {
+    - mediaID: String
+    - uploader: User
+    - fileName: String
+    - uploaded: LocalDateTime
+    - fileSize: Long
+    - data: byte[]
+}
+
+entity Video {
+    - duration: Long
+    - formatType: VideoFormatType
+}
+
+entity Picture {
+    - formatType: PictureFormatType
+
 }
 
 entity Park {
@@ -74,17 +92,21 @@ entity Country {
     - iso2Code: String
 }
 
-Event "1..1" -- User : created by
-Event --> "1..n" Park : has <
+User "1..1" -- Event : created by
+Event --right> "1..n" Park : has <
 Event -left- "n..m" User : joined By
 EventTag "n..m" --* Event : has <
 Media "n..m" <-- Event
-User -- "1..n" Media  : User create Media
+User -- "1..n" Media : User create Media
 Park "1..n" -- Media
 User -- Country
 Address - Country
-Park -left> "0..1" Address
-Media -left-> MediaCategory
+Park -right> "0..1" Address
+User -> Picture
+Video --|> Media
+Picture --|> Media
 User -left> GenderCategory
-
+Video -> VideoFormatType
+Picture -left> PictureFormatType
 @enduml
+
