@@ -51,7 +51,8 @@ public class User {
     private String email;
 
     @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).+$",
-            message = "Password must contain at least one lowercase letter and one uppercase letter. One number and one special character")
+            message = "Password must contain at least one lowercase letter and one uppercase letter." +
+                    " One number and one special character")
     @Size(min = 12, message = "Password must be at least 12 characters long")
     @NotBlank(message = "Enter a Password")
     private String password;
@@ -68,27 +69,6 @@ public class User {
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
-
-
-//    public User(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Boolean isAdmin) {
-//        this.salutation = salutation;
-//        this.userName = username;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.password = password;
-//        this.authToken = authToken;
-//       /* this.country = country;*/
-//        this.isAdmin = isAdmin;
-//    }
-
-    /*public User(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Country country) {
-        this(salutation,username,firstName, lastName,email,password,authToken,country,false);
-    }
-
-    public User(String userId) {
-        this.userId = userId;
-    }*/
     public User addJoinedEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.joinedEvents.add(event));
         return this;

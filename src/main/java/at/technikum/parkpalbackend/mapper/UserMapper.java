@@ -28,19 +28,19 @@ public class UserMapper {
     }
 
     public User toEntity(UserDto userDto) {
-            return User.builder()
-                    .userId(userDto.getUserId())
-                    .salutation(userDto.getSalutation())
-                    .userName(userDto.getUserName())
-                    .firstName(userDto.getFirstName())
-                    .lastName(userDto.getLastName())
-                    .email(userDto.getEmail())
-                    .password(userDto.getPassword())
-                    .country(userDto.getCountry())
-                    .authToken(userDto.getAuthToken())
-                    .isAdmin(userDto.isAdmin())
-                    .joinedEvents(userDto.getJoinedEvents())
-                    .build();
+        return User.builder()
+                .userId(userDto.getUserId())
+                .salutation(userDto.getSalutation())
+                .userName(userDto.getUserName())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .country(userDto.getCountry())
+                .authToken(userDto.getAuthToken())
+                .isAdmin(userDto.isAdmin())
+                .joinedEvents(userDto.getJoinedEvents())
+                .build();
     }
 
     public CreateUserDto toCreateUserDto(User user) {

@@ -2,13 +2,8 @@ package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
-import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.Media;
 import at.technikum.parkpalbackend.model.Park;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ParkMapper {
@@ -44,7 +39,7 @@ public class ParkMapper {
         );
     }
 
-    public Park CreateParkDtoToEntity(CreateParkDto createParkDto) {
+    public Park createParkDtoToEntity(CreateParkDto createParkDto) {
        // List<Event> parkEvents = new ArrayList<>(); -- use if we wanna send an empty list
        // List<Media> parkMedia = new ArrayList<>();
         return new Park(

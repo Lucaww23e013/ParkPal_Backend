@@ -23,7 +23,8 @@ public class EventTagController {
 
     private final EventTagMapper eventTagMapper;
 
-    public EventTagController(EventTagService eventTagService, EventService eventService, EventTagMapper eventTagMapper) {
+    public EventTagController(EventTagService eventTagService, EventService eventService,
+                              EventTagMapper eventTagMapper) {
         this.eventTagService = eventTagService;
         this.eventService = eventService;
         this.eventTagMapper = eventTagMapper;

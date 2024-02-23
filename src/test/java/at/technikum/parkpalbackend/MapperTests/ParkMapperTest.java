@@ -102,7 +102,7 @@ class ParkMapperTest {
 
         CreateParkDto createParkDto = new CreateParkDto(parkId, parkName, description, parkAddress);
 
-        Park park = parkMapper.CreateParkDtoToEntity(createParkDto);
+        Park park = parkMapper.createParkDtoToEntity(createParkDto);
 
         assertEquals(parkId, park.getParkId());
         assertEquals(parkName, park.getParkName());

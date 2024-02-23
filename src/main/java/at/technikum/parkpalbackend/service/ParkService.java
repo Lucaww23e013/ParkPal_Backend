@@ -41,12 +41,14 @@ public class ParkService {
     }
 
     public Park deleteParkByParkId(String parkId) {
-        Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
+        Park park = parkRepository.findParkByParkId(parkId)
+                .orElseThrow();
         parkRepository.delete(park);
         return null;
     }
 
     public Park findParkByEvents(List<Event> selectedEvents) {
-        return parkRepository.findByParkEventsIn(selectedEvents).orElseThrow(EntityNotFoundException::new);
+        return parkRepository.findByParkEventsIn(selectedEvents)
+                .orElseThrow(EntityNotFoundException::new);
     }
 }

@@ -29,10 +29,4 @@ public class Media {
     @Enumerated(EnumType.STRING)
     private MediaCategory mediaCategory;
 
-//    public Media(String mediaId, User user, MediaCategory mediaCategory) {
-//        this.mediaId = mediaId;
-//        this.user = user;
-//        this.mediaCategory = mediaCategory;
-//    }
-
 }

@@ -3,14 +3,15 @@ package at.technikum.parkpalbackend.dto.userdtos;
 import at.technikum.parkpalbackend.model.Country;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.Salutation;
-import at.technikum.parkpalbackend.model.User;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter

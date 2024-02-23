@@ -33,7 +33,8 @@ public class MediaService {
     }
 
     public Media updateMedia(String mediaId, Media updatedMedia) {
-        Media media = mediaRepository.findMediaByMediaId(mediaId).orElseThrow();
+        Media media = mediaRepository.findMediaByMediaId(mediaId)
+                .orElseThrow();
 
         media.setMediaId(updatedMedia.getMediaId());
         media.setUser(updatedMedia.getUser());
@@ -44,7 +45,8 @@ public class MediaService {
     }
 
     public Media deleteMediaByMediaId(String mediaId) {
-        Media media = mediaRepository.findMediaByMediaId(mediaId).orElseThrow();
+        Media media = mediaRepository.findMediaByMediaId(mediaId)
+                .orElseThrow();
         mediaRepository.delete(media);
         return null;
     }

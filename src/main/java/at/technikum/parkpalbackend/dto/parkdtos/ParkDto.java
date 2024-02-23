@@ -3,12 +3,12 @@ package at.technikum.parkpalbackend.dto.parkdtos;
 import at.technikum.parkpalbackend.model.Address;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.Media;
-import jakarta.persistence.*;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.validator.constraints.UUID;
 
 import java.util.ArrayList;
 import java.util.List;

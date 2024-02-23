@@ -26,6 +26,7 @@ public class EventTagService {
 
     public EventTag findTagById(String eventTagId) {
         // to rethink if i should also save eventID by the entity EventTag
-        return eventTagRepository.findById(eventTagId).orElseThrow(EntityNotFoundException::new);
+        return eventTagRepository.findById(eventTagId)
+                .orElseThrow(EntityNotFoundException::new);
     }
 }
