@@ -31,7 +31,6 @@ public class User {
     @Column(name = "user_id")
     private String userId;
 
-
     @Enumerated(EnumType.STRING)
     private Salutation salutation;
 
@@ -56,13 +55,10 @@ public class User {
     @NotBlank(message = "Enter a Password")
     private String password;
 
-
-    private String authToken;
-
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Country country;
 
-    private boolean isAdmin;
+    private Role role;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude

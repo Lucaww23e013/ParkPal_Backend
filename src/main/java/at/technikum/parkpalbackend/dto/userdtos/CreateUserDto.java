@@ -38,5 +38,6 @@ public class CreateUserDto {
     @NotBlank(message = "Enter a Password")
     private String password;
 
-    //country fehlt
+    private String countryId;
+
 }

@@ -13,7 +13,8 @@ import org.hibernate.annotations.UuidGenerator;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@Builder
+@AllArgsConstructor
+@Builder
 @Valid
 public class CreateParkDto {
     @Id
@@ -28,11 +29,5 @@ public class CreateParkDto {
     @Embedded
     private Address parkAddress;
 
-    public CreateParkDto(String parkId, String parkName, String description, Address parkAddress) {
-        this.parkId = parkId;
-        this.parkName = parkName;
-        this.description = description;
-        this.parkAddress = parkAddress;
-    }
 
 }

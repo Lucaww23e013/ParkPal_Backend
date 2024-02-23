@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
+@AllArgsConstructor
 @Builder
 @Valid
 public class CountryDto {
@@ -25,11 +25,5 @@ public class CountryDto {
 
     //@Column(length = 3, unique = true)
     private String iso2Code;
-
-    public CountryDto(String countryId, String name, String iso2Code){
-        this.countryId=countryId;
-        this.name=name;
-        this.iso2Code=iso2Code;
-    }
 
 }

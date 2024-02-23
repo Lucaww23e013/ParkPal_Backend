@@ -1,9 +1,6 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
-import at.technikum.parkpalbackend.model.Country;
-import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.Salutation;
-import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.model.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -47,30 +44,13 @@ public class UserDto {
     @NotBlank(message = "Enter a Password")
     private String password;
 
-    private String authToken;
+    private String countryId;
 
-    private Country country;
-
-    private boolean isAdmin;
+    private Role role;
 
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
-    /*public UserDto(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Country country, Boolean isAdmin) {
-        this.salutation = salutation;
-        this.userName = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.authToken = authToken;
-        this.country = country;
-        this.isAdmin = isAdmin;
-    }*/
-
-    /*public UserDto(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Country country) {
-        this(salutation,username,firstName, lastName,email,password,authToken,country,false);
-    }*/
 
 
 

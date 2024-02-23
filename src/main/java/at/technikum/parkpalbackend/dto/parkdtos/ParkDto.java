@@ -17,7 +17,9 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@Builder
+@AllArgsConstructor
+
+@Builder
 @Valid
 public class ParkDto {
     @Id
@@ -40,13 +42,5 @@ public class ParkDto {
     @ToString.Exclude
     private List<Media> parkMedia = new ArrayList<>();
 
-    public ParkDto(String parkId, String parkName, String description, Address parkAddress, List<Event> parkEvents, List<Media> parkMedia) {
-        this.parkId = parkId;
-        this.parkName = parkName;
-        this.description = description;
-        this.parkAddress = parkAddress;
-        this.parkEvents = parkEvents;
-        this.parkMedia = parkMedia;
-    }
 
 }
