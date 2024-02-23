@@ -55,7 +55,6 @@ class MediaRepositoryTest {
         Media foundMedia = mediaRepository.findMediaByMediaId(testMedia.getMediaId()).orElseThrow();
 
         assertEquals(foundMedia.getMediaId(), testMedia.getMediaId());
-        assertEquals(foundMedia.getMediaCategory(), testMedia.getMediaCategory());
 
         assertEquals(foundMedia.getUser().getUserId(), testMedia.getUser().getUserId());
         assertEquals(foundMedia.getUser().getPassword(), testMedia.getUser().getPassword());
@@ -83,7 +82,6 @@ class MediaRepositoryTest {
         Media foundMedia = mediaRepository.findMediaByUser(testMedia.getUser()).orElseThrow();
 
         assertEquals(foundMedia.getMediaId(), testMedia.getMediaId());
-        assertEquals(foundMedia.getMediaCategory(), testMedia.getMediaCategory());
 
         assertEquals(foundMedia.getUser().getUserId(), testMedia.getUser().getUserId());
         assertEquals(foundMedia.getUser().getPassword(), testMedia.getUser().getPassword());

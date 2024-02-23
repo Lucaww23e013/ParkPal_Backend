@@ -26,7 +26,5 @@ public class Media {
     @NotNull(message="Media must belong to a User. Pls add a User")
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    private MediaCategory mediaCategory;
 
 }

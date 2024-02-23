@@ -101,7 +101,6 @@ public class TestFixtures {
     private static Media createMedia() {
         return Media.builder()
                 .user(normalUser)
-                .mediaCategory(MediaCategory.PICTURE)
                 .build();
     }
 

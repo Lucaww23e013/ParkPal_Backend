@@ -11,16 +11,15 @@ public class MediaMapper {
     public MediaDto toDto(Media media){
         return new MediaDto(
                 media.getMediaId(),
-                media.getUser().getUserId(),
-                media.getMediaCategory()
+                media.getUser().getUserId()
         );
     }
 
     public Media toEntity(MediaDto mediaDto) {
         return new Media(
                 mediaDto.getMediaId(),
-                User.builder().userId(mediaDto.getUserId()).build(),
-                mediaDto.getMediaCategory()
+                User.builder().userId(mediaDto.getUserId()).build()
+
         );
     }
 }
