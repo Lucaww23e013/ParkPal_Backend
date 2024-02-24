@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.dto.parkdtos;
 
 import at.technikum.parkpalbackend.model.Address;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Id;
 import jakarta.validation.Valid;
@@ -22,12 +21,12 @@ public class CreateParkDto {
     private String parkId;
 
     @NotBlank(message = "Park name not found. All parks need a name")
-    private String parkName;
+    private String name;
 
     private String description;
 
     @Embedded
-    private Address parkAddress;
+    private Address address;
 
 
 }

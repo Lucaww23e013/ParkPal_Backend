@@ -26,12 +26,12 @@ public class Park {
 
     @NotBlank(message="Park name not found. All parks need a name")
     @Column(unique = true)
-    private String parkName;
+    private String name;
 
     private String description;
 
     @Embedded
-    private Address parkAddress;
+    private Address address;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude

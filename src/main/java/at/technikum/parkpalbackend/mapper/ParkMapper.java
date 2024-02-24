@@ -2,13 +2,8 @@ package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
-import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.Media;
 import at.technikum.parkpalbackend.model.Park;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ParkMapper {
@@ -16,7 +11,7 @@ public class ParkMapper {
     public ParkDto toDto(Park park){
         return ParkDto.builder()
                 .parkId(park.getParkId())
-                .parkName(park.getParkName())
+                .name(park.getName())
                 .description(park.getDescription())
                 .parkEvents(park.getParkEvents())
                 .parkMedia(park.getParkMedia())
@@ -26,7 +21,7 @@ public class ParkMapper {
     public Park toEntity(ParkDto parkDto) {
         return Park.builder()
                 .parkId(parkDto.getParkId())
-                .parkName(parkDto.getParkName())
+                .name(parkDto.getName())
                 .description(parkDto.getDescription())
                 .parkEvents(parkDto.getParkEvents())
                 .parkMedia(parkDto.getParkMedia())
@@ -36,18 +31,18 @@ public class ParkMapper {
     public CreateParkDto toCreateParkDto(Park park){
         return CreateParkDto.builder()
                 .parkId(park.getParkId())
-                .parkName(park.getParkName())
+                .name(park.getName())
                 .description(park.getDescription())
-                .parkAddress(park.getParkAddress())
+                .address(park.getAddress())
                 .build();
     }
 
     public Park CreateParkDtoToEntity(CreateParkDto createParkDto) {
         return Park.builder()
                 .parkId(createParkDto.getParkId())
-                .parkName(createParkDto.getParkName())
+                .name(createParkDto.getName())
                 .description(createParkDto.getDescription())
-                .parkAddress(createParkDto.getParkAddress())
+                .address(createParkDto.getAddress())
                 .build();
     }
 }

@@ -16,7 +16,7 @@ public class EventTagDto {
     private String eventTagId;
 
     @NotBlank(message = "Event Tag cannot be empty.")
-    private String tagName;
+    private String name;
 
 }
 

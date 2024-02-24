@@ -31,9 +31,9 @@ public class ParkService {
         Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
 
         park.setParkId(updatedPark.getParkId());
-        park.setParkName(updatedPark.getParkName());
+        park.setName(updatedPark.getName());
         park.setDescription(updatedPark.getDescription());
-        park.setParkAddress(updatedPark.getParkAddress());
+        park.setAddress(updatedPark.getAddress());
         park.setParkEvents(updatedPark.getParkEvents());
         park.setParkMedia(updatedPark.getParkMedia());
 
