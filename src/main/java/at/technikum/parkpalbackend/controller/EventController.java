@@ -75,13 +75,7 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreateEventDto createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
         Event event = eventMapper.toEntityCreateEvent(createEventDto);
-        Park park = parkService.findParkByParkId(createEventDto.getParkId());
-        User user = userService.findByUserId(createEventDto.getCreatorUserId());
-        event.setPark(park);
-        event.setCreator(user);
-
         event = iEventService.save(event);
-
         return eventMapper.toDtoCreateEvent(event);
     }
 

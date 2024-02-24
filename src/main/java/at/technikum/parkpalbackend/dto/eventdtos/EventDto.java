@@ -29,7 +29,7 @@ public class EventDto {
 
     private LocalDateTime endTS;
 
-    private Park park;
+    private String parkId;
 
     private User creator;
 
