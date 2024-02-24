@@ -37,9 +37,6 @@ public class MediaService {
 
         media.setMediaId(updatedMedia.getMediaId());
         media.setUser(updatedMedia.getUser());
-        media.setMediaCategory(updatedMedia.getMediaCategory());
-
-
         return mediaRepository.save(media);
     }
 

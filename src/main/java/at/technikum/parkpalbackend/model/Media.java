@@ -25,14 +25,4 @@ public class Media {
     @JoinColumn(name = "user_id")
     @NotNull(message="Media must belong to a User. Pls add a User")
     private User user;
-
-    @Enumerated(EnumType.STRING)
-    private MediaCategory mediaCategory;
-
-//    public Media(String mediaId, User user, MediaCategory mediaCategory) {
-//        this.mediaId = mediaId;
-//        this.user = user;
-//        this.mediaCategory = mediaCategory;
-//    }
-
 }

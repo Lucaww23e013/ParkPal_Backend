@@ -20,8 +20,6 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(name = "unique_username", columnNames = "user_name"),
         @UniqueConstraint(name = "unique_email", columnNames = "email")
-
-
 })
 public class User {
 
@@ -64,27 +62,6 @@ public class User {
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
-
-
-//    public User(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Boolean isAdmin) {
-//        this.salutation = salutation;
-//        this.userName = username;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.password = password;
-//        this.authToken = authToken;
-//       /* this.country = country;*/
-//        this.isAdmin = isAdmin;
-//    }
-
-    /*public User(String salutation, String username, String firstName, String lastName, String email, String password, String authToken, Country country) {
-        this(salutation,username,firstName, lastName,email,password,authToken,country,false);
-    }
-
-    public User(String userId) {
-        this.userId = userId;
-    }*/
     public User addJoinedEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.joinedEvents.add(event));
         return this;
