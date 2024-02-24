@@ -2,13 +2,12 @@ package at.technikum.parkpalbackend.dto.parkdtos;
 
 import at.technikum.parkpalbackend.model.Address;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.Media;
+import at.technikum.parkpalbackend.model.Picture;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.validator.constraints.UUID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class ParkDto {
 
     //@OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
-    private List<Media> parkMedia = new ArrayList<>();
+    private List<Picture> parkPictures = new ArrayList<>();
 
 
 }

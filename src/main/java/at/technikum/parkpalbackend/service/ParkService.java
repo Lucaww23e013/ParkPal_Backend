@@ -35,7 +35,7 @@ public class ParkService {
         park.setDescription(updatedPark.getDescription());
         park.setAddress(updatedPark.getAddress());
         park.setParkEvents(updatedPark.getParkEvents());
-        park.setParkMedia(updatedPark.getParkMedia());
+        park.setParkPictures(updatedPark.getParkPictures());
 
         return parkRepository.save(park);
     }

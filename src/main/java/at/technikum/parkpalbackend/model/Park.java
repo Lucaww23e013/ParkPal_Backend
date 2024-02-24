@@ -39,7 +39,7 @@ public class Park {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
-    private List<Media> parkMedia = new ArrayList<>();
+    private List<Picture> parkPictures = new ArrayList<>();
 
 
 
@@ -53,13 +53,13 @@ public class Park {
         return this;
     }
 
-    public Park addParkMedia(Media... media) {
-        Arrays.stream(media).forEach(med -> this.parkMedia.add(med));
+    public Park addParkMedia(Picture... media) {
+        Arrays.stream(media).forEach(med -> this.parkPictures.add(med));
         return this;
     }
 
-    public Park removeParkMedia(Media... media) {
-        Arrays.stream(media).forEach(med -> this.parkMedia.remove(med));
+    public Park removeParkMedia(Picture... media) {
+        Arrays.stream(media).forEach(med -> this.parkPictures.remove(med));
         return this;
     }
 

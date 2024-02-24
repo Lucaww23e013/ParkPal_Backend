@@ -12,17 +12,17 @@ import org.hibernate.annotations.UuidGenerator;
 @AllArgsConstructor
 @Builder
 
-@Entity(name = "medias")
-public class Media {
+@Entity(name = "pictures")
+public class Picture {
 
     @Id
     @UuidGenerator
-    @Column(name = "media_id")
-    private String mediaId;
+    @Column(name = "picture_id")
+    private String pictureId;
 
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
-    @NotNull(message="Media must belong to a User. Pls add a User")
+    @NotNull(message="Picture must belong to a User. Pls add a User")
     private User user;
 }

@@ -12,10 +12,10 @@ import org.hibernate.annotations.UuidGenerator;
 @AllArgsConstructor
 @Builder
 @Valid
-public class MediaDto {
+public class PictureDto {
     @Id
     @UuidGenerator
-    private String mediaId;
+    private String pictureId;
 
     private String userId;
 }

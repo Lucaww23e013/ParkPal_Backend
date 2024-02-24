@@ -1,8 +1,7 @@
 package at.technikum.parkpalbackend.dto.eventdtos;
 
 import at.technikum.parkpalbackend.model.EventTag;
-import at.technikum.parkpalbackend.model.Media;
-import at.technikum.parkpalbackend.model.Park;
+import at.technikum.parkpalbackend.model.Picture;
 import at.technikum.parkpalbackend.model.User;
 import lombok.*;
 import org.springframework.stereotype.Component;
@@ -35,7 +34,7 @@ public class EventDto {
 
     private List<User> joinedUsers;
 
-    private List<Media> eventMedia;
+    private List<Picture> eventPictures;
 
     private List<EventTag> eventTags;
 }

@@ -14,7 +14,7 @@ public class ParkMapper {
                 .name(park.getName())
                 .description(park.getDescription())
                 .parkEvents(park.getParkEvents())
-                .parkMedia(park.getParkMedia())
+                .parkPictures(park.getParkPictures())
                 .build();
     }
 
@@ -24,7 +24,7 @@ public class ParkMapper {
                 .name(parkDto.getName())
                 .description(parkDto.getDescription())
                 .parkEvents(parkDto.getParkEvents())
-                .parkMedia(parkDto.getParkMedia())
+                .parkPictures(parkDto.getParkPictures())
                 .build();
     }
 

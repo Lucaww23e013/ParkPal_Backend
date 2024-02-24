@@ -76,7 +76,7 @@ public class Event {
                     foreignKey = @ForeignKey(name = "fk_event_media_user")))
     @Builder.Default
     @ToString.Exclude
-    private List<Media> eventMedia = new ArrayList<>();
+    private List<Picture> eventPictures = new ArrayList<>();
 
     public Event addJoinedUsers(User... users) {
         Arrays.stream(users).forEach(user -> this.joinedUsers.add(user));
@@ -98,13 +98,13 @@ public class Event {
         return this;
     }
 
-    public Event addEventMedia(Media... media) {
-        Arrays.stream(media).forEach(m -> this.eventMedia.add(m));
+    public Event addEventMedia(Picture... media) {
+        Arrays.stream(media).forEach(m -> this.eventPictures.add(m));
         return this;
     }
 
-    public Event removeEventMedia(Media... media) {
-        Arrays.stream(media).forEach(m -> this.eventMedia.remove(m));
+    public Event removeEventMedia(Picture... media) {
+        Arrays.stream(media).forEach(m -> this.eventPictures.remove(m));
         return this;
     }
 
