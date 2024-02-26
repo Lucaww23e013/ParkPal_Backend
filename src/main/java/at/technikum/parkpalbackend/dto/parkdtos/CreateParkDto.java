@@ -27,6 +27,4 @@ public class CreateParkDto {
 
     @Embedded
     private Address address;
-
-
 }

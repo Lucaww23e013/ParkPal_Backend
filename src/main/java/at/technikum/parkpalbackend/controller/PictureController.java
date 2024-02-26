@@ -68,7 +68,4 @@ public class PictureController {
         Picture picture = pictureService.deletePictureByPictureId(pictureId);
         return null;
     }
-
-
-
 }

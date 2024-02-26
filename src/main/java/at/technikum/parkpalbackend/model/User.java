@@ -53,7 +53,7 @@ public class User {
     @NotBlank(message = "Enter a Password")
     private String password;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     private Country country;
 
     private Role role;

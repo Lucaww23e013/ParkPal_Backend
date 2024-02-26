@@ -41,7 +41,9 @@ public class Park {
     @ToString.Exclude
     private List<Picture> parkPictures = new ArrayList<>();
 
-
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ToString.Exclude
+    private List<Video> parkVideos = new ArrayList<>();
 
     public Park addParkEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.parkEvents.add(event));

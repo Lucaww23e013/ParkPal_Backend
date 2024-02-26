@@ -29,8 +29,6 @@ public class UserService {
         return userRepository.findUserByUserId(userId).orElseThrow(EntityNotFoundException::new);
     }
 
-
-
     public List<User> findAll() {
         return userRepository.findAll();
     }

@@ -68,8 +68,6 @@ public class EventController {
         return eventMapper.toDto(iEventService.findByEventId(eventId));
     }
 
-
-
     //@PostMapping ????
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)

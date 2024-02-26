@@ -15,6 +15,7 @@ entity User {
     - country: Country
     - isAdmin: Boolean
     - joinedEvents: List<Event>
+    - profilePicture: Picture
 }
 
 enum GenderCategory {
@@ -33,7 +34,8 @@ entity Event {
     - creator: User
     - joinedUsers: List<User>
     - eventTags: List<EventTag>
-    - eventMedia: List<Media>
+    - eventPicture: List<Picture>
+    - eventVideos: List<Videos>
 }
 
 entity EventTag {
@@ -41,16 +43,14 @@ entity EventTag {
     - name: String
 }
 
-entity Media {
-    - mediaID: String
+entity Picture {
+    - pictureId: String
     - user: User
-    - mediaCategory: MediaCategory
 }
 
-enum MediaCategory {
-    PICTURE
-    AUDIO
-    VIDEO
+entity Video {
+    - videoId: String
+    - user: User
 }
 
 entity Park {
@@ -59,7 +59,8 @@ entity Park {
     - description: String
     - parkAddress: Address
     - parkEvents: List<Event>
-    - parkMedia: List<Media>
+    - parkPictures: List<Picture>
+    - parkVideos: List<Video>
 }
 
 class Address <<(V, #FF7700) value-object>> {
@@ -78,13 +79,15 @@ Event "1..1" -- User : created by
 Event --> "1..n" Park : has <
 Event -left- "n..m" User : joined By
 EventTag "n..m" --* Event : has <
-Media "n..m" <-- Event
-User -- "1..n" Media  : User create Media
-Park "1..n" -- Media
+Picture "n..m" <-- Event
+Video "n..m" <-- Event
+User -- "1..n" Picture  : User create Picture
+Park "1..n" -- Picture
+User -- "1..n" Video  : User create Video
+Park "1..n" -- Video
 User -- Country
 Address - Country
 Park -left> "0..1" Address
-Media -left-> MediaCategory
 User -left> GenderCategory
 
 @enduml

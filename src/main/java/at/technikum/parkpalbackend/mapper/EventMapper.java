@@ -20,6 +20,8 @@ public class EventMapper {
                 .endTS(event.getEndTS())
                 .parkId(event.getPark().getParkId())
                 .creator(event.getCreator())
+                .eventPictures(event.getEventPictures())
+                .eventVideos(event.getEventVideos())
                 .build();
     }
 
@@ -35,6 +37,7 @@ public class EventMapper {
                 .joinedUsers(event.getJoinedUsers())
                 .eventTags(event.getEventTags())
                 .eventPictures(event.getEventPictures())
+                .eventVideos(event.getEventVideos())
                 .build();
     }
 
@@ -48,7 +51,6 @@ public class EventMapper {
                 .creatorUserId(event.getCreator().getUserId())
 //                .joinedUsers(event.getJoinedUsers())
 //                .eventTags(event.getEventTags())
-//                .eventMedia(event.getEventMedia())
                 .build();
     }
 

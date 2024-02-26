@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
+import at.technikum.parkpalbackend.model.Picture;
 import at.technikum.parkpalbackend.model.Salutation;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -39,5 +40,7 @@ public class CreateUserDto {
     private String password;
 
     private String countryId;
+
+    private Picture profilePicture;
 
 }
