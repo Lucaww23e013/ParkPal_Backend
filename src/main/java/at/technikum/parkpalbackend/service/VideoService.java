@@ -1,6 +1,5 @@
 package at.technikum.parkpalbackend.service;
 
-import at.technikum.parkpalbackend.model.Picture;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.Video;
 import at.technikum.parkpalbackend.persistence.VideoRepository;

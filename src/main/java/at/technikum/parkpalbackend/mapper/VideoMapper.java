@@ -1,8 +1,6 @@
 package at.technikum.parkpalbackend.mapper;
 
-import at.technikum.parkpalbackend.dto.PictureDto;
 import at.technikum.parkpalbackend.dto.VideoDto;
-import at.technikum.parkpalbackend.model.Picture;
 import at.technikum.parkpalbackend.model.Video;
 import at.technikum.parkpalbackend.service.UserService;
 import org.springframework.stereotype.Component;

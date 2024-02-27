@@ -21,7 +21,8 @@ public class VideoController {
 
     private final VideoMapper videoMapper;
 
-    public VideoController(VideoService videoService, UserService userService, VideoMapper videoMapper) {
+    public VideoController(VideoService videoService, UserService userService,
+                           VideoMapper videoMapper) {
         this.videoService = videoService;
         this.userService = userService;
         this.videoMapper = videoMapper;
@@ -56,7 +57,8 @@ public class VideoController {
         return videoMapper.toDto(createdVideo);
     }
     @PatchMapping("/videos/{videoId}")
-    public VideoDto updateVideo(@PathVariable String videoId, @RequestBody VideoDto updatedVideoDto){
+    public VideoDto updateVideo(@PathVariable String videoId,
+                                @RequestBody VideoDto updatedVideoDto){
         Video updatedVideo = videoMapper.toEntity(updatedVideoDto);
         updatedVideo = videoService.updateVideo(videoId, updatedVideo);
         return videoMapper.toDto(updatedVideo);
@@ -65,7 +67,7 @@ public class VideoController {
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
     public VideoDto deleteVideoByVideoId(@PathVariable @Valid String videoId){
-        Video video = videoService.deleteVideoByVideoId(videoId);
+        videoService.deleteVideoByVideoId(videoId);
         return null;
     }
 }

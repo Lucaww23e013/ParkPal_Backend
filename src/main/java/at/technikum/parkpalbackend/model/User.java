@@ -18,8 +18,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(name = "unique_username", columnNames = "user_name"),
-        @UniqueConstraint(name = "unique_email", columnNames = "email")
+    @UniqueConstraint(name = "unique_username", columnNames = "user_name"),
+    @UniqueConstraint(name = "unique_email", columnNames = "email")
 })
 public class User {
 
@@ -48,7 +48,8 @@ public class User {
     private String email;
 
     @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).+$",
-            message = "Password must contain at least one lowercase letter and one uppercase letter. One number and one special character")
+            message = "Password must contain at least one lowercase letter & one uppercase letter."
+                    + "One number and one special character")
     @Size(min = 12, message = "Password must be at least 12 characters long")
     @NotBlank(message = "Enter a Password")
     private String password;

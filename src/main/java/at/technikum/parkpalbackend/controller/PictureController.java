@@ -21,7 +21,8 @@ public class PictureController {
 
     private final PictureMapper pictureMapper;
 
-    public PictureController(PictureService pictureService, UserService userService, PictureMapper pictureMapper) {
+    public PictureController(PictureService pictureService, UserService userService,
+                             PictureMapper pictureMapper) {
         this.pictureService = pictureService;
         this.userService = userService;
         this.pictureMapper = pictureMapper;
@@ -42,9 +43,9 @@ public class PictureController {
 
     @GetMapping("/pictures/{userId}")
     public List<PictureDto> getPictureByUserId(@PathVariable @Valid String userId){
-            User user = userService.findByUserId(userId);
-            List<Picture> selectedPictures = pictureService.getPictureByUserId(user);
-            return selectedPictures.stream().map(picture -> pictureMapper.toDto(picture)).toList();
+        User user = userService.findByUserId(userId);
+        List<Picture> selectedPictures = pictureService.getPictureByUserId(user);
+        return selectedPictures.stream().map(picture -> pictureMapper.toDto(picture)).toList();
     }
 
     @PostMapping("/pictures/create")
@@ -56,7 +57,8 @@ public class PictureController {
         return pictureMapper.toDto(createdPicture);
     }
     @PatchMapping("/pictures/{pictureId}")
-    public PictureDto updatePicture(@PathVariable String pictureId, @RequestBody PictureDto updatedPictureDto){
+    public PictureDto updatePicture(@PathVariable String pictureId,
+                                    @RequestBody PictureDto updatedPictureDto){
         Picture updatedPicture = pictureMapper.toEntity(updatedPictureDto);
         updatedPicture = pictureService.updatePicture(pictureId, updatedPicture);
         return pictureMapper.toDto(updatedPicture);
@@ -65,7 +67,7 @@ public class PictureController {
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
     public PictureDto deletePictureByPictureId(@PathVariable @Valid String pictureId){
-        Picture picture = pictureService.deletePictureByPictureId(pictureId);
+        pictureService.deletePictureByPictureId(pictureId);
         return null;
     }
 }

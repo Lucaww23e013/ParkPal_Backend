@@ -26,7 +26,8 @@ public class ParkController {
 
     private final ParkMapper parkMapper;
 
-    public ParkController(ParkService parkService, EventService eventService, ParkMapper parkMapper){
+    public ParkController(ParkService parkService, EventService eventService,
+                          ParkMapper parkMapper){
         this.parkService = parkService;
         this.eventService = eventService;
         this.parkMapper = parkMapper;
@@ -70,13 +71,13 @@ public class ParkController {
         return parkMapper.toDto(park);
     }
 
-   @DeleteMapping("/parks/{parkId}")
-   //@Preauthorize with Spring security later
-   @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/parks/{parkId}")
+    //@Preauthorize with Spring security later
+    @ResponseStatus(HttpStatus.OK)
     public ParkDto deleteParkByParkById(@PathVariable @Valid String parkId){
-        Park park = parkService.deleteParkByParkId(parkId);
+        parkService.deleteParkByParkId(parkId);
         return null;
-   }
+    }
 
 
 

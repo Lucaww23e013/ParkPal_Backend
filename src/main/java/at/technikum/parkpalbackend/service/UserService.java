@@ -18,7 +18,8 @@ public class UserService {
     }
 
     public User findByUserName(String userName) {
-        return userRepository.findUserByUserName(userName).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findUserByUserName(userName)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     public User findByUserEmail(String email) {
@@ -46,13 +47,15 @@ public class UserService {
     }
 
     public User update(String userId, User newUser) {
-       User existingUser = userRepository.findUserByUserId(userId).orElseThrow(EntityNotFoundException::new);
-       BeanUtils.copyProperties(newUser, existingUser, userId);
-       return userRepository.save(existingUser);
+        User existingUser = userRepository.findUserByUserId(userId)
+                .orElseThrow(EntityNotFoundException::new);
+        BeanUtils.copyProperties(newUser, existingUser, userId);
+        return userRepository.save(existingUser);
     }
 
     public void delete(String userId) {
-        User user = userRepository.findUserByUserId(userId).orElseThrow(EntityNotFoundException::new);
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(EntityNotFoundException::new);
         userRepository.delete(user);
     }
 

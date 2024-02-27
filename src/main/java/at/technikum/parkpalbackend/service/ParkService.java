@@ -20,7 +20,8 @@ public class ParkService {
         return parkRepository.findAll();
     }
     public Park findParkByParkId(String parkId) {
-        return parkRepository.findParkByParkId(parkId).orElseThrow(EntityNotFoundException::new);
+        return parkRepository.findParkByParkId(parkId)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     public Park save(Park park) {
@@ -47,6 +48,7 @@ public class ParkService {
     }
 
     public Park findParkByEvents(List<Event> selectedEvents) {
-        return parkRepository.findByParkEventsIn(selectedEvents).orElseThrow(EntityNotFoundException::new);
+        return parkRepository.findByParkEventsIn(selectedEvents).
+                orElseThrow(EntityNotFoundException::new);
     }
 }

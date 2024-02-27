@@ -33,7 +33,8 @@ public class CountryController {
     }
 
     @PutMapping("/countries/{countryId}")
-    public CountryDto updateCountry(@PathVariable String countryId, @RequestBody CountryDto updatedCountryDto){
+    public CountryDto updateCountry(@PathVariable String countryId,
+                                    @RequestBody CountryDto updatedCountryDto){
         Country updatedCountry = countryMapper.toEntity(updatedCountryDto);
         updatedCountry = countryService.updateCountry(countryId, updatedCountry);
         return countryMapper.toDto(updatedCountry);
@@ -60,7 +61,7 @@ public class CountryController {
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
     public CountryDto deleteCountrybyCountryId(@PathVariable @Valid String countryId){
-        Country country = countryService.deleteCountryByCountryId(countryId);
+        countryService.deleteCountryByCountryId(countryId);
         return null;
     }
 }

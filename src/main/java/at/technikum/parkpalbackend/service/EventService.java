@@ -22,7 +22,7 @@ public class EventService implements IEventService {
     }
 
     public List<Event> findAllEvents() {
-         return eventRepository.findAll();
+        return eventRepository.findAll();
     }
 
     public Event findByEventId(String eventId) {
@@ -41,7 +41,8 @@ public class EventService implements IEventService {
     }
 
     public Event deleteEventById(String eventID) {
-        Event eventToDelete = eventRepository.findByEventId(eventID).orElseThrow(EntityNotFoundException::new);
+        Event eventToDelete = eventRepository.findByEventId(eventID)
+                .orElseThrow(EntityNotFoundException::new);
         eventRepository.delete(eventToDelete);
         return eventToDelete;
     }

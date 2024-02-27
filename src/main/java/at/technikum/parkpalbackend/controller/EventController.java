@@ -5,8 +5,6 @@ import at.technikum.parkpalbackend.dto.eventdtos.DeleteEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.Park;
-import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.ParkService;
 import at.technikum.parkpalbackend.service.UserService;
@@ -31,7 +29,8 @@ public class EventController {
     private final EventMapper eventMapper;
 
 
-    public EventController(EventService eventService, ParkService parkService, UserService userService, EventMapper eventMapper) {
+    public EventController(EventService eventService, ParkService parkService,
+                           UserService userService, EventMapper eventMapper) {
         this.iEventService = eventService;
         this.parkService = parkService;
         this.userService = userService;
@@ -80,7 +79,7 @@ public class EventController {
     @DeleteMapping("/{eventID}")
     @ResponseStatus(HttpStatus.OK)
     public DeleteEventDto deleteEventDto(@PathVariable @Valid String eventID) {
-        Event event = iEventService.deleteEventById(eventID);
+        iEventService.deleteEventById(eventID);
         return null;
     }
 

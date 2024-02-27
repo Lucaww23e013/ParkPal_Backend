@@ -31,12 +31,12 @@ public class UserController {
         this.userService = userService;
         this.userMapper = userMapper;
     }
-   @GetMapping
-   public List<UserDto> readAll() {
-       return userService.findAll().stream()
+    @GetMapping
+    public List<UserDto> readAll() {
+        return userService.findAll().stream()
                .map(userMapper::toDto)
                .collect(Collectors.toList());
-   }
+    }
 
     @GetMapping("/email/{email}")
     public UserDto getUserByEmail(@PathVariable String email) {
@@ -70,18 +70,15 @@ public class UserController {
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public LoginUserDto LoginUser(String email, String password) {
-
-       User user = userService.login(email, password);
-
-       return userMapper.toLoginUserDto(user);
+        User user = userService.login(email, password);
+        return userMapper.toLoginUserDto(user);
     }
 
-   @DeleteMapping("/delete/{userId}")
-   @ResponseStatus(HttpStatus.OK)
-   public void deleteUser(@PathVariable String userId) {
+    @DeleteMapping("/delete/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable String userId) {
         userService.delete(userId);
-
-   }
+    }
 
     @PutMapping("/update/{userId}")
     public UserDto updateUser(@PathVariable String id, @RequestBody @Valid UserDto userDto) {
@@ -90,13 +87,11 @@ public class UserController {
 
         return userMapper.toDto(user);
     }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({MethodArgumentNotValidException.class, DataIntegrityViolationException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class,
+        DataIntegrityViolationException.class})
     public Map<String, String> handleValidationException(Exception exception) {
-
         Map<String, String> errors = new HashMap<>();
-
         if (exception instanceof MethodArgumentNotValidException validationException) {
             validationException.getBindingResult().getAllErrors().forEach((error) -> {
                 String fieldName = ((FieldError) error).getField();
@@ -106,27 +101,23 @@ public class UserController {
         } else if (exception instanceof DataIntegrityViolationException) {
             String errorMessage = exception.getMessage();
             ArrayList<String> errorMessages = new ArrayList<>();
-
             Throwable cause = exception.getCause();
             if (cause != null) {
                 while (cause != null) {
-                    errorMessages.add(cause.getMessage());
-                    cause = cause.getCause();
+                    errorMessages.add(cause.getMessage()); cause = cause.getCause();
                 }
             } else {
                 errorMessages.add(errorMessage);
             }
-
             for (String error : errorMessages) {
-                if (errorMessage.contains(error)) {
-                    errors.put("email", "Email already exists, please choose another one");
-                }
-                if (errorMessage.contains(error)) {
-                    errors.put("username", "Username already exists, please choose another one");
-                }
+                if (errorMessage.contains(error))
+                {
+                    errors.put("email", "Email already exists, please choose another one");}
+                if (errorMessage.contains(error))
+                {
+                    errors.put("username", "Username already exists, please choose another one");}
             }
         }
         return errors;
     }
-
 }
