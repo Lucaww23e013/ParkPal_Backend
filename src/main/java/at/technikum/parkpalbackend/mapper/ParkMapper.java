@@ -39,7 +39,7 @@ public class ParkMapper {
                 .build();
     }
 
-    public Park CreateParkDtoToEntity(CreateParkDto createParkDto) {
+    public Park createParkDtoToEntity(CreateParkDto createParkDto) {
         return Park.builder()
                 .parkId(createParkDto.getParkId())
                 .name(createParkDto.getName())

@@ -37,7 +37,7 @@ public class ParkController {
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.CREATED)
     public CreateParkDto createPark(@RequestBody @Valid CreateParkDto createParkDto){
-        Park park = parkMapper.CreateParkDtoToEntity(createParkDto);
+        Park park = parkMapper.createParkDtoToEntity(createParkDto);
         park = parkService.save(park);
         return parkMapper.toCreateParkDto(park);
     }

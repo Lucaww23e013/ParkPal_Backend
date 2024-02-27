@@ -47,7 +47,11 @@ public class User {
     @Column(unique = true, name = "email")
     private String email;
 
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).+$",
+    @Pattern(regexp = "^(?=.*[a-z])" +
+            "(?=.*\\d)" +
+            "(?=.*[A-Z])" +
+            "(?=.*[@#$%^&+=!])" +
+            "(?=\\S+$).+$",
             message = "Password must contain at least one lowercase letter & one uppercase letter."
                     + "One number and one special character")
     @Size(min = 12, message = "Password must be at least 12 characters long")

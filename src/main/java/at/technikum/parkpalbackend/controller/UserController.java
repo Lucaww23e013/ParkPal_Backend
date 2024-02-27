@@ -69,7 +69,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public LoginUserDto LoginUser(String email, String password) {
+    public LoginUserDto loginUser(String email, String password) {
         User user = userService.login(email, password);
         return userMapper.toLoginUserDto(user);
     }
@@ -110,12 +110,12 @@ public class UserController {
                 errorMessages.add(errorMessage);
             }
             for (String error : errorMessages) {
-                if (errorMessage.contains(error))
-                {
-                    errors.put("email", "Email already exists, please choose another one");}
-                if (errorMessage.contains(error))
-                {
-                    errors.put("username", "Username already exists, please choose another one");}
+                if (errorMessage.contains(error)) {
+                    errors.put("email", "Email already exists, please choose another one");
+                }
+                if (errorMessage.contains(error)) {
+                    errors.put("username", "Username already exists, please choose another one");
+                }
             }
         }
         return errors;
