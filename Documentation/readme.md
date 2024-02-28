@@ -50,6 +50,32 @@ spring.datasource.password=springpw
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 spring.jpa.hibernate.ddl-auto=update
 ```
+
+## DB Setup
+For a new Setup of the Countries in the DB use this enclosed python Script to generate an SQL Query. 
+
+```phyton
+import pycountry
+import uuid
+
+countries = list(pycountry.countries)
+
+sql_script = "INSERT INTO countries (country_Id, name, iso2Code) VALUES\n"
+
+for country in countries:
+    country_id = str(uuid.uuid4())  # Generating a UUID for country_Id
+    country_name = country.name.replace("'", "''")  # Doubling single quotes
+    sql_script += f"('{country_id}', '{country_name}', '{country.alpha_2}'),\n"
+
+sql_script = sql_script.rstrip(',\n') + ';'
+
+print(sql_script)
+```
+You might also need to install pycountry, if you haven't already.
+```install pycountry
+pip install pycountry
+```
+
 # Features
 
 - **Create Events:** Users can create Events in different parks in Vienna. 
@@ -169,6 +195,7 @@ This project is licensed under the MIT License.
 - [MariaDB](https://mariadb.org/)
 - [H2 Database](https://www.h2database.com/html/main.html)
 - [Hibernate](https://hibernate.org/)
+- [Pycountry]((https://pypi.org/project/pycountry/))
 
 # Contact
 
