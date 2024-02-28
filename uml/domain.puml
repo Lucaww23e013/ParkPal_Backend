@@ -75,19 +75,19 @@ entity Country {
     - iso2Code: String
 }
 
-Event "1..1" -- User : created by
-Event --> "1..n" Park : has <
-Event -left- "n..m" User : joined By
-EventTag "n..m" --* Event : has <
+Event "1..1" --|> User : created by
+Event ---> "1..n" Park : has <
+Event -- "n..m" User : joined By
+EventTag "n..m" -left-* Event : has <
 Picture "n..m" <-- Event
-Video "n..m" <-- Event
+Video "n..m" <-left- Event
 User -- "1..n" Picture  : User create Picture
-Park "1..n" -- Picture
+Park "1..n" --|> Picture
 User -- "1..n" Video  : User create Video
-Park "1..n" -- Video
-User -- Country
-Address - Country
-Park -left> "0..1" Address
-User -left> GenderCategory
+Park "1..n" ---|> Video
+User -left-> Country
+Address --> Country
+Park -----> "0..1" Address
+User -> GenderCategory
 
 @enduml
