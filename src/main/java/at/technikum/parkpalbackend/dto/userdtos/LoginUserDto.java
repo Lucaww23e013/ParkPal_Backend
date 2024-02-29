@@ -15,5 +15,4 @@ public class LoginUserDto {
     @NotBlank(message = "Enter an Email-Address")
     @Email(message = "Email is not valid")
     private String email;
-
 }

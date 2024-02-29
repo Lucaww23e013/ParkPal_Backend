@@ -7,10 +7,7 @@ import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -86,38 +83,5 @@ public class UserController {
         user = userService.update(id, user);
 
         return userMapper.toDto(user);
-    }
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({MethodArgumentNotValidException.class,
-        DataIntegrityViolationException.class})
-    public Map<String, String> handleValidationException(Exception exception) {
-        Map<String, String> errors = new HashMap<>();
-        if (exception instanceof MethodArgumentNotValidException validationException) {
-            validationException.getBindingResult().getAllErrors().forEach((error) -> {
-                String fieldName = ((FieldError) error).getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.put(fieldName, errorMessage);
-            });
-        } else if (exception instanceof DataIntegrityViolationException) {
-            String errorMessage = exception.getMessage();
-            ArrayList<String> errorMessages = new ArrayList<>();
-            Throwable cause = exception.getCause();
-            if (cause != null) {
-                while (cause != null) {
-                    errorMessages.add(cause.getMessage()); cause = cause.getCause();
-                }
-            } else {
-                errorMessages.add(errorMessage);
-            }
-            for (String error : errorMessages) {
-                if (errorMessage.contains(error)) {
-                    errors.put("email", "Email already exists, please choose another one");
-                }
-                if (errorMessage.contains(error)) {
-                    errors.put("username", "Username already exists, please choose another one");
-                }
-            }
-        }
-        return errors;
     }
 }
