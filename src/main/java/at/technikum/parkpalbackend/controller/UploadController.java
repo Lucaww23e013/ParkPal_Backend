@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpStatus;
 
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/upload")
@@ -18,7 +19,8 @@ public class UploadController {
 
     @PostMapping("/upload")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> fileUpload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> fileUpload(@RequestParam("file") MultipartFile file)
+            throws IOException {
         return uploadService.processAndSaveFile(file);
     }
 }

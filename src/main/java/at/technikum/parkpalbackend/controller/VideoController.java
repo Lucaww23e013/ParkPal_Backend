@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -65,7 +66,7 @@ public class VideoController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public VideoDto createVideo(@RequestParam("file") MultipartFile file,
-                                @RequestBody @Valid VideoDto videoDto) {
+                                @RequestBody @Valid VideoDto videoDto) throws IOException {
         ResponseEntity<String> uploadResponse = uploadController.fileUpload(file);
         if (uploadResponse.getStatusCode().is2xxSuccessful()) {
             Video createdVideo = videoMapper.toEntity(videoDto);

@@ -31,4 +31,6 @@ public class Picture {
     @NotBlank(message = "File must have an uploadDate")
     private LocalDateTime uploadDate;
 
+    @NotBlank(message = "File must exist")
+    private byte[] file;
 }

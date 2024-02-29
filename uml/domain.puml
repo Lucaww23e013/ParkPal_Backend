@@ -46,17 +46,15 @@ entity EventTag {
 entity Picture {
     - pictureId: String
     - user: User
-    - PictureFileType: fileType
-    - Long: fileSize
     - LocalDateTime: uploadDate
+    - byte[]: file
 }
 
 entity Video {
     - videoId: String
     - user: User
-    - VideoFileType: fileType
-    - Long: fileSize
     - LocalDateTime: uploadDate
+    - byte[]: file
 }
 
 entity Park {

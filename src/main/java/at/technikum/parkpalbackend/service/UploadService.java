@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,49 +18,50 @@ import java.util.List;
 @Service
 public class UploadService {
 
-    private static final List<String> ALLOWED_PICTURE_TYPES = Arrays.asList("jpg", "png", "gif");
-    private static final List<String> ALLOWED_VIDEO_TYPES = Arrays.asList("wmv", "mp4");
+    private static final List<String> ALLOWED_PICTURE_TYPES
+            = new ArrayList<>(Arrays.asList("jpg", "jpeg", "png", "gif"));
+    private static final List<String> ALLOWED_VIDEO_TYPES
+            = new ArrayList<>(Arrays.asList("mp4", "avi", "mov"));
 
+
+    private final PictureMapper pictureMapper;
+    private final VideoMapper videoMapper;
     private final PictureService pictureService;
     private final VideoService videoService;
 
-    private final PictureMapper pictureMapper;
-
-    private final VideoMapper videoMapper;
-
-    public UploadService(PictureService pictureService, VideoService videoService,
-                         PictureMapper pictureMapper, VideoMapper videoMapper) {
-        this.pictureService = pictureService;
-        this.videoService = videoService;
+    public UploadService(PictureMapper pictureMapper, VideoMapper videoMapper,
+                         PictureService pictureService, VideoService videoService) {
         this.pictureMapper = pictureMapper;
         this.videoMapper = videoMapper;
+        this.pictureService = pictureService;
+        this.videoService = videoService;
     }
 
-    public ResponseEntity<String> processAndSaveFile(MultipartFile file) {
+    public ResponseEntity<String> processAndSaveFile(MultipartFile file) throws IOException {
         String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
 
-        if (ALLOWED_PICTURE_TYPES.contains(fileExtension)) {
-            Picture picture = pictureMapper.fromMultipartFileToEntity(file);
-            picture.setUploadDate(LocalDateTime.now());
-            pictureService.save(picture);
-            return ResponseEntity.ok("Upload Successfully");
+        if (fileExtension != null) {
+            if (ALLOWED_PICTURE_TYPES.contains(fileExtension.toLowerCase())) {
+                Picture picture = pictureMapper.fromMultipartFileToEntity(file);
+                picture.setUploadDate(LocalDateTime.now());
+                pictureService.save(picture);
 
-        } else if (ALLOWED_VIDEO_TYPES.contains(fileExtension)) {
-            Video video = videoMapper.fromMultipartFileToEntity(file);
-            videoService.save(video);
-            video.setUploadDate(LocalDateTime.now());
-            return ResponseEntity.ok("Upload Successfully");
+                return ResponseEntity.ok("Picture uploaded successfully");
 
-        } else {
-            return ResponseEntity.badRequest().body("Invalid file type. Allowed types: "
-                    + getAllowedFileTypes());
+            } else if (ALLOWED_VIDEO_TYPES.contains(fileExtension.toLowerCase())) {
+                Video video = videoMapper.fromMultipartFileToEntity(file);
+                video.setUploadDate(LocalDateTime.now());
+                videoService.save(video);
+
+                return ResponseEntity.ok("Video uploaded successfully");
+            }
         }
-    }
 
-    public List<String> getAllowedFileTypes() {
-        List<String> allowedFileTypes = new ArrayList<>(ALLOWED_PICTURE_TYPES);
-        allowedFileTypes.addAll(ALLOWED_VIDEO_TYPES);
-        return allowedFileTypes;
+        return ResponseEntity.badRequest().body("Invalid file type. Allowed picture types: "
+                + String.join(", ", ALLOWED_PICTURE_TYPES) +
+                ". Allowed video types: " + String.join(", ", ALLOWED_VIDEO_TYPES));
+    }
+    public byte[] transferToBytes(MultipartFile file) throws IOException {
+        return file.getBytes();
     }
 }
-
