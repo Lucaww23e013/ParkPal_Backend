@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -18,4 +20,6 @@ public class PictureDto {
     private String pictureId;
 
     private String userId;
+
+    private LocalDateTime uploadDate;
 }

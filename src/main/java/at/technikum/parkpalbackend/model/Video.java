@@ -1,9 +1,13 @@
 package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
+
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -22,4 +26,7 @@ public class Video {
     @JoinColumn(name = "user_id")
     @NotNull(message="Video must belong to a User. Pls add a User")
     private User user;
+
+    @NotBlank(message = "File must have an uploadDate")
+    private LocalDateTime uploadDate;
 }

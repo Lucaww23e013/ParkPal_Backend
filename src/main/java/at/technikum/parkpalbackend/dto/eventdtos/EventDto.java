@@ -39,6 +39,5 @@ public class EventDto {
 
     private List<Video> eventVideos;
 
-
     private List<EventTag> eventTags;
 }

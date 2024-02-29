@@ -5,6 +5,7 @@ import at.technikum.parkpalbackend.model.Video;
 import at.technikum.parkpalbackend.persistence.VideoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -42,5 +43,9 @@ public class VideoService {
         Video video = videoRepository.findVideoByVideoId(videoId).orElseThrow();
         videoRepository.delete(video);
         return null;
+    }
+
+    public LocalDateTime getUploadDate() {
+        return LocalDateTime.now();
     }
 }

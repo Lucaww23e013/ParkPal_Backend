@@ -46,11 +46,17 @@ entity EventTag {
 entity Picture {
     - pictureId: String
     - user: User
+    - PictureFileType: fileType
+    - Long: fileSize
+    - LocalDateTime: uploadDate
 }
 
 entity Video {
     - videoId: String
     - user: User
+    - VideoFileType: fileType
+    - Long: fileSize
+    - LocalDateTime: uploadDate
 }
 
 entity Park {
@@ -75,6 +81,9 @@ entity Country {
     - iso2Code: String
 }
 
+
+
+
 Event "1..1" --|> User : created by
 Event ---> "1..n" Park : has <
 Event -- "n..m" User : joined By
@@ -89,5 +98,6 @@ User -left-> Country
 Address --> Country
 Park -----> "0..1" Address
 User -> GenderCategory
+
 
 @enduml
