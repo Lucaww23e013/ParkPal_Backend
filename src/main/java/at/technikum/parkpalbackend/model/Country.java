@@ -15,7 +15,7 @@ import lombok.*;
 public class Country {
 
     @Id
-    @Column(name = "country_Id")
+    @Column(name = "country_id")
     private String countryId;
 
     @NotBlank(message = "Country-Name not found")

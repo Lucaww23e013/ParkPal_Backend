@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/picture")
+@RequestMapping("/pictures")
 @CrossOrigin
 public class PictureController {
     private final PictureService pictureService;
@@ -28,27 +28,27 @@ public class PictureController {
         this.pictureMapper = pictureMapper;
     }
 
-    @GetMapping("/pictures")
+    @GetMapping
     public List<PictureDto> getAllPictures() {
         List<Picture> pictures = pictureService.findAllPictures();
         return pictures.stream().map(picture -> pictureMapper.toDto(picture)).toList();
 
     }
 
-    @GetMapping("/pictures/{pictureId}")
+    @GetMapping("/{pictureId}")
     public PictureDto getPictureByPictureId(@PathVariable @Valid String pictureId){
         Picture picture = pictureService.findPictureByPictureId(pictureId);
         return pictureMapper.toDto(picture);
     }
 
-    @GetMapping("/pictures/{userId}")
+    @GetMapping("/{userId}")
     public List<PictureDto> getPictureByUserId(@PathVariable @Valid String userId){
         User user = userService.findByUserId(userId);
         List<Picture> selectedPictures = pictureService.getPictureByUserId(user);
         return selectedPictures.stream().map(picture -> pictureMapper.toDto(picture)).toList();
     }
 
-    @PostMapping("/pictures/create")
+    @PostMapping("/create")
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.CREATED)
     public PictureDto createPicture(@RequestBody @Valid PictureDto pictureDto){
@@ -56,14 +56,14 @@ public class PictureController {
         createdPicture = pictureService.save(createdPicture);
         return pictureMapper.toDto(createdPicture);
     }
-    @PatchMapping("/pictures/{pictureId}")
+    @PatchMapping("/{pictureId}")
     public PictureDto updatePicture(@PathVariable String pictureId,
                                     @RequestBody PictureDto updatedPictureDto){
         Picture updatedPicture = pictureMapper.toEntity(updatedPictureDto);
         updatedPicture = pictureService.updatePicture(pictureId, updatedPicture);
         return pictureMapper.toDto(updatedPicture);
     }
-    @DeleteMapping("/pictures/{pictureId}")
+    @DeleteMapping("/{pictureId}")
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
     public PictureDto deletePictureByPictureId(@PathVariable @Valid String pictureId){

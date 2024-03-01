@@ -23,7 +23,7 @@ public class CountryController {
         this.countryMapper = countryMapper;
     }
 
-    @PostMapping("/countries")
+    @PostMapping
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.CREATED)
     public CountryDto addCountries(@RequestBody @Valid CountryDto countryDto){
@@ -32,7 +32,7 @@ public class CountryController {
         return countryMapper.toDto(country);
     }
 
-    @PutMapping("/countries/{countryId}")
+    @PutMapping("/{countryId}")
     public CountryDto updateCountry(@PathVariable String countryId,
                                     @RequestBody CountryDto updatedCountryDto){
         Country updatedCountry = countryMapper.toEntity(updatedCountryDto);
@@ -40,27 +40,27 @@ public class CountryController {
         return countryMapper.toDto(updatedCountry);
     }
 
-    @GetMapping("/countries")
+    @GetMapping()
     public List<CountryDto> getAllCountries() {
         List<Country> allCountries = countryService.findAllCountries();
         return allCountries.stream().map(country -> countryMapper.toDto(country)).toList();
     }
-    @GetMapping("/country/{countryId}")
+    @GetMapping("/{countryId}")
     public CountryDto getCountryById(@PathVariable @Valid String countryId){
         Country country = countryService.findCountryByCountryId(countryId);
         return countryMapper.toDto(country);
     }
 
-    @GetMapping("/country/{name}")
+    @GetMapping("/{name}")
     public CountryDto getCountryByName(@PathVariable @Valid String name){
         Country country = countryService.findCountryByName(name);
         return countryMapper.toDto(country);
     }
 
-    @DeleteMapping("/countries/{countryId}")
+    @DeleteMapping("/{countryId}")
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
-    public CountryDto deleteCountrybyCountryId(@PathVariable @Valid String countryId){
+    public CountryDto deleteCountryByCountryId(@PathVariable @Valid String countryId){
         countryService.deleteCountryByCountryId(countryId);
         return null;
     }

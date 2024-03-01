@@ -34,20 +34,20 @@ public class VideoController {
         this.videoMapper = videoMapper;
     }
 
-    @GetMapping("/videos")
+    @GetMapping
     public List<VideoDto> getAllPicture() {
         List<Video> videos = videoService.findAllVideos();
         return videos.stream().map(video -> videoMapper.toDto(video)).toList();
 
     }
 
-    @GetMapping("/videos/{videoId}")
+    @GetMapping("/{videoId}")
     public VideoDto getVideoByVideoId(@PathVariable @Valid String videoId){
         Video video = videoService.findVideoByVideoId(videoId);
         return videoMapper.toDto(video);
     }
 
-    @GetMapping("/videos/{userId}")
+    @GetMapping("/{userId}")
     public List<VideoDto> getVideoByUserId(@PathVariable @Valid String userId){
         User user = userService.findByUserId(userId);
         List<Video> selectedVideos = videoService.findVideosByUser(user);
@@ -76,14 +76,14 @@ public class VideoController {
             throw new RuntimeException("File upload failed");
         }
     }
-    @PatchMapping("/videos/{videoId}")
+    @PatchMapping("/{videoId}")
     public VideoDto updateVideo(@PathVariable String videoId,
                                 @RequestBody VideoDto updatedVideoDto){
         Video updatedVideo = videoMapper.toEntity(updatedVideoDto);
         updatedVideo = videoService.updateVideo(videoId, updatedVideo);
         return videoMapper.toDto(updatedVideo);
     }
-    @DeleteMapping("/videos/{videoId}")
+    @DeleteMapping("/{videoId}")
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
     public VideoDto deleteVideoByVideoId(@PathVariable @Valid String videoId){

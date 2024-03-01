@@ -17,7 +17,7 @@ public class UploadController {
     @Autowired
     private UploadService uploadService;
 
-    @PostMapping("/upload")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> fileUpload(@RequestParam("file") MultipartFile file)
             throws IOException {

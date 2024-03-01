@@ -60,7 +60,7 @@ import uuid
 
 countries = list(pycountry.countries)
 
-sql_script = "INSERT INTO countries (country_Id, name, iso2Code) VALUES\n"
+sql_script = "INSERT INTO country (country_Id, name, iso2Code) VALUES\n"
 
 for country in countries:
     country_id = str(uuid.uuid4())  # Generating a UUID for country_Id
