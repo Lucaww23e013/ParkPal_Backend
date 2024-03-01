@@ -2,11 +2,9 @@ package at.technikum.parkpalbackend.dto.parkdtos;
 
 import at.technikum.parkpalbackend.model.Address;
 import jakarta.persistence.Embedded;
-import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
 
 @Getter
 @Setter
