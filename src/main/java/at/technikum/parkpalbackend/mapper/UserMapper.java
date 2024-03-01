@@ -11,7 +11,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    private CountryService countryService;
+    private final CountryService countryService;
+
+    public UserMapper(CountryService countryService) {
+        this.countryService = countryService;
+    }
 
     public UserDto toDto(User user) {
         return UserDto.builder()
@@ -64,6 +68,7 @@ public class UserMapper {
                 .lastName(createUserDto.getLastName())
                 .email(createUserDto.getEmail())
                 .password(createUserDto.getPassword())
+                .country(countryService.findCountryByCountryId(createUserDto.getCountryId()))
                 .build();
     }
 
