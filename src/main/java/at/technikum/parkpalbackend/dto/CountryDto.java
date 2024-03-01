@@ -14,7 +14,6 @@ import org.hibernate.annotations.UuidGenerator;
 @Builder
 @Valid
 public class CountryDto {
-    @Id
 
     private String countryId;
 
