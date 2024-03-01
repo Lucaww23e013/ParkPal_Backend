@@ -22,8 +22,7 @@ import java.util.List;
 @Builder
 @Valid
 public class ParkDto {
-    @Id
-    @UuidGenerator
+
     private String parkId;
 
     @NotBlank(message = "Park name not found. All parks need a name")

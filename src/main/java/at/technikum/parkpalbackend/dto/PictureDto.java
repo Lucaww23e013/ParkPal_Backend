@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @Valid
 public class PictureDto {
-    @Id
-    @UuidGenerator
+
     private String pictureId;
 
     private String userId;

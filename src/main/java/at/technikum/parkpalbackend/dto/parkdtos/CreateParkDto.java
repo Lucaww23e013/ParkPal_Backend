@@ -16,8 +16,7 @@ import org.hibernate.annotations.UuidGenerator;
 @Builder
 @Valid
 public class CreateParkDto {
-    @Id
-    @UuidGenerator
+
     private String parkId;
 
     @NotBlank(message = "Park name not found. All parks need a name")

@@ -15,7 +15,7 @@ import org.hibernate.annotations.UuidGenerator;
 @Valid
 public class CountryDto {
     @Id
-    @UuidGenerator
+
     private String countryId;
 
     @NotBlank(message = "Country-Name not found")
