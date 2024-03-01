@@ -9,7 +9,9 @@ ParkPal Backend is the server-side component for the ParkPal service. It is buil
     - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
+- [DB Setup](#db-setup)
 - [Features](#features)
+- [UML Diagram](#uml-diagram)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
@@ -21,10 +23,11 @@ To get started with ParkPal Backend, follow the instructions below:
 ### Prerequisites
 Ensure you have the following installed:
 
-- Java (version X.X.X)
-- Spring Boot (version X.X.X)
-- MariaDB (version X.X.X)
-- H2 Database (version X.X.X)
+- Java (version 21)
+- Spring Boot (version 3.2.2)
+- MariaDB 
+- H2 Database 
+- Minio
 
 ### Installation
 1. Clone the repository: `git clone https://github.com/your-username/parkpal-backend.git`
