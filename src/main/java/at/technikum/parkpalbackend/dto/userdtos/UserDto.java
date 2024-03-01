@@ -49,5 +49,4 @@ public class UserDto {
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
-    private Picture profilePicture;
 }
