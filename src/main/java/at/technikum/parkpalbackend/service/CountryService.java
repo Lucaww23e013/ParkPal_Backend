@@ -19,7 +19,8 @@ public class CountryService {
     }
 
     public Country updateCountry(String countryId, Country updatedCountry) {
-        Country country = countryRepository.findCountryByCountryId(countryId).orElseThrow();
+        Country country = countryRepository.findCountryByCountryId(countryId)
+                .orElseThrow();
         country.setCountryId(updatedCountry.getCountryId());
         country.setName(updatedCountry.getName());
         country.setIso2Code(updatedCountry.getIso2Code());
@@ -37,7 +38,8 @@ public class CountryService {
     }
 
     public Country findCountryByName(String name) {
-        return countryRepository.findCountryByName(name).orElseThrow();
+        return countryRepository.findCountryByName(name)
+                .orElseThrow();
     }
 
     public Country deleteCountryByCountryId(String countryId) {

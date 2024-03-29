@@ -20,8 +20,7 @@ public class ParkService {
         return parkRepository.findAll();
     }
     public Park findParkByParkId(String parkId) {
-        return parkRepository.findParkByParkId(parkId)
-                .orElseThrow(EntityNotFoundException::new);
+        return parkRepository.findParkByParkId(parkId).orElseThrow(EntityNotFoundException::new);
     }
 
     public Park save(Park park) {
@@ -32,23 +31,24 @@ public class ParkService {
         Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
 
         park.setParkId(updatedPark.getParkId());
-        park.setName(updatedPark.getName());
+        park.setParkName(updatedPark.getParkName());
         park.setDescription(updatedPark.getDescription());
-        park.setAddress(updatedPark.getAddress());
+        park.setParkAddress(updatedPark.getParkAddress());
         park.setParkEvents(updatedPark.getParkEvents());
-        park.setParkPictures(updatedPark.getParkPictures());
+        park.setParkMedia(updatedPark.getParkMedia());
 
         return parkRepository.save(park);
     }
 
     public Park deleteParkByParkId(String parkId) {
-        Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
+        Park park = parkRepository.findParkByParkId(parkId)
+                .orElseThrow();
         parkRepository.delete(park);
         return null;
     }
 
     public Park findParkByEvents(List<Event> selectedEvents) {
-        return parkRepository.findByParkEventsIn(selectedEvents).
-                orElseThrow(EntityNotFoundException::new);
+        return parkRepository.findByParkEventsIn(selectedEvents)
+                .orElseThrow(EntityNotFoundException::new);
     }
 }

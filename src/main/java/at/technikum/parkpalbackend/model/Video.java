@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
+
 @Getter
 @Setter
 @ToString
@@ -11,15 +12,19 @@ import org.hibernate.annotations.UuidGenerator;
 @AllArgsConstructor
 @Builder
 
-@Entity(name = "videos")
-public class Video {
+@Entity(name = "medias")
+public class Media {
+
     @Id
     @UuidGenerator
-    @Column(name = "video_id")
-    private String videoId;
+    @Column(name = "media_id")
+    private String mediaId;
+
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
-    @NotNull(message="Video must belong to a User. Pls add a User")
+    @NotNull(message="Media must belong to a User. Pls add a User")
     private User user;
+
+
 }

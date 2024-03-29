@@ -30,6 +30,8 @@ public class UserService {
         return userRepository.findUserByUserId(userId).orElseThrow(EntityNotFoundException::new);
     }
 
+
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -48,7 +50,7 @@ public class UserService {
 
     public User update(String userId, User newUser) {
         User existingUser = userRepository.findUserByUserId(userId)
-                .orElseThrow(EntityNotFoundException::new);
+               .orElseThrow(EntityNotFoundException::new);
         BeanUtils.copyProperties(newUser, existingUser, userId);
         return userRepository.save(existingUser);
     }

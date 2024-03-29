@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.dto.parkdtos;
 
 import at.technikum.parkpalbackend.model.Address;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Id;
 import jakarta.validation.Valid;
@@ -12,7 +13,6 @@ import org.hibernate.annotations.UuidGenerator;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
 @Valid
 public class CreateParkDto {
@@ -21,10 +21,18 @@ public class CreateParkDto {
     private String parkId;
 
     @NotBlank(message = "Park name not found. All parks need a name")
-    private String name;
+    private String parkName;
 
     private String description;
 
     @Embedded
-    private Address address;
+    private Address parkAddress;
+
+    public CreateParkDto(String parkId, String parkName, String description, Address parkAddress) {
+        this.parkId = parkId;
+        this.parkName = parkName;
+        this.description = description;
+        this.parkAddress = parkAddress;
+    }
+
 }
