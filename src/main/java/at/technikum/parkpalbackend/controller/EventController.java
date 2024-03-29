@@ -88,27 +88,10 @@ public class EventController {
 
     // PATCH /events/{eventID}		(change elements of the Event with a given EventId)
     @PutMapping("/{eventID}")
-    public ResponseEntity<EventDto> updateEventDto(@RequestBody EventDto newEventDto, @PathVariable @Valid String eventID) {
+    public ResponseEntity<EventDto> updateEventDto(@RequestBody EventDto newEventDto,
+        @PathVariable @Valid String eventID) {
         Event mappedEntity = eventMapper.toEntity(newEventDto);
         Event updatedEvent = iEventService.updateEvent(eventID, mappedEntity);
         return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
     }
-
-
-//    PATCH /events/{eventID}		(change elements of the Event with a given EventId)
-//
-//    DELETE /events/{eventID}		(User delete an event with a given eventId)
-//
-//    PATCH /events/join			(join event with an given EventId from a given 						UserId)
-//
-//    PATCH /events/unjoin 			(Unjoin event with an EventId from a given UserId)
-//
-//    PUT /events /{eventId}			(User can change Event Details)
-//
-//    GET /media/{eventId}			(Gets all Media for a certain Event with a eventId)
-
-
-
-
-
 }

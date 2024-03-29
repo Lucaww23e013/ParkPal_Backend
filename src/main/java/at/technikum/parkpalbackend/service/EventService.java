@@ -59,7 +59,8 @@ public class EventService implements IEventService {
             //existingEvent.setCreator(updatedEvent.getCreator());
             existingEvent.setJoinedUsers(updatedEvent.getJoinedUsers());
             existingEvent.setEventTags(updatedEvent.getEventTags());
-            existingEvent.setEventMedia(updatedEvent.getEventMedia());
+            existingEvent.setEventPictures(updatedEvent.getEventPictures());
+            existingEvent.setEventVideos(updatedEvent.getEventVideos());
             return eventRepository.save(existingEvent);
         } catch (Exception e) {
             throw new RuntimeException("Failed to update Event: %s".formatted(e.getMessage()));
