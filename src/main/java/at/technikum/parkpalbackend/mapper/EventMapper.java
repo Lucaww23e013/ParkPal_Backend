@@ -3,13 +3,14 @@ package at.technikum.parkpalbackend.mapper;
 import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.service.ParkService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventMapper {
 
+    private ParkService parkService;
     public EventDto toDto(Event event) {
         return EventDto.builder()
                 .eventId(event.getEventId())
@@ -17,8 +18,10 @@ public class EventMapper {
                 .description(event.getDescription())
                 .startTS(event.getStartTS())
                 .endTS(event.getEndTS())
-                .park(event.getPark())
+                .parkId(event.getPark().getParkId())
                 .creator(event.getCreator())
+                .eventPictures(event.getEventPictures())
+                .eventVideos(event.getEventVideos())
                 .build();
     }
 
@@ -29,11 +32,12 @@ public class EventMapper {
                 .description(event.getDescription())
                 .startTS(event.getStartTS())
                 .endTS(event.getEndTS())
-                .park(event.getPark())
+                .parkId(event.getPark().getParkId())
                 .creator(event.getCreator())
                 .joinedUsers(event.getJoinedUsers())
                 .eventTags(event.getEventTags())
-                .eventMedia(event.getEventMedia())
+                .eventPictures(event.getEventPictures())
+                .eventVideos(event.getEventVideos())
                 .build();
     }
 
@@ -47,7 +51,6 @@ public class EventMapper {
                 .creatorUserId(event.getCreator().getUserId())
 //                .joinedUsers(event.getJoinedUsers())
 //                .eventTags(event.getEventTags())
-//                .eventMedia(event.getEventMedia())
                 .build();
     }
 
@@ -57,7 +60,7 @@ public class EventMapper {
                 .description(eventDto.getDescription())
                 .startTS(eventDto.getStartTS())
                 .endTS(eventDto.getEndTS())
-                .park(eventDto.getPark())
+                .park(parkService.findParkByParkId(eventDto.getParkId()))
                 .creator(eventDto.getCreator())
                 .build();
     }
@@ -68,11 +71,11 @@ public class EventMapper {
                 .description(eventDto.getDescription())
                 .startTS(eventDto.getStartTS())
                 .endTS(eventDto.getEndTS())
-                .park(eventDto.getPark())
+                .park(parkService.findParkByParkId(eventDto.getParkId()))
                 .creator(eventDto.getCreator())
                 .joinedUsers(eventDto.getJoinedUsers())
                 .eventTags(eventDto.getEventTags())
-                .eventMedia(eventDto.getEventMedia())
+                .eventPictures(eventDto.getEventPictures())
                 .build();
     }
 
@@ -83,9 +86,7 @@ public class EventMapper {
                 .startTS(createEventDto.getStartTS())
                 .endTS(createEventDto.getEndTS())
                 .creator(User.builder().userId(createEventDto.getCreatorUserId()).build())
-                .park(Park.builder().parkId(createEventDto.getParkId()).build())
+                .park(parkService.findParkByParkId(createEventDto.getParkId()))
                 .build();
     }
-
-
 }

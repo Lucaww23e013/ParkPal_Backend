@@ -3,7 +3,6 @@ package at.technikum.parkpalbackend.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
 
 @Getter
 @Setter
@@ -16,8 +15,7 @@ import org.hibernate.annotations.UuidGenerator;
 public class Country {
 
     @Id
-    @UuidGenerator
-    @Column(name = "country_Id")
+    @Column(name = "country_id")
     private String countryId;
 
     @NotBlank(message = "Country-Name not found")

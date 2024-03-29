@@ -7,18 +7,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class CountryMapper {
     public CountryDto toDto(Country country){
-        return new CountryDto(
-                country.getCountryId(),
-                country.getName(),
-                country.getIso2Code()
-        );
+        return CountryDto.builder()
+                .countryId(country.getCountryId())
+                .name(country.getName())
+                .iso2Code(country.getIso2Code())
+                .build();
     }
 
     public Country toEntity(CountryDto countryDto) {
-        return new Country(
-                countryDto.getCountryId(),
-                countryDto.getName(),
-                countryDto.getIso2Code()
-        );
+        return Country.builder()
+                .countryId(countryDto.getCountryId())
+                .name(countryDto.getName())
+                .iso2Code(countryDto.getIso2Code())
+                .build();
     }
 }

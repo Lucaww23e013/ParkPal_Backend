@@ -11,6 +11,7 @@ entity User {
     - lastName: String
     - email: String
     - password: String
+    - AuthToken: String
     - country: Country
     - isAdmin: Boolean
     - joinedEvents: List<Event>
@@ -33,7 +34,8 @@ entity Event {
     - creator: User
     - joinedUsers: List<User>
     - eventTags: List<EventTag>
-    - eventMedia: List<Media>
+    - eventPicture: List<Picture>
+    - eventVideos: List<Videos>
 }
 
 entity EventTag {
@@ -41,34 +43,18 @@ entity EventTag {
     - name: String
 }
 
-enum VideoFormatType {
-    MP4
-    WMV
-}
-
-enum PictureFormatType {
-    JPG
-    PNG
-    GIF
-}
-
-abstract class Media {
-    - mediaID: String
-    - uploader: User
-    - fileName: String
-    - published: LocalDateTime
-    - fileSize: Long
-    - data: byte[]
+entity Picture {
+    - pictureId: String
+    - user: User
+    - LocalDateTime: uploadDate
+    - byte[]: file
 }
 
 entity Video {
-    - duration: Long
-    - formatType: VideoFormatType
-}
-
-entity Picture {
-    - formatType: PictureFormatType
-
+    - videoId: String
+    - user: User
+    - LocalDateTime: uploadDate
+    - byte[]: file
 }
 
 entity Park {
@@ -77,7 +63,8 @@ entity Park {
     - description: String
     - parkAddress: Address
     - parkEvents: List<Event>
-    - parkMedia: List<Media>
+    - parkPictures: List<Picture>
+    - parkVideos: List<Video>
 }
 
 class Address <<(V, #FF7700) value-object>> {
@@ -92,21 +79,23 @@ entity Country {
     - iso2Code: String
 }
 
-User "1..1" -- Event : created by
-Event --right> "1..n" Park : has <
-Event -left- "n..m" User : joined By
-EventTag "n..m" --* Event : has <
-Media "n..m" <-- Event
-User -- "1..n" Media : User create Media
-Park "1..n" -- Media
-User -- Country
-Address - Country
-Park -right> "0..1" Address
-User -> Picture
-Video --|> Media
-Picture --|> Media
-User -left> GenderCategory
-Video -> VideoFormatType
-Picture -left> PictureFormatType
-@enduml
 
+
+
+Event "1..1" --|> User : created by
+Event ---> "1..n" Park : has <
+Event -- "n..m" User : joined By
+EventTag "n..m" -left-* Event : has <
+Picture "n..m" <-- Event
+Video "n..m" <-left- Event
+User -- "1..n" Picture  : User create Picture
+Park "1..n" --|> Picture
+User -- "1..n" Video  : User create Video
+Park "1..n" ---|> Video
+User -left-> Country
+Address --> Country
+Park -----> "0..1" Address
+User -> GenderCategory
+
+
+@enduml

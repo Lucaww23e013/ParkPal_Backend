@@ -5,11 +5,17 @@ import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.service.CountryService;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class UserMapper {
+    private final CountryService countryService;
+
+    public UserMapper(CountryService countryService) {
+        this.countryService = countryService;
+    }
 
     public UserDto toDto(User user) {
         return UserDto.builder()
@@ -20,9 +26,8 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .country(user.getCountry())
-                .authToken(user.getAuthToken())
-                .isAdmin(user.isAdmin())
+                .countryId(user.getCountry().getCountryId())
+                .role(user.getRole())
                 .joinedEvents(user.getJoinedEvents())
                 .build();
     }
@@ -36,9 +41,8 @@ public class UserMapper {
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
-                .country(userDto.getCountry())
-                .authToken(userDto.getAuthToken())
-                .isAdmin(userDto.isAdmin())
+                .country(countryService.findCountryByCountryId(userDto.getCountryId()))
+                .role(userDto.getRole())
                 .joinedEvents(userDto.getJoinedEvents())
                 .build();
     }
@@ -64,6 +68,7 @@ public class UserMapper {
                 .lastName(createUserDto.getLastName())
                 .email(createUserDto.getEmail())
                 .password(createUserDto.getPassword())
+                .country(countryService.findCountryByCountryId(createUserDto.getCountryId()))
                 .build();
     }
 

@@ -26,12 +26,12 @@ public class Park {
 
     @NotBlank(message="Park name not found. All parks need a name")
     @Column(unique = true)
-    private String parkName;
+    private String name;
 
     private String description;
 
     @Embedded
-    private Address parkAddress;
+    private Address address;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
@@ -39,7 +39,11 @@ public class Park {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
-    private List<Media> parkMedia = new ArrayList<>();
+    private List<Picture> parkPictures = new ArrayList<>();
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ToString.Exclude
+    private List<Video> parkVideos = new ArrayList<>();
 
     public Park addParkEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.parkEvents.add(event));
@@ -51,13 +55,13 @@ public class Park {
         return this;
     }
 
-    public Park addParkMedia(Media... media) {
-        Arrays.stream(media).forEach(med -> this.parkMedia.add(med));
+    public Park addParkMedia(Picture... media) {
+        Arrays.stream(media).forEach(med -> this.parkPictures.add(med));
         return this;
     }
 
-    public Park removeParkMedia(Media... media) {
-        Arrays.stream(media).forEach(med -> this.parkMedia.remove(med));
+    public Park removeParkMedia(Picture... media) {
+        Arrays.stream(media).forEach(med -> this.parkPictures.remove(med));
         return this;
     }
 

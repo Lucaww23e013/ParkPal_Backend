@@ -31,11 +31,11 @@ public class EventService implements IEventService {
     }
 
     public List<Event> findAllEventsByPark(String parkId) {
-        return eventRepository.findAllByPark_ParkId(parkId);
+        return eventRepository.findAllByParkParkId(parkId);
     }
 
     public List<Event> findAllEventsByUser(String userId) {
-        List<Event> events = eventRepository.findAllByCreator_UserId(userId);
+        List<Event> events = eventRepository.findAllByCreatorUserId(userId);
         // check if even the user exists
         // if the User has not created any Event ??!!
         return events;

@@ -1,8 +1,9 @@
 package at.technikum.parkpalbackend.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,12 +12,11 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Valid
-public class EventTagDto {
+public class VideoDto {
+    private String videoId;
 
-    private String eventTagId;
+    private String userId;
 
-    @NotBlank(message = "Event Tag cannot be empty.")
-    private String name;
+    private LocalDateTime uploadDate;
 
 }
-

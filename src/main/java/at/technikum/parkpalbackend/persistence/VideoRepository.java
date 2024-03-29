@@ -1,16 +1,17 @@
 package at.technikum.parkpalbackend.persistence;
 
-import at.technikum.parkpalbackend.model.Media;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.model.Video;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-
 @Repository
-public interface MediaRepository extends JpaRepository<Media, String> {
-    Optional<Media> findMediaByMediaId(String mediaId);
+public interface VideoRepository extends JpaRepository<Video, String> {
 
-    Optional<Media> findMediaByUser(User user);
+    Optional<Video>findVideoByVideoId(String videoId);
+
+    Optional<Video> findVideoByUser(User user);
 
 }
+

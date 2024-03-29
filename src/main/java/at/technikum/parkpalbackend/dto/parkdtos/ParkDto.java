@@ -2,13 +2,12 @@ package at.technikum.parkpalbackend.dto.parkdtos;
 
 import at.technikum.parkpalbackend.model.Address;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.Media;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Id;
+import at.technikum.parkpalbackend.model.Picture;
+import at.technikum.parkpalbackend.model.Video;
+import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +16,21 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+
 @Builder
 @Valid
 public class ParkDto {
-    @Id
-    @UuidGenerator
+
     private String parkId;
 
     @NotBlank(message = "Park name not found. All parks need a name")
-    private String parkName;
+    private String name;
 
     private String description;
 
     @Embedded
-    private Address parkAddress;
+    private Address address;
 
     // @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
@@ -38,15 +38,10 @@ public class ParkDto {
 
     //@OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
-    private List<Media> parkMedia = new ArrayList<>();
+    private List<Picture> parkPictures = new ArrayList<>();
 
-    public ParkDto(String parkId, String parkName, String description, Address parkAddress, List<Event> parkEvents, List<Media> parkMedia) {
-        this.parkId = parkId;
-        this.parkName = parkName;
-        this.description = description;
-        this.parkAddress = parkAddress;
-        this.parkEvents = parkEvents;
-        this.parkMedia = parkMedia;
-    }
+    @ToString.Exclude
+    private List<Video> parkVideos = new ArrayList<>();
+
 
 }

@@ -9,13 +9,13 @@ public class EventTagMapper {
 
     public EventTagDto toDto(EventTag eventTag) {
         return EventTagDto.builder()
-                .tagName(eventTag.getTagName())
+                .name(eventTag.getName())
                 .build();
     }
 
     public EventTag toEntity(EventTagDto eventTagDto) {
         return EventTag.builder()
-                .tagName(eventTagDto.getTagName())
+                .name(eventTagDto.getName())
                 .build();
     }
 

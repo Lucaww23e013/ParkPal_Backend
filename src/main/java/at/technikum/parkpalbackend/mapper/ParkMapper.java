@@ -9,46 +9,42 @@ import org.springframework.stereotype.Component;
 public class ParkMapper {
 
     public ParkDto toDto(Park park){
-        return new ParkDto(
-                park.getParkId(),
-                park.getParkName(),
-                park.getDescription(),
-                park.getParkAddress(),
-                park.getParkEvents(),
-                park.getParkMedia()
-        );
+        return ParkDto.builder()
+                .parkId(park.getParkId())
+                .name(park.getName())
+                .description(park.getDescription())
+                .parkEvents(park.getParkEvents())
+                .parkPictures(park.getParkPictures())
+                .parkVideos(park.getParkVideos())
+                .build();
     }
 
     public Park toEntity(ParkDto parkDto) {
-        return new Park(
-                parkDto.getParkId(),
-                parkDto.getParkName(),
-                parkDto.getDescription(),
-                parkDto.getParkAddress(),
-                parkDto.getParkEvents(),
-                parkDto.getParkMedia()
-        );
+        return Park.builder()
+                .parkId(parkDto.getParkId())
+                .name(parkDto.getName())
+                .description(parkDto.getDescription())
+                .parkEvents(parkDto.getParkEvents())
+                .parkPictures(parkDto.getParkPictures())
+                .parkVideos(parkDto.getParkVideos())
+                .build();
     }
 
     public CreateParkDto toCreateParkDto(Park park){
-        return new CreateParkDto(
-                park.getParkId(),
-                park.getParkName(),
-                park.getDescription(),
-                park.getParkAddress()
-        );
+        return CreateParkDto.builder()
+                .parkId(park.getParkId())
+                .name(park.getName())
+                .description(park.getDescription())
+                .address(park.getAddress())
+                .build();
     }
 
     public Park createParkDtoToEntity(CreateParkDto createParkDto) {
-       // List<Event> parkEvents = new ArrayList<>(); -- use if we wanna send an empty list
-       // List<Media> parkMedia = new ArrayList<>();
-        return new Park(
-                createParkDto.getParkId(),
-                createParkDto.getParkName(),
-                createParkDto.getDescription(),
-                createParkDto.getParkAddress(),
-                null,
-                null
-        );
+        return Park.builder()
+                .parkId(createParkDto.getParkId())
+                .name(createParkDto.getName())
+                .description(createParkDto.getDescription())
+                .address(createParkDto.getAddress())
+                .build();
     }
 }

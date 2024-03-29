@@ -37,9 +37,7 @@ public class CreateEventDto {
 
     @NotBlank(message = "Park not found. All Events need to take place in a Park")
     private String parkId;
-    // private Park park;
 
     @NotBlank(message = "Creator not found. All Events need to have been created by an User")
     private String creatorUserId;
-
 }

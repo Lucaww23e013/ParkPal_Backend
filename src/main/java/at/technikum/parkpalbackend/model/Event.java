@@ -70,13 +70,22 @@ public class Event {
     private List<EventTag> eventTags = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(name = "event_event_media", joinColumns = @JoinColumn(name = "event_id",
-            foreignKey = @ForeignKey(name = "fk_event_media_event")),
-            inverseJoinColumns = @JoinColumn(name = "event_media_id",
-                    foreignKey = @ForeignKey(name = "fk_event_media_user")))
+    @JoinTable(name = "event_event_pictures", joinColumns = @JoinColumn(name = "picture_id",
+            foreignKey = @ForeignKey(name = "fk_event_pictures_event")),
+            inverseJoinColumns = @JoinColumn(name = "event_picture_id",
+                    foreignKey = @ForeignKey(name = "fk_event_picture_user")))
     @Builder.Default
     @ToString.Exclude
-    private List<Media> eventMedia = new ArrayList<>();
+    private List<Picture> eventPictures = new ArrayList<>();
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(name = "event_event_videos", joinColumns = @JoinColumn(name = "video_id",
+            foreignKey = @ForeignKey(name = "fk_event_video_event")),
+            inverseJoinColumns = @JoinColumn(name = "event_video_id",
+                    foreignKey = @ForeignKey(name = "fk_event_video_user")))
+    @Builder.Default
+    @ToString.Exclude
+    private List<Video> eventVideos = new ArrayList<>();
 
     public Event addJoinedUsers(User... users) {
         Arrays.stream(users).forEach(user -> this.joinedUsers.add(user));
@@ -98,13 +107,13 @@ public class Event {
         return this;
     }
 
-    public Event addEventMedia(Media... media) {
-        Arrays.stream(media).forEach(m -> this.eventMedia.add(m));
+    public Event addEventMedia(Picture... media) {
+        Arrays.stream(media).forEach(m -> this.eventPictures.add(m));
         return this;
     }
 
-    public Event removeEventMedia(Media... media) {
-        Arrays.stream(media).forEach(m -> this.eventMedia.remove(m));
+    public Event removeEventMedia(Picture... media) {
+        Arrays.stream(media).forEach(m -> this.eventPictures.remove(m));
         return this;
     }
 

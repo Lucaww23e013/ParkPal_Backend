@@ -1,9 +1,12 @@
 package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -12,19 +15,22 @@ import org.hibernate.annotations.UuidGenerator;
 @AllArgsConstructor
 @Builder
 
-@Entity(name = "medias")
-public class Media {
+@Entity(name = "pictures")
+public class Picture {
 
     @Id
     @UuidGenerator
-    @Column(name = "media_id")
-    private String mediaId;
-
+    @Column(name = "picture_id")
+    private String pictureId;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
-    @NotNull(message="Media must belong to a User. Pls add a User")
+    @NotNull(message="Picture must belong to a User. Pls add a User")
     private User user;
 
+    @NotBlank(message = "File must have an uploadDate")
+    private LocalDateTime uploadDate;
 
+    @NotBlank(message = "File must exist")
+    private byte[] file;
 }

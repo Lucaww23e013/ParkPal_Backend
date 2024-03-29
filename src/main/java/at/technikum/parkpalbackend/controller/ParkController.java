@@ -26,13 +26,14 @@ public class ParkController {
 
     private final ParkMapper parkMapper;
 
-    public ParkController(ParkService parkService, EventService eventService, ParkMapper parkMapper){
+    public ParkController(ParkService parkService, EventService eventService,
+                          ParkMapper parkMapper){
         this.parkService = parkService;
         this.eventService = eventService;
         this.parkMapper = parkMapper;
     }
 
-    @PostMapping("/parks")
+    @PostMapping
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.CREATED)
     public CreateParkDto createPark(@RequestBody @Valid CreateParkDto createParkDto){
@@ -41,7 +42,7 @@ public class ParkController {
         return parkMapper.toCreateParkDto(park);
     }
 
-    @PutMapping("/parks/{parkId}")
+    @PutMapping("/{parkId}")
     //@Preauthorize with Spring security later
     public ParkDto updatePark(@PathVariable String parkId, @RequestBody ParkDto updatedParkDto){
         Park updatedPark = parkMapper.toEntity(updatedParkDto);
@@ -49,19 +50,19 @@ public class ParkController {
         return parkMapper.toDto(updatedPark);
     }
 
-    @GetMapping("/parks")
+    @GetMapping
     public List<ParkDto> getAllParks() {
         List<Park> allParks = parkService.findAllParks();
         return allParks.stream().map(park -> parkMapper.toDto(park)).toList();
     }
 
-    @GetMapping("/parks/{parkId}")
+    @GetMapping("/{parkId}")
     public ParkDto getParkByParkId(@PathVariable @Valid String parkId){
         Park park = parkService.findParkByParkId(parkId);
         return parkMapper.toDto(park);
     }
 
-    @GetMapping("/parks/{eventId}")
+    @GetMapping("/{eventId}")
     public ParkDto getParkByEventId(@PathVariable @Valid String eventId){
         List<Event> selectedEvents = new ArrayList<Event>();
         Event event = eventService.findByEventId(eventId);
@@ -70,12 +71,12 @@ public class ParkController {
         return parkMapper.toDto(park);
     }
 
-   @DeleteMapping("/parks/{parkId}")
-   //@Preauthorize with Spring security later
-   @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{parkId}")
+    //@Preauthorize with Spring security later
+    @ResponseStatus(HttpStatus.OK)
     public ParkDto deleteParkByParkById(@PathVariable @Valid String parkId){
-        Park park = parkService.deleteParkByParkId(parkId);
+        parkService.deleteParkByParkId(parkId);
         return null;
-   }
+    }
 
 }
