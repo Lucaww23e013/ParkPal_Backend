@@ -12,5 +12,6 @@ public interface IEventService {
     List<Event> findAllEventsByPark(String parkId);
     List<Event> findAllEventsByUser(String userId);
     Event deleteEventById(String eventID);
+    Event updateEvent(String id, Event updatedEvent);
 
 }
