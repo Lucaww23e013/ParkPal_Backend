@@ -26,7 +26,8 @@ public class EventService implements IEventService {
     }
 
     public Event findByEventId(String eventId) {
-        return eventRepository.findByEventId(eventId).orElseThrow(EntityNotFoundException::new);
+        return eventRepository.findByEventId(eventId)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     public List<Event> findAllEventsByPark(String parkId) {
@@ -45,5 +46,23 @@ public class EventService implements IEventService {
                 .orElseThrow(EntityNotFoundException::new);
         eventRepository.delete(eventToDelete);
         return eventToDelete;
+    }
+
+    public Event updateEvent(String id, Event updatedEvent) {
+        try {
+            Event existingEvent = findByEventId(id);
+            existingEvent.setTitle(updatedEvent.getTitle());
+            existingEvent.setDescription(updatedEvent.getDescription());
+            existingEvent.setStartTS(updatedEvent.getStartTS());
+            existingEvent.setEndTS(updatedEvent.getEndTS());
+            existingEvent.setPark(updatedEvent.getPark());
+            //existingEvent.setCreator(updatedEvent.getCreator());
+            existingEvent.setJoinedUsers(updatedEvent.getJoinedUsers());
+            existingEvent.setEventTags(updatedEvent.getEventTags());
+            existingEvent.setEventMedia(updatedEvent.getEventMedia());
+            return eventRepository.save(existingEvent);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update Event: %s".formatted(e.getMessage()));
+        }
     }
 }
