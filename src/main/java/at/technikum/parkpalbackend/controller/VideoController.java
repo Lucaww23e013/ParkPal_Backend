@@ -34,6 +34,27 @@ public class VideoController {
         this.videoMapper = videoMapper;
     }
 
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public VideoDto createVideo(@RequestParam("file") MultipartFile file,
+                                @RequestBody @Valid VideoDto videoDto) throws IOException {
+        ResponseEntity<String> uploadResponse = uploadController.fileUpload(file);
+        if (uploadResponse.getStatusCode().is2xxSuccessful()) {
+            Video createdVideo = videoMapper.toEntity(videoDto);
+            createdVideo = videoService.save(createdVideo);
+            return videoMapper.toDto(createdVideo);
+        } else {
+            throw new RuntimeException("File upload failed");
+        }
+    }
+
+    @PatchMapping("/{videoId}")
+    public VideoDto updateVideo(@PathVariable String videoId,
+                                @RequestBody VideoDto updatedVideoDto){
+        Video updatedVideo = videoMapper.toEntity(updatedVideoDto);
+        updatedVideo = videoService.updateVideo(videoId, updatedVideo);
+        return videoMapper.toDto(updatedVideo);
+    }
     @GetMapping
     public List<VideoDto> getAllPicture() {
         List<Video> videos = videoService.findAllVideos();
@@ -53,30 +74,7 @@ public class VideoController {
         List<Video> selectedVideos = videoService.findVideosByUser(user);
         return selectedVideos.stream().map(video -> videoMapper.toDto(video)).toList();
     }
-
-
-    @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    public VideoDto createVideo(@RequestParam("file") MultipartFile file,
-                                @RequestBody @Valid VideoDto videoDto) throws IOException {
-        ResponseEntity<String> uploadResponse = uploadController.fileUpload(file);
-        if (uploadResponse.getStatusCode().is2xxSuccessful()) {
-            Video createdVideo = videoMapper.toEntity(videoDto);
-            createdVideo = videoService.save(createdVideo);
-            return videoMapper.toDto(createdVideo);
-        } else {
-            throw new RuntimeException("File upload failed");
-        }
-    }
-    @PatchMapping("/{videoId}")
-    public VideoDto updateVideo(@PathVariable String videoId,
-                                @RequestBody VideoDto updatedVideoDto){
-        Video updatedVideo = videoMapper.toEntity(updatedVideoDto);
-        updatedVideo = videoService.updateVideo(videoId, updatedVideo);
-        return videoMapper.toDto(updatedVideo);
-    }
     @DeleteMapping("/{videoId}")
-    //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
     public VideoDto deleteVideoByVideoId(@PathVariable @Valid String videoId){
         videoService.deleteVideoByVideoId(videoId);

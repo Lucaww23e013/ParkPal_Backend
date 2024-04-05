@@ -8,7 +8,6 @@ import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.ParkService;
 import at.technikum.parkpalbackend.service.UserService;
-import at.technikum.parkpalbackend.service.interfaces.IEventService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ import java.util.List;
 @CrossOrigin
 public class EventController {
 
-    private final IEventService iEventService;
+    private final EventService eventService;
 
     private final ParkService parkService;
 
@@ -32,7 +31,7 @@ public class EventController {
 
     public EventController(EventService eventService, ParkService parkService,
                            UserService userService, EventMapper eventMapper) {
-        this.iEventService = eventService;
+        this.eventService = eventService;
         this.parkService = parkService;
         this.userService = userService;
         this.eventMapper = eventMapper;
@@ -41,31 +40,22 @@ public class EventController {
 
     @GetMapping
     public List<EventDto> getAllEvents() {
-        List<Event> events = iEventService.findAllEvents();
+        List<Event> events = eventService.findAllEvents();
         return events.stream()
                 .map(getEventDto -> eventMapper.toDto(getEventDto))
                 .toList();
     }
-
-    @GetMapping("/{parkId}")
-    public List<EventDto> getAllEventsByParkId(@PathVariable String parkId) {
-        List<Event> events = iEventService.findAllEventsByPark(parkId);
-        return events.stream()
-                .map(event -> eventMapper.toDto(event))
-                .toList();
+    @GetMapping("/{eventId}")
+    public EventDto getEventByID(@PathVariable String eventId) {
+        return eventMapper.toDto(eventService.findByEventId(eventId));
     }
 
     @GetMapping("/{userId}")
     public List<EventDto> getAllEventsByUserId(@PathVariable String userId) {
-        List<Event> events = iEventService.findAllEventsByUser(userId);
+        List<Event> events = eventService.findAllEventsByUser(userId);
         return events.stream()
                 .map(event -> eventMapper.toDto(event))
                 .toList();
-    }
-
-    @GetMapping("/{eventId}")
-    public EventDto getEventByID(@PathVariable String eventId) {
-        return eventMapper.toDto(iEventService.findByEventId(eventId));
     }
 
     //@PostMapping ????
@@ -73,14 +63,14 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreateEventDto createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
         Event event = eventMapper.toEntityCreateEvent(createEventDto);
-        event = iEventService.save(event);
+        event = eventService.save(event);
         return eventMapper.toDtoCreateEvent(event);
     }
 
     @DeleteMapping("/{eventID}")
     @ResponseStatus(HttpStatus.OK)
     public DeleteEventDto deleteEventDto(@PathVariable @Valid String eventID) {
-        iEventService.deleteEventById(eventID);
+        eventService.deleteEventById(eventID);
         return null;
     }
 
@@ -89,7 +79,7 @@ public class EventController {
     public ResponseEntity<EventDto> updateEventDto(@RequestBody EventDto newEventDto,
         @PathVariable @Valid String eventID) {
         Event mappedEntity = eventMapper.toEntity(newEventDto);
-        Event updatedEvent = iEventService.updateEvent(eventID, mappedEntity);
+        Event updatedEvent = eventService.updateEvent(eventID, mappedEntity);
         return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
     }
 }

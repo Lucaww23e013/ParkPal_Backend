@@ -29,15 +29,6 @@ public class EventTagController {
         this.eventService = eventService;
         this.eventTagMapper = eventTagMapper;
     }
-
-    @GetMapping
-    public List<EventTagDto> getAllTags() {
-        List<EventTag> eventTags = eventTagService.findAllTags();
-        return eventTags.stream()
-                .map(eventTag -> eventTagMapper.toDto(eventTag))
-                .toList();
-    }
-
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public EventTagDto createEventTag(@RequestBody @Valid EventTagDto eventTagDto) {
@@ -46,9 +37,17 @@ public class EventTagController {
         return eventTagMapper.toDto(eventTag);
     }
 
+    @GetMapping
+    public List<EventTagDto> getAllTags() {
+        List<EventTag> eventTags = eventTagService.findAllTags();
+        return eventTags.stream()
+                .map(eventTag -> eventTagMapper.toDto(eventTag))
+                .toList();
+    }
     @GetMapping("/{eventTagId}")
     public EventTagDto getEventTagById(@RequestBody @Valid String eventTagId) {
         EventTag eventTag = eventTagService.findTagById(eventTagId);
         return eventTagMapper.toDto(eventTag);
     }
+
 }

@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
-import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import org.springframework.stereotype.Service;
@@ -45,10 +44,5 @@ public class ParkService {
         Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
         parkRepository.delete(park);
         return null;
-    }
-
-    public Park findParkByEvents(List<Event> selectedEvents) {
-        return parkRepository.findByParkEventsIn(selectedEvents).
-                orElseThrow(EntityNotFoundException::new);
     }
 }
