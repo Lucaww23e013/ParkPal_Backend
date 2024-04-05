@@ -3,13 +3,12 @@ package at.technikum.parkpalbackend.service;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.persistence.EventRepository;
-import at.technikum.parkpalbackend.service.interfaces.IEventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class EventService implements IEventService {
+public class EventService {
 
     private final EventRepository eventRepository;
 
@@ -28,10 +27,6 @@ public class EventService implements IEventService {
     public Event findByEventId(String eventId) {
         return eventRepository.findByEventId(eventId)
                 .orElseThrow(EntityNotFoundException::new);
-    }
-
-    public List<Event> findAllEventsByPark(String parkId) {
-        return eventRepository.findAllByParkParkId(parkId);
     }
 
     public List<Event> findAllEventsByUser(String userId) {
@@ -56,7 +51,6 @@ public class EventService implements IEventService {
             existingEvent.setStartTS(updatedEvent.getStartTS());
             existingEvent.setEndTS(updatedEvent.getEndTS());
             existingEvent.setPark(updatedEvent.getPark());
-            //existingEvent.setCreator(updatedEvent.getCreator());
             existingEvent.setJoinedUsers(updatedEvent.getJoinedUsers());
             existingEvent.setEventTags(updatedEvent.getEventTags());
             existingEvent.setEventPictures(updatedEvent.getEventPictures());

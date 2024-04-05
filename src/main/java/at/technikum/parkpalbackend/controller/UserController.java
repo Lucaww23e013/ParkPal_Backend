@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 @CrossOrigin
 
-//@AllArgsConstructor
 
 public class UserController {
 
@@ -31,34 +30,12 @@ public class UserController {
         this.userService = userService;
         this.userMapper = userMapper;
     }
-    @GetMapping
-    public List<UserDto> readAll() {
-        return userService.findAll().stream()
-               .map(userMapper::toDto)
-               .collect(Collectors.toList());
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public LoginUserDto loginUser(String email, String password) {
+        User user = userService.login(email, password);
+        return userMapper.toLoginUserDto(user);
     }
-
-    @GetMapping("/email/{email}")
-    public UserDto getUserByEmail(@PathVariable String email) {
-        User user = userService.findByUserEmail(email);
-
-        return userMapper.toDto(user);
-    }
-
-    @GetMapping("/userid/{userId}")
-    public UserDto getUserById(@PathVariable String userId) {
-        User user = userService.findByUserId(userId);
-
-        return userMapper.toDto(user);
-    }
-
-    @GetMapping("/userName/{userName}")
-    public UserDto getUserByUserName(@PathVariable String userName) {
-        User user = userService.findByUserName(userName);
-
-        return userMapper.toDto(user);
-    }
-
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public CreateUserDto createUser(@RequestBody @Valid CreateUserDto createUserDto) {
@@ -67,26 +44,33 @@ public class UserController {
         return userMapper.toCreateUserDto(user);
     }
 
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public LoginUserDto loginUser(String email, String password) {
-        User user = userService.login(email, password);
-        return userMapper.toLoginUserDto(user);
+    @GetMapping
+    public List<UserDto> readAll() {
+        return userService.findAll().stream()
+               .map(userMapper::toDto)
+               .collect(Collectors.toList());
     }
 
-    @DeleteMapping("/delete/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable String userId) {
-        userService.delete(userId);
+    @GetMapping("/{userId}")
+    public UserDto getUserById(@PathVariable String userId) {
+        User user = userService.findByUserId(userId);
+
+        return userMapper.toDto(user);
     }
 
-    @PutMapping("/update/{userId}")
+    @PutMapping("/{userId}")
     public UserDto updateUser(@PathVariable String id, @RequestBody @Valid UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         user = userService.update(id, user);
 
         return userMapper.toDto(user);
     }
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable String userId) {
+        userService.delete(userId);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class,
         DataIntegrityViolationException.class})

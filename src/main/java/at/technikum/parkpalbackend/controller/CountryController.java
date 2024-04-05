@@ -51,11 +51,6 @@ public class CountryController {
         return countryMapper.toDto(country);
     }
 
-    @GetMapping("/{name}")
-    public CountryDto getCountryByName(@PathVariable @Valid String name){
-        Country country = countryService.findCountryByName(name);
-        return countryMapper.toDto(country);
-    }
 
     @DeleteMapping("/{countryId}")
     //@Preauthorize with Spring security later

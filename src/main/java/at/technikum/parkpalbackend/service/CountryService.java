@@ -37,11 +37,6 @@ public class CountryService {
 
     }
 
-    public Country findCountryByName(String name) {
-        return countryRepository.findCountryByName(name)
-                .orElseThrow();
-    }
-
     public Country deleteCountryByCountryId(String countryId) {
         Country deltedCountry = countryRepository.findCountryByCountryId(countryId).orElseThrow();
         countryRepository.delete(deltedCountry);

@@ -28,6 +28,21 @@ public class PictureController {
         this.pictureMapper = pictureMapper;
     }
 
+    @PostMapping("/create")
+    //@Preauthorize with Spring security later
+    @ResponseStatus(HttpStatus.CREATED)
+    public PictureDto createPicture(@RequestBody @Valid PictureDto pictureDto){
+        Picture createdPicture = pictureMapper.toEntity(pictureDto);
+        createdPicture = pictureService.save(createdPicture);
+        return pictureMapper.toDto(createdPicture);
+    }
+    @PatchMapping("/{pictureId}")
+    public PictureDto updatePicture(@PathVariable String pictureId,
+                                    @RequestBody PictureDto updatedPictureDto){
+        Picture updatedPicture = pictureMapper.toEntity(updatedPictureDto);
+        updatedPicture = pictureService.updatePicture(pictureId, updatedPicture);
+        return pictureMapper.toDto(updatedPicture);
+    }
     @GetMapping
     public List<PictureDto> getAllPictures() {
         List<Picture> pictures = pictureService.findAllPictures();
@@ -48,21 +63,6 @@ public class PictureController {
         return selectedPictures.stream().map(picture -> pictureMapper.toDto(picture)).toList();
     }
 
-    @PostMapping("/create")
-    //@Preauthorize with Spring security later
-    @ResponseStatus(HttpStatus.CREATED)
-    public PictureDto createPicture(@RequestBody @Valid PictureDto pictureDto){
-        Picture createdPicture = pictureMapper.toEntity(pictureDto);
-        createdPicture = pictureService.save(createdPicture);
-        return pictureMapper.toDto(createdPicture);
-    }
-    @PatchMapping("/{pictureId}")
-    public PictureDto updatePicture(@PathVariable String pictureId,
-                                    @RequestBody PictureDto updatedPictureDto){
-        Picture updatedPicture = pictureMapper.toEntity(updatedPictureDto);
-        updatedPicture = pictureService.updatePicture(pictureId, updatedPicture);
-        return pictureMapper.toDto(updatedPicture);
-    }
     @DeleteMapping("/{pictureId}")
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)

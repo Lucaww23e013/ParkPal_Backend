@@ -17,11 +17,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User findByUserName(String userName) {
-        return userRepository.findUserByUserName(userName)
-                .orElseThrow(EntityNotFoundException::new);
-    }
-
     public User findByUserEmail(String email) {
         return userRepository.findUserByEmail(email).orElseThrow(EntityNotFoundException::new);
     }
@@ -39,7 +34,7 @@ public class UserService {
     }
 
     public User login(String email, String password) {
-        User user = findByUserEmail(email);
+        User user = findByUserEmail(email); //username always equals email
         if (user.getPassword().equals(password)) return user;
         else {
             throw new EntityNotFoundException("User not found or invalid password");
