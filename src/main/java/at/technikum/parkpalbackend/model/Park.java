@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -24,7 +23,6 @@ public class Park {
     @Column(name = "park_id", unique = true)
     private String parkId;
 
-    @NotBlank(message="Park name not found. All parks need a name")
     @Column(unique = true)
     private String name;
 

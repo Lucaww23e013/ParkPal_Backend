@@ -25,24 +25,19 @@ public class User {
 
     @Id
     @UuidGenerator // the default is a random generation
-    //@UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @Column(name = "user_id")
     private String userId;
 
     @Enumerated(EnumType.STRING)
     private Salutation salutation;
 
-    @NotBlank(message = "Enter a Username")
     @Column(unique = true, name = "user_name")
     private String userName;
 
-    @NotBlank(message = "Enter a your Firstname")
     private String firstName;
 
-    @NotBlank(message = "Enter a your Lastname")
     private String lastName;
 
-    @NotBlank(message = "Enter an Email-Address")
     @Email(message = "Email is not valid")
     @Column(unique = true, name = "email")
     private String email;
@@ -55,7 +50,6 @@ public class User {
             message = "Password must contain at least one lowercase letter & one uppercase letter."
                     + "One number and one special character")
     @Size(min = 12, message = "Password must be at least 12 characters long")
-    @NotBlank(message = "Enter a Password")
     private String password;
 
     @ManyToOne

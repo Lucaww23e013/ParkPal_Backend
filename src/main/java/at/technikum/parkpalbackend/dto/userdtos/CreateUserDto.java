@@ -17,6 +17,7 @@ public class CreateUserDto {
     private String userId;
 
     @Enumerated(EnumType.STRING)
+    @NotBlank(message = "Enter a Salutation")
     private Salutation salutation;
 
     @NotBlank(message = "Enter a Username")
