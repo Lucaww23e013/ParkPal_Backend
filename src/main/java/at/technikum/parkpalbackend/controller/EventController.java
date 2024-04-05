@@ -50,14 +50,6 @@ public class EventController {
         return eventMapper.toDto(eventService.findByEventId(eventId));
     }
 
-    @GetMapping("/{userId}")
-    public List<EventDto> getAllEventsByUserId(@PathVariable String userId) {
-        List<Event> events = eventService.findAllEventsByUser(userId);
-        return events.stream()
-                .map(event -> eventMapper.toDto(event))
-                .toList();
-    }
-
     //@PostMapping ????
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)

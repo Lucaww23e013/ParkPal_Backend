@@ -1,10 +1,14 @@
 package at.technikum.parkpalbackend.controller;
 
+import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
+import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.mapper.UserMapper;
+import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,10 +29,16 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final EventService eventService;
+    private final EventMapper eventMapper;
 
-    public UserController(UserService userService, UserMapper userMapper) {
+
+    public UserController(UserService userService, EventService eventService,
+                          UserMapper userMapper, EventMapper eventMapper) {
         this.userService = userService;
+        this.eventService = eventService;
         this.userMapper = userMapper;
+        this.eventMapper = eventMapper;
     }
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
@@ -56,6 +66,14 @@ public class UserController {
         User user = userService.findByUserId(userId);
 
         return userMapper.toDto(user);
+    }
+
+    @GetMapping("/{userId}/events")
+    public List<EventDto> getAllEventsByUserId(@PathVariable String userId) {
+        List<Event> events = eventService.findAllEventsByUser(userId);
+        return events.stream()
+                .map(event -> eventMapper.toDto(event))
+                .toList();
     }
 
     @PutMapping("/{userId}")
