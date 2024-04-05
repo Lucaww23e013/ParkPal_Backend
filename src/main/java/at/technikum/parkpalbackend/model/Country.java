@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -18,7 +17,6 @@ public class Country {
     @Column(name = "country_id")
     private String countryId;
 
-    @NotBlank(message = "Country-Name not found")
     private String name;
 
     //@Column(length = 3, unique = true)

@@ -32,11 +32,9 @@ public class ParkDto {
     @Embedded
     private Address address;
 
-    // @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
     private List<Event> parkEvents = new ArrayList<>();
 
-    //@OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
     private List<Picture> parkPictures = new ArrayList<>();
 

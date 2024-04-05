@@ -1,9 +1,6 @@
 package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -27,28 +24,20 @@ public class Event {
     @Column(name = "event_Id")
     private String eventId;
 
-    @NotBlank(message = "Event title not Valid")
     private String title;
 
-    @NotBlank(message = "Event description not Valid")
     private String description;
 
-    @FutureOrPresent(message = "Start EventTime must be now or in the Future")
-    @NotNull(message="Event Start Time not found. All Events need to have a Start and End Time")
     private LocalDateTime startTS;
 
-    @FutureOrPresent(message = "End EventTime must be now or in the Future")
-    @NotNull(message="Event End Time not found. All Events need to have a Start and End Time")
     private LocalDateTime endTS;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "event_park_id", foreignKey = @ForeignKey(name = "fk_event_2_park"))
-    @NotNull(message = "Park not found. All Events need to take place in a Park")
     private Park park;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "event_2_user_id", foreignKey = @ForeignKey(name = "fk_event_2_user"))
-    @NotNull(message = "Creator not found. All Events need to have been created by an User")
     private User creator;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
