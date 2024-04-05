@@ -77,8 +77,6 @@ public class EventController {
         return eventMapper.toDtoCreateEvent(event);
     }
 
-
-
     @DeleteMapping("/{eventID}")
     @ResponseStatus(HttpStatus.OK)
     public DeleteEventDto deleteEventDto(@PathVariable @Valid String eventID) {

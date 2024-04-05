@@ -54,14 +54,6 @@ public class VideoController {
         return selectedVideos.stream().map(video -> videoMapper.toDto(video)).toList();
     }
 
-    /*@PostMapping("/videos/create")
-    //@Preauthorize with Spring security later
-    @ResponseStatus(HttpStatus.CREATED)
-    public VideoDto createVideo(@RequestBody @Valid VideoDto videoDto){
-        Video createdVideo = videoMapper.toEntity(videoDto);
-        createdVideo = videoService.save(createdVideo);
-        return videoMapper.toDto(createdVideo);
-    }*/
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
