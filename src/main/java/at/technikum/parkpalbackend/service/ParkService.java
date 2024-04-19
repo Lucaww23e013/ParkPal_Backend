@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ParkService {
+public class  ParkService {
     private final ParkRepository parkRepository;
 
     public ParkService(ParkRepository parkRepository) {
