@@ -28,20 +28,13 @@ public class PictureController {
         this.pictureMapper = pictureMapper;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.CREATED)
     public PictureDto createPicture(@RequestBody @Valid PictureDto pictureDto){
         Picture createdPicture = pictureMapper.toEntity(pictureDto);
         createdPicture = pictureService.save(createdPicture);
         return pictureMapper.toDto(createdPicture);
-    }
-    @PatchMapping("/{pictureId}")
-    public PictureDto updatePicture(@PathVariable String pictureId,
-                                    @RequestBody PictureDto updatedPictureDto){
-        Picture updatedPicture = pictureMapper.toEntity(updatedPictureDto);
-        updatedPicture = pictureService.updatePicture(pictureId, updatedPicture);
-        return pictureMapper.toDto(updatedPicture);
     }
     @GetMapping
     public List<PictureDto> getAllPictures() {
@@ -62,7 +55,13 @@ public class PictureController {
         List<Picture> selectedPictures = pictureService.getPictureByUserId(user);
         return selectedPictures.stream().map(picture -> pictureMapper.toDto(picture)).toList();
     }
-
+    @PatchMapping("/{pictureId}")
+    public PictureDto updatePicture(@PathVariable String pictureId,
+                                    @RequestBody @Valid PictureDto updatedPictureDto){
+        Picture updatedPicture = pictureMapper.toEntity(updatedPictureDto);
+        updatedPicture = pictureService.updatePicture(pictureId, updatedPicture);
+        return pictureMapper.toDto(updatedPicture);
+    }
     @DeleteMapping("/{pictureId}")
     //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)

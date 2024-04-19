@@ -34,7 +34,7 @@ public class VideoController {
         this.videoMapper = videoMapper;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VideoDto createVideo(@RequestParam("file") MultipartFile file,
                                 @RequestBody @Valid VideoDto videoDto) throws IOException {
@@ -48,13 +48,6 @@ public class VideoController {
         }
     }
 
-    @PatchMapping("/{videoId}")
-    public VideoDto updateVideo(@PathVariable String videoId,
-                                @RequestBody VideoDto updatedVideoDto){
-        Video updatedVideo = videoMapper.toEntity(updatedVideoDto);
-        updatedVideo = videoService.updateVideo(videoId, updatedVideo);
-        return videoMapper.toDto(updatedVideo);
-    }
     @GetMapping
     public List<VideoDto> getAllPicture() {
         List<Video> videos = videoService.findAllVideos();
@@ -73,6 +66,13 @@ public class VideoController {
         User user = userService.findByUserId(userId);
         List<Video> selectedVideos = videoService.findVideosByUser(user);
         return selectedVideos.stream().map(video -> videoMapper.toDto(video)).toList();
+    }
+    @PatchMapping("/{videoId}")
+    public VideoDto updateVideo(@PathVariable String videoId,
+                                @RequestBody @Valid VideoDto updatedVideoDto){
+        Video updatedVideo = videoMapper.toEntity(updatedVideoDto);
+        updatedVideo = videoService.updateVideo(videoId, updatedVideo);
+        return videoMapper.toDto(updatedVideo);
     }
     @DeleteMapping("/{videoId}")
     @ResponseStatus(HttpStatus.OK)

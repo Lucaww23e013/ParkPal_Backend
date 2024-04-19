@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend.service;
 
+import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Picture;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.PictureRepository;
@@ -35,8 +36,8 @@ public class PictureService {
     }
 
     public Picture updatePicture(String pictureId, Picture updatedPicture) {
-        Picture picture = pictureRepository.findPictureByPictureId(pictureId).orElseThrow();
-
+        Picture picture = pictureRepository.findPictureByPictureId(pictureId)
+                .orElseThrow(EntityNotFoundException::new);
         picture.setPictureId(updatedPicture.getPictureId());
         picture.setUser(updatedPicture.getUser());
         return pictureRepository.save(picture);

@@ -39,13 +39,6 @@ public class ParkController {
         return parkMapper.toCreateParkDto(park);
     }
 
-    @PutMapping("/{parkId}")
-    //@Preauthorize with Spring security later
-    public ParkDto updatePark(@PathVariable String parkId, @RequestBody ParkDto updatedParkDto){
-        Park updatedPark = parkMapper.toEntity(updatedParkDto);
-        updatedPark = parkService.updatePark(parkId, updatedPark);
-        return parkMapper.toDto(updatedPark);
-    }
 
     @GetMapping
     public List<ParkDto> getAllParks() {
@@ -57,6 +50,15 @@ public class ParkController {
     public ParkDto getParkByParkId(@PathVariable @Valid String parkId){
         Park park = parkService.findParkByParkId(parkId);
         return parkMapper.toDto(park);
+    }
+
+    @PutMapping("/{parkId}")
+    //@Preauthorize with Spring security later
+    public ParkDto updatePark(@PathVariable String parkId,
+                              @RequestBody @Valid ParkDto updatedParkDto){
+        Park updatedPark = parkMapper.toEntity(updatedParkDto);
+        updatedPark = parkService.updatePark(parkId, updatedPark);
+        return parkMapper.toDto(updatedPark);
     }
 
     @DeleteMapping("/{parkId}")

@@ -29,7 +29,7 @@ public class EventTagController {
         this.eventService = eventService;
         this.eventTagMapper = eventTagMapper;
     }
-    @PostMapping("/create")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventTagDto createEventTag(@RequestBody @Valid EventTagDto eventTagDto) {
         EventTag eventTag = eventTagMapper.toEntity(eventTagDto);
