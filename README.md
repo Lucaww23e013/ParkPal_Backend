@@ -7,6 +7,10 @@ ParkPal Backend is the server-side component for the ParkPal service. It is buil
 - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+- [Workflow](#workflow)
+      - [Creating new Issues](#creating-new-issues)
+      - [Working on a new Issue](#working-on-a-new-issue)
+      - [Commits](#commits)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [DB Setup](#db-setup)
@@ -34,6 +38,33 @@ Ensure you have the following installed:
 2. Navigate to the project directory: `cd parkpal-backend`
 3. Build the project: `./mvnw clean install`
 4. Run the application: `./mvnw spring-boot:run`
+
+## Workflow
+Establishing a consistent and efficient workflow serves to benefit productivity.
+
+### Creating new Issues
+1. From Repo go to Projects
+2. Select the Parkpal Project
+3. In the Backlog section have ur cursor in add item
+4. Click the plus icon again to create a new issue
+       - Issue message should start with "Ppp:" and a short message to clearly communicate the task
+       - use dashes for spaces
+       - a issue number will be generated automaticly
+   
+### Working on a new Issue
+1. Move Issue to "in Progress" in the Kanbanbaord
+2. In the Issue click on the 3 dots to open in a new tab
+3. In the left menu assigne it and create a new branch for the Issue
+4. Use this as branch name "[task]/[issue-number]-ppp-[issue-title]"
+       - for branch type -> for [task] put in "feature" or "bugfix"
+6. Use {git fetch origin [branch-name]} to get branch to local repo (or use downwards arrow in branch section)
+7. Use {git checkout [branch-name]} to work on ur Issue in ur issue-branch
+
+### Commits
+1. You can do what ever you want on your own branch
+2. Best practice: every single commit is one new feature for your feature
+3. Commit and push every day, task for task and save your work
+4. Commit messages should start with "Ppp-[issue-number]: [short-message-title]
 
 ## Usage
 ParkPal Backend provides the backend services for the ParkPal application. Ensure that the application is running, and you can then integrate it with the ParkPal frontend or test the functionality using API tools like Postman.
