@@ -37,6 +37,13 @@ public class EventController {
         this.eventMapper = eventMapper;
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CreateEventDto createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
+        Event event = eventMapper.toEntityCreateEvent(createEventDto);
+        event = eventService.save(event);
+        return eventMapper.toDtoCreateEvent(event);
+    }
 
     @GetMapping
     public List<EventDto> getAllEvents() {
@@ -50,15 +57,13 @@ public class EventController {
         return eventMapper.toDto(eventService.findByEventId(eventId));
     }
 
-    //@PostMapping ????
-    @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreateEventDto createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
-        Event event = eventMapper.toEntityCreateEvent(createEventDto);
-        event = eventService.save(event);
-        return eventMapper.toDtoCreateEvent(event);
+    @PutMapping("/{eventID}")
+    public ResponseEntity<EventDto> updateEventDto(@RequestBody @Valid EventDto newEventDto,
+                                                   @PathVariable String eventID) {
+        Event mappedEntity = eventMapper.toEntity(newEventDto);
+        Event updatedEvent = eventService.updateEvent(eventID, mappedEntity);
+        return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
     }
-
     @DeleteMapping("/{eventID}")
     @ResponseStatus(HttpStatus.OK)
     public DeleteEventDto deleteEventDto(@PathVariable @Valid String eventID) {
@@ -66,12 +71,4 @@ public class EventController {
         return null;
     }
 
-    // PATCH /events/{eventID}		(change elements of the Event with a given EventId)
-    @PutMapping("/{eventID}")
-    public ResponseEntity<EventDto> updateEventDto(@RequestBody EventDto newEventDto,
-        @PathVariable @Valid String eventID) {
-        Event mappedEntity = eventMapper.toEntity(newEventDto);
-        Event updatedEvent = eventService.updateEvent(eventID, mappedEntity);
-        return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
-    }
 }
