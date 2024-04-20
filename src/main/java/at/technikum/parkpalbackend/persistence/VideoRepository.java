@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface VideoRepository extends JpaRepository<Video, String> {
-
-    Optional<Video>findVideoByVideoId(String videoId);
-
     Optional<Video> findVideoByUser(User user);
-
 }
 

@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 
-@Entity(name = "videos")
+@Entity
 public class Video {
     @Id
     @UuidGenerator
     @Column(name = "video_id")
-    private String videoId;
+    private String id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")

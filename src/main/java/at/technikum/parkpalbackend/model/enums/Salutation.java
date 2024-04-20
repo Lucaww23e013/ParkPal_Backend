@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.model;
+package at.technikum.parkpalbackend.model.enums;
 
 import jakarta.validation.constraints.NotNull;
 

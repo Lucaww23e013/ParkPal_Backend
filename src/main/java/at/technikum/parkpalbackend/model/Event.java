@@ -5,9 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -22,7 +20,7 @@ public class Event {
     @Id
     @UuidGenerator
     @Column(name = "event_Id")
-    private String eventId;
+    private String id;
 
     private String title;
 
@@ -56,7 +54,7 @@ public class Event {
                     foreignKey = @ForeignKey(name = "fk_event_event_tag_user")))
     @Builder.Default
     @ToString.Exclude
-    private List<EventTag> eventTags = new ArrayList<>();
+    private Set<EventTag> tags = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "event_event_pictures", joinColumns = @JoinColumn(name = "picture_id",
@@ -87,12 +85,12 @@ public class Event {
     }
 
     public Event addEventTags(EventTag... eventTags) {
-        Arrays.stream(eventTags).forEach(eventTag -> this.eventTags.add(eventTag));
+        Arrays.stream(eventTags).forEach(eventTag -> this.tags.add(eventTag));
         return this;
     }
 
     public Event removeEventTags(EventTag... eventTags) {
-        Arrays.stream(eventTags).forEach(eventTag -> this.eventTags.remove(eventTag));
+        Arrays.stream(eventTags).forEach(eventTag -> this.tags.remove(eventTag));
         return this;
     }
 

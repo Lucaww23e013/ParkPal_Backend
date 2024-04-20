@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @Valid
 public class VideoDto {
-    private String videoId;
+    private String id;
 
     @NotNull(message="Video must belong to a User. Please add a User")
     private String userId;

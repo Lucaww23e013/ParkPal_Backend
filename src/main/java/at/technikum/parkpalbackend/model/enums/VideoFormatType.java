@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.model;
+package at.technikum.parkpalbackend.model.enums;
 
 public enum VideoFormatType {
     MP4,

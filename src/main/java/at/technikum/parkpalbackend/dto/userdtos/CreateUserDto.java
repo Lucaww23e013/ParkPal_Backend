@@ -1,6 +1,6 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
-import at.technikum.parkpalbackend.model.Salutation;
+import at.technikum.parkpalbackend.model.enums.Salutation;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
@@ -14,7 +14,7 @@ import lombok.*;
 @Builder
 public class CreateUserDto {
 
-    private String userId;
+    private String id;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Enter a Salutation")

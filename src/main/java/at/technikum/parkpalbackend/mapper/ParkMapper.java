@@ -10,7 +10,7 @@ public class ParkMapper {
 
     public ParkDto toDto(Park park){
         return ParkDto.builder()
-                .parkId(park.getParkId())
+                .id(park.getId())
                 .name(park.getName())
                 .description(park.getDescription())
                 .parkEvents(park.getParkEvents())
@@ -21,7 +21,7 @@ public class ParkMapper {
 
     public Park toEntity(ParkDto parkDto) {
         return Park.builder()
-                .parkId(parkDto.getParkId())
+                .id(parkDto.getId())
                 .name(parkDto.getName())
                 .description(parkDto.getDescription())
                 .parkEvents(parkDto.getParkEvents())
@@ -32,7 +32,7 @@ public class ParkMapper {
 
     public CreateParkDto toCreateParkDto(Park park){
         return CreateParkDto.builder()
-                .parkId(park.getParkId())
+                .parkId(park.getId())
                 .name(park.getName())
                 .description(park.getDescription())
                 .address(park.getAddress())
@@ -41,7 +41,7 @@ public class ParkMapper {
 
     public Park createParkDtoToEntity(CreateParkDto createParkDto) {
         return Park.builder()
-                .parkId(createParkDto.getParkId())
+                .id(createParkDto.getParkId())
                 .name(createParkDto.getName())
                 .description(createParkDto.getDescription())
                 .address(createParkDto.getAddress())

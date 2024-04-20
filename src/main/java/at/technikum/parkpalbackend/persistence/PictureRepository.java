@@ -9,8 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface PictureRepository extends JpaRepository<Picture, String> {
-    Optional<Picture> findPictureByPictureId(String pictureId);
-
     Optional<Picture> findPictureByUser(User user);
-
 }

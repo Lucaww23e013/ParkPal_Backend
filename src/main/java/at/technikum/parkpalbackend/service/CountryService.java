@@ -20,9 +20,9 @@ public class CountryService {
     }
 
     public Country updateCountry(String countryId, Country updatedCountry) {
-        Country country = countryRepository.findCountryByCountryId(countryId)
+        Country country = countryRepository.findById(countryId)
                 .orElseThrow(EntityNotFoundException::new);
-        country.setCountryId(updatedCountry.getCountryId());
+        country.setId(updatedCountry.getId());
         country.setName(updatedCountry.getName());
         country.setIso2Code(updatedCountry.getIso2Code());
 
@@ -34,12 +34,12 @@ public class CountryService {
     }
 
     public Country findCountryByCountryId(String countryId) {
-        return countryRepository.findCountryByCountryId(countryId).orElseThrow();
+        return countryRepository.findById(countryId).orElseThrow();
 
     }
 
     public Country deleteCountryByCountryId(String countryId) {
-        Country deltedCountry = countryRepository.findCountryByCountryId(countryId).orElseThrow();
+        Country deltedCountry = countryRepository.findById(countryId).orElseThrow();
         countryRepository.delete(deltedCountry);
         return null;
     }

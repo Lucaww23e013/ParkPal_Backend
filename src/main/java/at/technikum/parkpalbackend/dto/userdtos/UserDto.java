@@ -1,6 +1,8 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
 import at.technikum.parkpalbackend.model.*;
+import at.technikum.parkpalbackend.model.enums.Role;
+import at.technikum.parkpalbackend.model.enums.Salutation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -16,7 +18,7 @@ import java.util.List;
 
 public class UserDto {
 
-    private String userId;
+    private String id;
 
     @Enumerated(EnumType.STRING)
     private Salutation salutation;

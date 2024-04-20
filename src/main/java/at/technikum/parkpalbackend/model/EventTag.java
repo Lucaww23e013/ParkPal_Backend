@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Getter
 @Setter
@@ -20,10 +23,12 @@ public class EventTag {
     @Id
     @UuidGenerator
     @Column(name = "event_tag_id")
-    private String eventTagId;
+    private String id;
 
     @NotBlank(message = "Event Tag cannot be empty.")
     private String name;
 
-
+    @ManyToMany(mappedBy = "tags")
+    @ToString.Exclude
+    private Set<Event> events = new HashSet<>();
 }

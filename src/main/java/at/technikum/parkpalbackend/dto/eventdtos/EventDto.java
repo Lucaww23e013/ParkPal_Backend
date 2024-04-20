@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +24,7 @@ import java.util.List;
 
 @Component
 public class EventDto {
-    private String eventId;
+    private String id;
 
     @NotBlank(message = "Event title not Valid")
     private String title;
@@ -53,5 +54,5 @@ public class EventDto {
 
     private List<Video> eventVideos;
 
-    private List<EventTag> eventTags;
+    private Set<EventTag> eventTags;
 }
