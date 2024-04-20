@@ -24,7 +24,7 @@ public class PictureService {
     }
 
     public Picture findPictureByPictureId(String pictureId) {
-        return pictureRepository.findPictureByPictureId(pictureId).orElseThrow();
+        return pictureRepository.findById(pictureId).orElseThrow();
     }
 
     public List<Picture> getPictureByUserId(User user) {
@@ -36,15 +36,19 @@ public class PictureService {
     }
 
     public Picture updatePicture(String pictureId, Picture updatedPicture) {
-        Picture picture = pictureRepository.findPictureByPictureId(pictureId)
+        Picture picture = pictureRepository
+                .findById(pictureId)
                 .orElseThrow(EntityNotFoundException::new);
-        picture.setPictureId(updatedPicture.getPictureId());
+
+        picture.setId(updatedPicture.getId());
         picture.setUser(updatedPicture.getUser());
         return pictureRepository.save(picture);
     }
 
     public Picture deletePictureByPictureId(String pictureId) {
-        Picture picture = pictureRepository.findPictureByPictureId(pictureId).orElseThrow();
+        Picture picture = pictureRepository
+                .findById(pictureId)
+                .orElseThrow(EntityNotFoundException::new);
         pictureRepository.delete(picture);
         return null;
     }

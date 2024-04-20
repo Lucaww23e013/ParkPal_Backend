@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Valid
 public class PictureDto {
 
-    private String pictureId;
+    private String id;
 
     @NotNull(message="Picture must belong to a User. Please add a User")
     private String userId;

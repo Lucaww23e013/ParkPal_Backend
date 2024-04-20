@@ -1,6 +1,5 @@
 package at.technikum.parkpalbackend.service;
 
-import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.Video;
 import at.technikum.parkpalbackend.persistence.VideoRepository;
@@ -22,7 +21,7 @@ public class VideoService {
     }
 
     public Video findVideoByVideoId(String videoId) {
-        return videoRepository.findVideoByVideoId(videoId).orElseThrow();
+        return videoRepository.findById(videoId).orElseThrow();
     }
 
     public List<Video> findVideosByUser(User user) {
@@ -33,15 +32,15 @@ public class VideoService {
     }
 
     public Video updateVideo(String videoId, Video updatedVideo) {
-        Video video = videoRepository.findVideoByVideoId(videoId)
-                .orElseThrow(EntityNotFoundException::new);
-        video.setVideoId(updatedVideo.getVideoId());
+        Video video = videoRepository.findById(videoId).orElseThrow();
+
+        video.setId(updatedVideo.getId());
         video.setUser(updatedVideo.getUser());
         return videoRepository.save(video);
     }
 
     public Video deleteVideoByVideoId(String videoId) {
-        Video video = videoRepository.findVideoByVideoId(videoId).orElseThrow();
+        Video video = videoRepository.findById(videoId).orElseThrow();
         videoRepository.delete(video);
         return null;
     }

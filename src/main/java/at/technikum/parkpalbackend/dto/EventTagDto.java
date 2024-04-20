@@ -13,7 +13,7 @@ import lombok.*;
 @Valid
 public class EventTagDto {
 
-    private String eventTagId;
+    private String id;
 
     @NotBlank(message = "Event Tag cannot be empty.")
     private String name;

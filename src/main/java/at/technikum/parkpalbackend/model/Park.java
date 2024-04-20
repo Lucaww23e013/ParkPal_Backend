@@ -20,8 +20,8 @@ public class Park {
 
     @Id
     @UuidGenerator
-    @Column(name = "park_id", unique = true)
-    private String parkId;
+    @Column(name = "park_id")
+    private String id;
 
     @Column(unique = true)
     private String name;

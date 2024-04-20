@@ -19,14 +19,14 @@ public class UserMapper {
 
     public UserDto toDto(User user) {
         return UserDto.builder()
-                .userId(user.getUserId())
+                .id(user.getId())
                 .salutation(user.getSalutation())
                 .userName(user.getUserName())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .countryId(user.getCountry().getCountryId())
+                .countryId(user.getCountry().getId())
                 .role(user.getRole())
                 .joinedEvents(user.getJoinedEvents())
                 .build();
@@ -34,7 +34,7 @@ public class UserMapper {
 
     public User toEntity(UserDto userDto) {
         return User.builder()
-                .userId(userDto.getUserId())
+                .id(userDto.getId())
                 .salutation(userDto.getSalutation())
                 .userName(userDto.getUserName())
                 .firstName(userDto.getFirstName())
@@ -49,7 +49,7 @@ public class UserMapper {
 
     public CreateUserDto toCreateUserDto(User user) {
         return CreateUserDto.builder()
-                .userId(user.getUserId())
+                .id(user.getId())
                 .salutation(user.getSalutation())
                 .userName(user.getUserName())
                 .firstName(user.getFirstName())
@@ -61,7 +61,7 @@ public class UserMapper {
 
     public User toEntity(CreateUserDto createUserDto) {
         return User.builder()
-                .userId(createUserDto.getUserId())
+                .id(createUserDto.getId())
                 .salutation(createUserDto.getSalutation())
                 .userName(createUserDto.getUserName())
                 .firstName(createUserDto.getFirstName())
@@ -74,13 +74,13 @@ public class UserMapper {
 
     public DeleteUserDto toDeleteUserDto(User user) {
         return DeleteUserDto.builder()
-                .userId(user.getUserId())
+                .userId(user.getId())
                 .build();
     }
 
     public User toEntity(DeleteUserDto deleteUserDto) {
         return User.builder()
-                .userId(deleteUserDto.getUserId())
+                .id(deleteUserDto.getUserId())
                 .build();
     }
 

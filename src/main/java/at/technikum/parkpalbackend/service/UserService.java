@@ -22,7 +22,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findUserByUserId(userId).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<User> findAll() {
@@ -42,14 +42,14 @@ public class UserService {
     }
 
     public User update(String userId, User newUser) {
-        User existingUser = userRepository.findUserByUserId(userId)
+        User existingUser = userRepository.findById(userId)
                 .orElseThrow(EntityNotFoundException::new);
         BeanUtils.copyProperties(newUser, existingUser, userId);
         return userRepository.save(existingUser);
     }
 
     public void delete(String userId) {
-        User user = userRepository.findUserByUserId(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(EntityNotFoundException::new);
         userRepository.delete(user);
     }

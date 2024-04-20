@@ -13,7 +13,7 @@ import lombok.*;
 @Valid
 public class CountryDto {
 
-    private String countryId;
+    private String id;
 
     @NotBlank(message = "Country-Name not found")
     private String name;

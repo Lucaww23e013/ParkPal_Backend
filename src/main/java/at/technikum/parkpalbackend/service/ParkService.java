@@ -19,7 +19,7 @@ public class ParkService {
         return parkRepository.findAll();
     }
     public Park findParkByParkId(String parkId) {
-        return parkRepository.findParkByParkId(parkId)
+        return parkRepository.findById(parkId)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
@@ -28,9 +28,9 @@ public class ParkService {
     }
 
     public Park updatePark(String parkId, Park updatedPark) {
-        Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
+        Park park = parkRepository.findById(parkId).orElseThrow();
 
-        park.setParkId(updatedPark.getParkId());
+        park.setId(updatedPark.getId());
         park.setName(updatedPark.getName());
         park.setDescription(updatedPark.getDescription());
         park.setAddress(updatedPark.getAddress());
@@ -41,7 +41,7 @@ public class ParkService {
     }
 
     public Park deleteParkByParkId(String parkId) {
-        Park park = parkRepository.findParkByParkId(parkId).orElseThrow();
+        Park park = parkRepository.findById(parkId).orElseThrow();
         parkRepository.delete(park);
         return null;
     }

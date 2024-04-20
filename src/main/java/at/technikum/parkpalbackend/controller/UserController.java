@@ -69,8 +69,9 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/events")
+    @ResponseStatus(HttpStatus.OK)
     public List<EventDto> getAllEventsByUserId(@PathVariable String userId) {
-        List<Event> events = eventService.findAllEventsByUser(userId);
+        List<Event> events = eventService.findAllEventsCreatedByUser(userId);
         return events.stream()
                 .map(event -> eventMapper.toDto(event))
                 .toList();

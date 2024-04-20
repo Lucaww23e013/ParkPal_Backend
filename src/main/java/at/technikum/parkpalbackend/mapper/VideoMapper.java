@@ -16,14 +16,14 @@ public class VideoMapper {
 
     public VideoDto toDto(Video video){
         return VideoDto.builder()
-                .videoId(video.getVideoId())
-                .userId(video.getUser().getUserId())
+                .id(video.getId())
+                .userId(video.getUser().getId())
                 .build();
     }
 
     public Video toEntity(VideoDto videoDto) {
         return Video.builder()
-                .videoId(videoDto.getVideoId())
+                .id(videoDto.getId())
                 .user(userService.findByUserId(videoDto.getUserId()))
                 .uploadDate(videoDto.getUploadDate())
                 .build();

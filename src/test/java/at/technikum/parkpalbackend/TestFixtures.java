@@ -1,6 +1,8 @@
 package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.model.*;
+import at.technikum.parkpalbackend.model.enums.Role;
+import at.technikum.parkpalbackend.model.enums.Salutation;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,8 +14,8 @@ public class TestFixtures {
     public static Country austria = Country.builder().name("Austria").iso2Code("AT").build();
     public static Country germany = Country.builder().name("Germany").iso2Code("AT").build();
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
-    public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", true);
-    public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", false);
+    public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN);
+    public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER);
     public static Park parkAwesome = createParkWithOutEvents("Awesome Park");
 
     public static Park parkWithEvents = createParkWithEvents("parkWithEvents");
@@ -26,8 +28,8 @@ public class TestFixtures {
     /*public static List<Event> eventList = createEventList();*/
     public static List<User> userList = createUserlist();
     public static Event grilling = createEvent("grilling Biggest Steak Beef");
-
-
+    public static Event pingPongGame = createEvent("pingPong Game with 4 players");
+    public static Event chessMaster = createEvent("Chess Master only for the best players");
 
 
     private static List<EventTag> createEventTagListForAnEvent(Event event) {
@@ -104,7 +106,7 @@ public class TestFixtures {
                 .build();
     }*/
 
-    private static User createUser(String userName, String email, String firstName, String lastName, boolean isAdmin) {
+    private static User createUser(String userName, String email, String firstName, String lastName, Role role) {
         return User.builder()
                 .salutation(Salutation.MALE)
                 .userName(userName)

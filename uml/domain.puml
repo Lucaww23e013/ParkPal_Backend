@@ -2,16 +2,15 @@
 'https://plantuml.com/class-diagram
 
 hide empty methods
+'hide EventTag
 
 entity User {
-    - userID: String
     - salutation: String
     - username: String
     - firstName: String
     - lastName: String
     - email: String
     - password: String
-    - AuthToken: String
     - country: Country
     - isAdmin: Boolean
     - joinedEvents: List<Event>
@@ -24,8 +23,12 @@ enum GenderCategory {
     MALE
 }
 
+enum UserRole {
+    USER
+    ADMIN
+}
+
 entity Event {
-    - eventID: String
     - title: String
     - description: String
     - startTS: LocalDateTime
@@ -33,32 +36,29 @@ entity Event {
     - park: Park
     - creator: User
     - joinedUsers: List<User>
-    - eventTags: List<EventTag>
-    - eventPicture: List<Picture>
-    - eventVideos: List<Videos>
+    - tags: Set<EventTag>
+    - pictures: List<Picture>
+    - videos: List<Videos>
 }
 
-entity EventTag {
-    - eventTagID: String
-    - name: String
+enum EventTag {
+    name: string
+    events: Set<Event>
 }
 
 entity Picture {
-    - pictureId: String
     - user: User
     - LocalDateTime: uploadDate
     - byte[]: file
 }
 
 entity Video {
-    - videoId: String
     - user: User
     - LocalDateTime: uploadDate
     - byte[]: file
 }
 
 entity Park {
-    - parkID: String
     - name: String
     - description: String
     - parkAddress: Address
@@ -79,23 +79,26 @@ entity Country {
     - iso2Code: String
 }
 
-
-
-
-Event "1..1" --|> User : created by
-Event ---> "1..n" Park : has <
-Event -- "n..m" User : joined By
-EventTag "n..m" -left-* Event : has <
-Picture "n..m" <-- Event
-Video "n..m" <-left- Event
+User "1..1" <-left- Event : created by
+User -left- "n..m" Event : joined By
+'Event "1..1" --> User : created by
+Event --> "1..n" Park : has <
+'Event --- "n..m" User : joined By
+Event "n..1" --* EventTag : has >
+'EventTag "n..1" --* Event : has <
+'Picture "n..m" <-- Event
+Event "n..m" --> Picture
+'Video "n..m" <-- Event
+Event "n..m" --> Video
 User -- "1..n" Picture  : User create Picture
-Park "1..n" --|> Picture
+Park "1..n" -up-> Picture
 User -- "1..n" Video  : User create Video
-Park "1..n" ---|> Video
-User -left-> Country
-Address --> Country
-Park -----> "0..1" Address
-User -> GenderCategory
+Park "1..n" -up-> Video
+User -> Country
+Address -right-> Country
+Park -> "0..1" Address
+User -up-> GenderCategory
+User -up-> UserRole
 
 
 @enduml

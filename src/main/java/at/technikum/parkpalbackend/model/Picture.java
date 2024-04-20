@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 
-@Entity(name = "pictures")
+@Entity
 public class Picture {
 
     @Id
     @UuidGenerator
     @Column(name = "picture_id")
-    private String pictureId;
+    private String id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")

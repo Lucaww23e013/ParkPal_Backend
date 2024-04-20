@@ -18,14 +18,14 @@ public class PictureMapper {
 
     public PictureDto toDto(Picture picture){
         return PictureDto.builder()
-                .pictureId(picture.getPictureId())
-                .userId(picture.getUser().getUserId())
+                .id(picture.getId())
+                .userId(picture.getUser().getId())
                 .build();
     }
 
     public Picture toEntity(PictureDto pictureDto) {
         return Picture.builder()
-                .pictureId(pictureDto.getPictureId())
+                .id(pictureDto.getId())
                 .user(userService.findByUserId(pictureDto.getUserId()))
                 .uploadDate(pictureDto.getUploadDate())
                 .build();
