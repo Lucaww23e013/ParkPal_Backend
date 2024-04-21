@@ -51,7 +51,7 @@ public class EventService {
                     .formatted(userId));
         } catch (Throwable e) {
             log.error("Unknown Error:Failed to find events for user with ID: {}", userId, e);
-            throw new EntityNotFoundException("Failed to find events for user with ID: %s"
+            throw new RuntimeException("Failed to find events for user with ID: %s"
                     .formatted(userId));
         }
         return Collections.emptyList();
@@ -70,7 +70,7 @@ public class EventService {
             log.error("Database error: Failed to delete event with ID: {}", eventID, e);
             throw new RuntimeException("Failed to delete event with ID: " + eventID, e);
         } catch (Throwable e) {
-            log.error("Failed to delete event with ID: {}", eventID, e);
+            log.error("Unknown Error:Failed to delete event with ID: {}", eventID, e);
             throw new RuntimeException("Failed to delete event with ID: %s"
                     .formatted(eventID), e);
         }
