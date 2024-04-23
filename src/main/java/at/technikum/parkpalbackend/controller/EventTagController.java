@@ -9,7 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/event-tags")
@@ -38,11 +39,11 @@ public class EventTagController {
     }
 
     @GetMapping
-    public List<EventTagDto> getAllTags() {
-        List<EventTag> eventTags = eventTagService.findAllTags();
+    public Set<EventTagDto> getAllTags() {
+        Set<EventTag> eventTags = eventTagService.findAllEventTagSet();
         return eventTags.stream()
                 .map(eventTag -> eventTagMapper.toDto(eventTag))
-                .toList();
+                .collect(Collectors.toSet());
     }
     @GetMapping("/{eventTagId}")
     public EventTagDto getEventTagById(@RequestBody @Valid String eventTagId) {
