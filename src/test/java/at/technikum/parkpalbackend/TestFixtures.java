@@ -6,7 +6,9 @@ import at.technikum.parkpalbackend.model.enums.Salutation;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class TestFixtures {
@@ -27,9 +29,14 @@ public class TestFixtures {
 
     /*public static List<Event> eventList = createEventList();*/
     public static List<User> userList = createUserlist();
+    // Events
     public static Event grilling = createEvent("grilling Biggest Steak Beef");
     public static Event pingPongGame = createEvent("pingPong Game with 4 players");
     public static Event chessMaster = createEvent("Chess Master only for the best players");
+    public static Event pickNickWithYourFamily = createEvent("Pick Nick With Your Family");
+    // EventTags
+    public static EventTag familyEventTag = createEventTag("Family", grilling, pickNickWithYourFamily);
+    public static EventTag gamesEventTag = createEventTag("Games", chessMaster, chessMaster);
 
 
     private static List<EventTag> createEventTagListForAnEvent(Event event) {
@@ -40,9 +47,14 @@ public class TestFixtures {
     }
 
 
-    private static EventTag createEventTag(String eventTagName, Event event) {
+    private static EventTag createEventTag(String eventTagName, Event ...events) {
+        Set<Event> eventSet = new HashSet<>();
+        for (Event event : events) {
+            eventSet.add(event);
+        }
         return EventTag.builder()
                 .name(eventTagName)
+                .events(eventSet)
                 .build();
     }
 
