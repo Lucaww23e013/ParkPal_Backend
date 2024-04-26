@@ -5,9 +5,9 @@ import at.technikum.parkpalbackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface PictureRepository extends JpaRepository<Picture, String> {
-    Optional<Picture> findPictureByUser(User user);
+    List<Picture> getPicturesByUser(User user);
 }
