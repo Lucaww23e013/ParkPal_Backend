@@ -46,6 +46,18 @@ public class TestFixtures {
             .uploadDate(LocalDateTime.now())
             .file(testFile).build();
 
+    public static byte[] testVideoFile;
+    public static Video testVideo = Video.builder().id(UUID.randomUUID().toString())
+            .user(normalUser)
+            .uploadDate(LocalDateTime.now())
+            .file(testVideoFile).build();
+
+    public static Video alternateTestVideo = Video.builder().id(UUID.randomUUID().toString())
+            .user(normalUser)
+            .uploadDate(LocalDateTime.now())
+            .file(testVideoFile).build();
+
+
 
     private static List<EventTag> createEventTagListForAnEvent(Event event) {
         List<EventTag> eventTags = new ArrayList<>();
