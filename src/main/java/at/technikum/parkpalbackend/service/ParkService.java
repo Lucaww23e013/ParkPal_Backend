@@ -28,7 +28,7 @@ public class ParkService {
     }
 
     public Park updatePark(String parkId, Park updatedPark) {
-        Park park = parkRepository.findById(parkId).orElseThrow();
+        Park park = parkRepository.findById(parkId).orElseThrow(EntityNotFoundException::new);
 
         park.setId(updatedPark.getId());
         park.setName(updatedPark.getName());
@@ -41,8 +41,8 @@ public class ParkService {
     }
 
     public Park deleteParkByParkId(String parkId) {
-        Park park = parkRepository.findById(parkId).orElseThrow();
+        Park park = parkRepository.findById(parkId).orElseThrow(EntityNotFoundException::new);
         parkRepository.delete(park);
-        return null;
+        return park;
     }
 }

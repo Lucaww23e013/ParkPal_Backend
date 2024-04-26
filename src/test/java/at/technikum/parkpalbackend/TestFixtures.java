@@ -19,6 +19,8 @@ public class TestFixtures {
 
     public static Park parkWithEvents = createParkWithEvents("parkWithEvents");
 
+    public static Park alternateParkWithEvents = createParkWithEvents("alternateParkWithEvents");
+
     public static Park parkLuca = createParkWithOutEvents("Park only For Lucas");
 
    /* public static Media testMedia = createMedia();*/
@@ -57,8 +59,6 @@ public class TestFixtures {
             .uploadDate(LocalDateTime.now())
             .file(testVideoFile).build();
 
-
-
     private static List<EventTag> createEventTagListForAnEvent(Event event) {
         List<EventTag> eventTags = new ArrayList<>();
         eventTags.add(createEventTag("Family", event));
@@ -83,6 +83,20 @@ public class TestFixtures {
         joinedUsers.add(normalUser);
         joinedUsers.add(adminUser);
         return joinedUsers;
+    }
+
+
+    public static List<Picture> pictureList() {
+        List<Picture> pictureList = new ArrayList<>();
+        pictureList.add(testPicture);
+        pictureList.add(alternateTestPicture);
+        return pictureList;
+    }
+    public static List<Video> videoList() {
+        List<Video> videoList = new ArrayList<>();
+        videoList.add(testVideo);
+        videoList.add(alternateTestVideo);
+        return videoList;
     }
 
 
@@ -151,7 +165,7 @@ public class TestFixtures {
                 .build();
     }
 
-    private static Address wien1010Address(String streetName, Integer number) {
+    public static Address wien1010Address(String streetName, Integer number) {
         return Address.builder()
                 .streetNumber(streetName)
                 .zipCode("1010")
