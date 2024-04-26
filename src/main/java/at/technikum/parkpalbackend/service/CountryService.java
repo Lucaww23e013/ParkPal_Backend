@@ -34,13 +34,14 @@ public class CountryService {
     }
 
     public Country findCountryByCountryId(String countryId) {
-        return countryRepository.findById(countryId).orElseThrow();
+        return countryRepository.findById(countryId).orElseThrow(EntityNotFoundException::new);
 
     }
 
     public Country deleteCountryByCountryId(String countryId) {
-        Country deltedCountry = countryRepository.findById(countryId).orElseThrow();
+        Country deltedCountry = countryRepository
+                .findById(countryId).orElseThrow(EntityNotFoundException::new);
         countryRepository.delete(deltedCountry);
-        return null;
+        return deltedCountry;
     }
 }
