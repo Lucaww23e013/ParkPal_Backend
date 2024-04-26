@@ -42,7 +42,7 @@ public class VideoService {
     public Video deleteVideoByVideoId(String videoId) {
         Video video = videoRepository.findById(videoId).orElseThrow();
         videoRepository.delete(video);
-        return null;
+        return video;
     }
 
     public LocalDateTime getUploadDate() {

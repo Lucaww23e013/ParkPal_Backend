@@ -24,11 +24,11 @@ public class PictureService {
     }
 
     public Picture findPictureByPictureId(String pictureId) {
-        return pictureRepository.findById(pictureId).orElseThrow();
+        return pictureRepository.findById(pictureId).orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<Picture> getPictureByUserId(User user) {
-        return pictureRepository.findPictureByUser(user).stream().toList();
+    public List<Picture> findPicturesByUser(User user) {
+        return pictureRepository.getPicturesByUser(user).stream().toList();
     }
 
     public Picture save(Picture createdPicture) {
@@ -50,10 +50,6 @@ public class PictureService {
                 .findById(pictureId)
                 .orElseThrow(EntityNotFoundException::new);
         pictureRepository.delete(picture);
-        return null;
-    }
-
-    public LocalDateTime getUploadDate() { //change with FileController
-        return LocalDateTime.now();
+        return picture;
     }
 }

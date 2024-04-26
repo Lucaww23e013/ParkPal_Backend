@@ -52,7 +52,7 @@ public class PictureController {
     @GetMapping("/{userId}")
     public List<PictureDto> getPictureByUserId(@PathVariable @Valid String userId){
         User user = userService.findByUserId(userId);
-        List<Picture> selectedPictures = pictureService.getPictureByUserId(user);
+        List<Picture> selectedPictures = pictureService.findPicturesByUser(user);
         return selectedPictures.stream().map(picture -> pictureMapper.toDto(picture)).toList();
     }
     @PatchMapping("/{pictureId}")

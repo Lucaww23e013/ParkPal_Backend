@@ -5,10 +5,7 @@ import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Salutation;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class TestFixtures {
@@ -37,6 +34,17 @@ public class TestFixtures {
     // EventTags
     public static EventTag familyEventTag = createEventTag("Family", grilling, pickNickWithYourFamily);
     public static EventTag gamesEventTag = createEventTag("Games", chessMaster, chessMaster);
+
+    public static byte[] testFile;
+    public static Picture testPicture = Picture.builder().id(UUID.randomUUID().toString())
+            .user(normalUser)
+            .uploadDate(LocalDateTime.now())
+            .file(testFile).build();
+
+    public static Picture alternateTestPicture = Picture.builder().id(UUID.randomUUID().toString())
+            .user(normalUser)
+            .uploadDate(LocalDateTime.now())
+            .file(testFile).build();
 
 
     private static List<EventTag> createEventTagListForAnEvent(Event event) {
