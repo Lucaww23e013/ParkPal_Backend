@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend;
 
+import at.technikum.parkpalbackend.dto.CountryDto;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Salutation;
@@ -12,6 +13,8 @@ public class TestFixtures {
 
     public static Country austria = Country.builder().name("Austria").iso2Code("AT").build();
     public static Country germany = Country.builder().name("Germany").iso2Code("AT").build();
+
+    public static CountryDto austriaDTO = CountryDto.builder().name("AustriaDTO").iso2Code("ATDTO").build();
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
     public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN);
     public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER);
