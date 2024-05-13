@@ -22,6 +22,9 @@ public class Event {
     @Column(name = "event_Id")
     private String id;
 
+    @Version
+    private long version;
+
     private String title;
 
     private String description;

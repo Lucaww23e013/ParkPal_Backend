@@ -21,6 +21,10 @@ public class UserService {
         return userRepository.findUserByEmail(email).orElseThrow(EntityNotFoundException::new);
     }
 
+    public User findByUserName(String name) {
+        return userRepository.findByUserName(name).orElseThrow(EntityNotFoundException::new);
+    }
+
     public User findByUserId(String userId) {
         return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
     }
