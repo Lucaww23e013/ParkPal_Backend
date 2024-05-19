@@ -3,6 +3,7 @@ package at.technikum.parkpalbackend.dto.userdtos;
 import at.technikum.parkpalbackend.model.enums.Salutation;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Valid
 public class CreateUserDto {
 
     private String id;

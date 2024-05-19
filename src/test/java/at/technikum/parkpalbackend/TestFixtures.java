@@ -5,6 +5,7 @@ import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Salutation;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -118,8 +119,8 @@ public class TestFixtures {
         Event event = Event.builder()
                 .title(title)
                 .description("Runaway Park")
-                .startTS(LocalDateTime.now().plusHours(1))
-                .endTS( LocalDateTime.now().plusHours(2))
+                .startTS(LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.MINUTES))
+                .endTS( LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES))
                 .park(parkAwesome)
                 .creator(adminUser)
                 .joinedUsers(createUserlist())
