@@ -40,19 +40,6 @@ public class UserController {
         this.userMapper = userMapper;
         this.eventMapper = eventMapper;
     }
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserDto createUser(@RequestBody @Valid CreateUserDto createUserDto) {
-        User user = userMapper.toEntity(createUserDto);
-        user = userService.create(user);
-        return userMapper.toCreateUserDto(user);
-    }
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public LoginUserDto loginUser(String email, String password) {
-        User user = userService.login(email, password);
-        return userMapper.toLoginUserDto(user);
-    }
 
     @GetMapping
     public List<UserDto> readAll() {

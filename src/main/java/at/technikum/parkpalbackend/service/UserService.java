@@ -22,7 +22,7 @@ public class UserService {
     }
 
     public User findByUserName(String name) {
-        return userRepository.findByUserName(name).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findUserByUserName(name).orElseThrow(EntityNotFoundException::new);
     }
 
     public User findByUserId(String userId) {
@@ -34,6 +34,9 @@ public class UserService {
     }
 
     public User create(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         return userRepository.save(user);
     }
 
