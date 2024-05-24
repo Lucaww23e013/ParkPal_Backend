@@ -42,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private Optional<String> extractTokenFromRequest(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
+        // if we want to get token as only http cookie, here is the place
 
         if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
             return Optional.of(token.substring("Bearer ".length()));
