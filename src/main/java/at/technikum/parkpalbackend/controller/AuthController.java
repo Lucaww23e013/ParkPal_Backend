@@ -8,6 +8,8 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.jwt.JwtIssuer;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -45,7 +47,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public TokenResponse login(@RequestBody @Valid LoginRequest loginRequest) {
+    public TokenResponse login(@RequestBody @Valid LoginRequest loginRequest,
+                               HttpServletResponse response) {
         // pass the username and password to springs in-build security manager
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -54,12 +57,8 @@ public class AuthController {
                 )
         );
 
-        // extract the user principle from the security context
-        // the user is in the security context
-        // because the information was passed to the security manager
         SecurityContextHolder.getContext().setAuthentication(auth);
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-
         // issue the jwt with the user information
         List<String> roles = principal.getAuthorities()
                 .stream()
@@ -71,6 +70,11 @@ public class AuthController {
                 principal.getUsername(),
                 roles
         );
+
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/"); // for all paths is the cookie available
+        response.addCookie(cookie);
 
         return new TokenResponse(token);
     }

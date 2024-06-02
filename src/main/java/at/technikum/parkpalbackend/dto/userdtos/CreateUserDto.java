@@ -1,7 +1,7 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
 import at.technikum.parkpalbackend.model.enums.Role;
-import at.technikum.parkpalbackend.model.enums.Salutation;
+import at.technikum.parkpalbackend.model.enums.Gender;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
@@ -20,8 +20,9 @@ public class CreateUserDto {
     private String id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Enter a Salutation")
-    private Salutation salutation;
+    private Gender gender;
+
+    private String salutation;
 
     @Enumerated(EnumType.STRING)
     private Role role;

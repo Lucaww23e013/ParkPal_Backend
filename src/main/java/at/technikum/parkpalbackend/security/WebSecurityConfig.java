@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -43,27 +44,29 @@ public class WebSecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //  Add JWT filter to the security chain
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(registry -> registry
-                        // Swagger UI access
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
+                // Swagger UI access
+                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
 
-                        .requestMatchers("/users/**").permitAll()
-                        .requestMatchers("/countries/**").permitAll()
-                        .requestMatchers("/events/**").permitAll()
-                        .requestMatchers("/parks/**").permitAll()
-                        .requestMatchers("/pictures/**").permitAll()
-                        .requestMatchers("/videos/**").permitAll()
-                        .requestMatchers("/upload/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        // allow errors so that @ResponseStatus() will show and not 401
-                        .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated());
+                .requestMatchers("/users/**").permitAll()
+                .requestMatchers("/countries/**").permitAll()
+                .requestMatchers("/events/**").permitAll()
+                .requestMatchers("/parks/**").permitAll()
+                .requestMatchers("/pictures/**").permitAll()
+                .requestMatchers("/videos/**").permitAll()
+                .requestMatchers("/upload/**").permitAll()
+                .requestMatchers("/auth/login", "/auth/register").permitAll()
+                // allow errors so that @ResponseStatus() will show and not 401
+                .requestMatchers("/error").permitAll()
+                .anyRequest().authenticated());
         return http.build();
     }
 
