@@ -54,9 +54,11 @@ public class User {
     @Size(min = 12, message = "Password must be at least 12 characters long")
     private String password;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "country_id", foreignKey = @ForeignKey(name = "fk_user_2_country"))
     private Country country;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
