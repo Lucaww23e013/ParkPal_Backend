@@ -2,7 +2,7 @@ package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.model.enums.Role;
-import at.technikum.parkpalbackend.model.enums.Salutation;
+import at.technikum.parkpalbackend.model.enums.Gender;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -14,8 +14,8 @@ public class TestFixtures {
     public static Country austria = Country.builder().name("Austria").iso2Code("AT").build();
     public static Country germany = Country.builder().name("Germany").iso2Code("AT").build();
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
-    public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN);
-    public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER);
+    public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
     public static Park parkAwesome = createParkWithOutEvents("Awesome Park");
 
     public static Park parkWithEvents = createParkWithEvents("parkWithEvents");
@@ -153,9 +153,10 @@ public class TestFixtures {
                 .build();
     }*/
 
-    private static User createUser(String userName, String email, String firstName, String lastName, Role role) {
+    private static User createUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return User.builder()
-                .salutation(Salutation.MALE)
+                .gender(gender)
+                .salutation(salutation)
                 .userName(userName)
                 .firstName(firstName)
                 .lastName(lastName)
