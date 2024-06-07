@@ -11,17 +11,30 @@ import java.io.IOException;
 
 @Component
 public class VideoMapper {
+
     public UserService userService;
     public UploadService uploadService;
 
-    public VideoDto toDto(Video video){
+    public VideoDto toDto(Video video) {
+        if (video == null || video.getId() == null
+                || video.getUser() == null || video.getFile() == null
+                || video.getUploadDate() == null) {
+            throw new IllegalArgumentException("Video entity or its fields cannot be null");
+        }
+
         return VideoDto.builder()
                 .id(video.getId())
                 .userId(video.getUser().getId())
+                .uploadDate(video.getUploadDate())
                 .build();
     }
 
     public Video toEntity(VideoDto videoDto) {
+        if (videoDto == null || videoDto.getId() == null
+                || videoDto.getUserId() == null) {
+            throw new IllegalArgumentException("VideoDTO or its fields cannot be null");
+        }
+
         return Video.builder()
                 .id(videoDto.getId())
                 .user(userService.findByUserId(videoDto.getUserId()))

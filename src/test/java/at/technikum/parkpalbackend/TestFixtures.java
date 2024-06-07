@@ -60,7 +60,9 @@ public class TestFixtures {
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testVideoFile).build();
-
+    public static VideoDto testVideoDto = VideoDto.builder().id(UUID.randomUUID().toString())
+            .userId(normalUser.getId())
+            .uploadDate(LocalDateTime.now()).build();
     public static Video alternateTestVideo = Video.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
