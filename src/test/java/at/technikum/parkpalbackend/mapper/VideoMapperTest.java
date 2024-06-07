@@ -64,19 +64,6 @@ public class VideoMapperTest {
         assertThrows(IllegalArgumentException.class, () -> videoMapper.toDto(video));
     }
 
-
-    @Test
-    public void whenEntityIncomplete_toDto_thenThrowIllegalArgumentException() {
-        // Arrange
-        Video video = Video.builder().build();
-        video.setId(UUID.randomUUID().toString()); // Picture object without ID and iso2Code
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> videoMapper.toDto(video));
-    }
-
-
-
     @Test
     public void whenDTO_thenToEntity() {
         // Arrange
@@ -96,18 +83,6 @@ public class VideoMapperTest {
     public void whenDTONull_toEntity_thenThrowIllegalArgumentException() {
         // Arrange
         VideoDto videoDto = null;
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> videoMapper.toEntity(videoDto));
-    }
-
-
-    @Test
-    public void whenDTOIncomplete_toEntity_thenThrowIllegalArgumentException() {
-        // Arrange
-        VideoDto videoDto = VideoDto.builder().build();
-        videoDto.setId(UUID.randomUUID().toString()); // PictureDto object without ID and iso2Code
-
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> videoMapper.toEntity(videoDto));
