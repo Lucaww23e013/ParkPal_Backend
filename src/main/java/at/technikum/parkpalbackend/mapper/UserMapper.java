@@ -18,8 +18,10 @@ public class UserMapper {
     public UserMapper(CountryService countryService) {
         this.countryService = countryService;
     }
-
     public UserDto toDto(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User entity or its fields cannot be null");
+        }
         return UserDto.builder()
                 .id(user.getId())
                 .gender(user.getGender())
@@ -36,6 +38,9 @@ public class UserMapper {
     }
 
     public User toEntity(UserDto userDto) {
+        if (userDto == null) {
+            throw new IllegalArgumentException("UserDto  or its fields cannot be null");
+        }
         return User.builder()
                 .id(userDto.getId())
                 .gender(userDto.getGender())
@@ -50,8 +55,10 @@ public class UserMapper {
                 .joinedEvents(userDto.getJoinedEvents())
                 .build();
     }
-
     public CreateUserDto toCreateUserDto(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User entity or its fields cannot be null");
+        }
         return CreateUserDto.builder()
                 .id(user.getId())
                 .salutation(user.getSalutation())
@@ -64,10 +71,12 @@ public class UserMapper {
                 .password(user.getPassword())
                 .build();
     }
-
     public User toEntity(CreateUserDto createUserDto) {
+        if (createUserDto == null) {
+            throw new IllegalArgumentException("CreateUserDto or its fields cannot be null");
+        }
         return User.builder()
-                //.id(createUserDto.getId())
+                .id(createUserDto.getId())
                 .salutation(createUserDto.getSalutation())
                 .userName(createUserDto.getUserName())
                 .firstName(createUserDto.getFirstName())
@@ -80,18 +89,27 @@ public class UserMapper {
     }
 
     public DeleteUserDto toDeleteUserDto(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User entity or its fields cannot be null");
+        }
         return DeleteUserDto.builder()
                 .userId(user.getId())
                 .build();
     }
 
     public User toEntity(DeleteUserDto deleteUserDto) {
+        if (deleteUserDto == null) {
+            throw new IllegalArgumentException("DeleteUserDto or its fields cannot be null");
+        }
         return User.builder()
                 .id(deleteUserDto.getUserId())
                 .build();
     }
 
     public LoginUserDto toLoginUserDto(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("LoginUserDto or its fields cannot be null");
+        }
         return LoginUserDto.builder()
                 .email(user.getEmail())
                 .build();
@@ -99,6 +117,9 @@ public class UserMapper {
     }
 
     public User toEntity(LoginUserDto loginUserDto) {
+        if (loginUserDto == null) {
+            throw new IllegalArgumentException("LoginUserDto or its fields cannot be null");
+        }
         return User.builder()
                 .email(loginUserDto.getEmail())
                 .build();
