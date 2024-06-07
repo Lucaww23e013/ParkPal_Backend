@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend;
 
+import at.technikum.parkpalbackend.dto.PictureDto;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Salutation;
@@ -37,18 +38,23 @@ public class TestFixtures {
     public static EventTag familyEventTag = createEventTag("Family", grilling, pickNickWithYourFamily);
     public static EventTag gamesEventTag = createEventTag("Games", chessMaster, chessMaster);
 
-    public static byte[] testFile;
+    public static byte[] testFile = new byte[100];
     public static Picture testPicture = Picture.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testFile).build();
+
+    public static PictureDto testPictureDto = PictureDto.builder().id(UUID.randomUUID().toString())
+            .userId(normalUser.getId())
+            .uploadDate(LocalDateTime.now())
+            .build();
 
     public static Picture alternateTestPicture = Picture.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testFile).build();
 
-    public static byte[] testVideoFile;
+    public static byte[] testVideoFile = new byte[100];
     public static Video testVideo = Video.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
@@ -154,6 +160,7 @@ public class TestFixtures {
 
     private static User createUser(String userName, String email, String firstName, String lastName, Role role) {
         return User.builder()
+                .id(UUID.randomUUID().toString())
                 .salutation(Salutation.MALE)
                 .userName(userName)
                 .firstName(firstName)
