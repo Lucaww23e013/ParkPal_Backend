@@ -1,9 +1,6 @@
 package at.technikum.parkpalbackend.model.enums;
 
-import jakarta.validation.constraints.NotNull;
-
-@NotNull
-public enum Salutation {
+public enum Gender {
     OTHER,
 
     FEMALE,

@@ -1,8 +1,10 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
-import at.technikum.parkpalbackend.model.enums.Salutation;
+import at.technikum.parkpalbackend.model.enums.Role;
+import at.technikum.parkpalbackend.model.enums.Gender;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -12,13 +14,18 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Valid
 public class CreateUserDto {
 
     private String id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Enter a Salutation")
-    private Salutation salutation;
+    private Gender gender;
+
+    private String salutation;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @NotBlank(message = "Enter a Username")
     private String userName;
@@ -40,8 +47,7 @@ public class CreateUserDto {
     @NotBlank(message = "Enter a Password")
     private String password;
 
+    @NotBlank(message = "Enter a Country")
     private String countryId;
-
-
 
 }

@@ -5,6 +5,7 @@ hide empty methods
 'hide EventTag
 
 entity User {
+    - gender : Gender
     - salutation: String
     - username: String
     - firstName: String
@@ -12,12 +13,12 @@ entity User {
     - email: String
     - password: String
     - country: Country
-    - isAdmin: Boolean
+    - role: Role
     - joinedEvents: List<Event>
     - profilePicture: Picture
 }
 
-enum GenderCategory {
+enum Gender {
     OTHER
     FEMALE
     MALE
@@ -97,7 +98,7 @@ Park "1..n" -up-> Video
 User -> Country
 Address -right-> Country
 Park -> "0..1" Address
-User -up-> GenderCategory
+User -up-> Gender
 User -up-> UserRole
 
 
