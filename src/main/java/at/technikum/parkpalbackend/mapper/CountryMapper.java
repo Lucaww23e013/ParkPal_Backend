@@ -6,7 +6,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CountryMapper {
-    public CountryDto toDto(Country country){
+    public CountryDto toDto(Country country) {
+        if (country == null) {
+            throw new IllegalArgumentException("Country entity or its fields cannot be null");
+        }
+
         return CountryDto.builder()
                 .id(country.getId())
                 .name(country.getName())
@@ -15,6 +19,10 @@ public class CountryMapper {
     }
 
     public Country toEntity(CountryDto countryDto) {
+        if (countryDto == null) {
+            throw new IllegalArgumentException("CountryDto or its fields cannot be null");
+        }
+
         return Country.builder()
                 .id(countryDto.getId())
                 .name(countryDto.getName())
