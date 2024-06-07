@@ -4,6 +4,10 @@ import at.technikum.parkpalbackend.dto.PictureDto;
 import at.technikum.parkpalbackend.dto.VideoDto;
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
+import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
+import at.technikum.parkpalbackend.dto.userdtos.DeleteUserDto;
+import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
+import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Gender;
@@ -15,10 +19,17 @@ import java.util.*;
 
 public class TestFixtures {
 
-    public static Country austria = Country.builder().name("Austria").iso2Code("AT").build();
+    public static Country austria = Country.builder().id("c07cd7cb-ce44-4709-a9b6-9d8d2d568263").name("Austria").iso2Code("AT").build();
     public static Country germany = Country.builder().name("Germany").iso2Code("AT").build();
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
     public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+
+    public static DeleteUserDto adminDeleteUserDto = createDelteUserDto();
+    public static LoginUserDto adminLoginUserDto = createLoginUserDto();
+
+
+    public static CreateUserDto adminCreateUserDto = createCreateUserDTO("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static UserDto adminUserDto = createUserDto("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
     public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
     public static Park parkAwesome = createParkWithOutEvents("Awesome Park");
 
@@ -189,6 +200,51 @@ public class TestFixtures {
                 .build();
     }*/
 
+    private static UserDto createUserDto(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
+        return UserDto.builder()
+                .id(UUID.randomUUID().toString())
+                .salutation(salutation)
+                .gender(gender)
+                .userName(userName)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password("eyJhbGciOiJIUzI1NiIsInR5cCI32!")
+                .countryId(austria.getId())
+                .role(Role.ADMIN)
+                .joinedEvents(createEventList())
+                .build();
+    }
+
+    private static CreateUserDto createCreateUserDTO(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
+        return CreateUserDto.builder()
+                .id(UUID.randomUUID().toString())
+                .salutation(salutation)
+                .gender(gender)
+                .userName(userName)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password("eyJhbGciOiJIUzI1NiIsInR5cCI32!")
+                .countryId(austria.getId())
+                .role(Role.ADMIN)
+                .build();
+    }
+
+    private static DeleteUserDto createDelteUserDto() {
+        return DeleteUserDto.builder()
+                .userId(UUID.randomUUID().toString())
+                .build();
+
+    }
+
+    private static LoginUserDto createLoginUserDto() {
+        return LoginUserDto.builder()
+                .email(UUID.randomUUID().toString())
+                .build();
+
+    }
+
     private static User createUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return User.builder()
                 .id(UUID.randomUUID().toString())
@@ -201,6 +257,7 @@ public class TestFixtures {
                 .password("eyJhbGciOiJIUzI1NiIsInR5cCI32!")
                 .country(austria)
                 .role(Role.ADMIN)
+                .joinedEvents(createEventList())
                 .build();
     }
 
