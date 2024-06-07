@@ -49,7 +49,7 @@ public class TestFixtures {
             .uploadDate(LocalDateTime.now())
             .file(testFile).build();
 
-    public static byte[] testVideoFile = new byte[0];
+    public static byte[] testVideoFile = new byte[100];
     public static Video testVideo = Video.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
