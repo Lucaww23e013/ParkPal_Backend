@@ -24,7 +24,6 @@ public class CountryMapperTest {
         Country country = TestFixtures.austria;
         country.setId(UUID.randomUUID().toString());
 
-
         // Act
         CountryDto countryDto = countryMapper.toDto(country);
 
@@ -38,16 +37,6 @@ public class CountryMapperTest {
     public void whenEntityNull_toDto_thenThrowIllegalArgumentException() {
         // Arrange
         Country country = null;
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> countryMapper.toDto(country));
-    }
-
-    @Test
-    public void whenEntityIncomplete_toDto_thenThrowIllegalArgumentException() {
-        // Arrange
-        Country country = Country.builder().build();
-        country.setName("Austria"); // Country object without ID and iso2Code
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> countryMapper.toDto(country));
@@ -71,16 +60,6 @@ public class CountryMapperTest {
     public void whenDTONull_toEntity_thenThrowIllegalArgumentException() {
         // Arrange
         CountryDto countryDto = null;
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> countryMapper.toEntity(countryDto));
-    }
-
-    @Test
-    public void whenDTOIncomplete_toEntity_thenThrowIllegalArgumentException() {
-        // Arrange
-        CountryDto countryDto = CountryDto.builder().build();
-        countryDto.setName("Austria"); // CountryDTOs object without ID and iso2Code
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> countryMapper.toEntity(countryDto));
