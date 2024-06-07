@@ -21,6 +21,10 @@ public class UserService {
         return userRepository.findUserByEmail(email).orElseThrow(EntityNotFoundException::new);
     }
 
+    public User findByUserName(String name) {
+        return userRepository.findUserByUserName(name).orElseThrow(EntityNotFoundException::new);
+    }
+
     public User findByUserId(String userId) {
         return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
     }
@@ -30,6 +34,9 @@ public class UserService {
     }
 
     public User create(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         return userRepository.save(user);
     }
 
