@@ -16,9 +16,7 @@ public class VideoMapper {
     public UploadService uploadService;
 
     public VideoDto toDto(Video video) {
-        if (video == null || video.getId() == null
-                || video.getUser() == null || video.getFile() == null
-                || video.getUploadDate() == null) {
+        if (video == null) {
             throw new IllegalArgumentException("Video entity or its fields cannot be null");
         }
 
@@ -30,8 +28,7 @@ public class VideoMapper {
     }
 
     public Video toEntity(VideoDto videoDto) {
-        if (videoDto == null || videoDto.getId() == null
-                || videoDto.getUserId() == null) {
+        if (videoDto == null) {
             throw new IllegalArgumentException("VideoDTO or its fields cannot be null");
         }
 

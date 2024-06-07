@@ -17,9 +17,7 @@ public class PictureMapper {
     public UploadService uploadService;
 
     public PictureDto toDto(Picture picture) {
-        if (picture == null || picture.getId() == null
-                || picture.getUser() == null || picture.getFile() == null
-                || picture.getUploadDate() == null) {
+        if (picture == null) {
             throw new IllegalArgumentException("Picture entity or its fields cannot be null");
         }
         return PictureDto.builder()
@@ -30,8 +28,7 @@ public class PictureMapper {
     }
 
     public Picture toEntity(PictureDto pictureDto) {
-        if (pictureDto == null || pictureDto.getId() == null
-                || pictureDto.getUserId() == null || pictureDto.getUploadDate() == null) {
+        if (pictureDto == null) {
             throw new IllegalArgumentException("PictureDTO or its fields cannot be null");
         }
         return Picture.builder()

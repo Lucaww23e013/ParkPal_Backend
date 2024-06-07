@@ -66,18 +66,6 @@ public class PictureMapperTest {
     }
 
 
-    @Test
-    public void whenEntityIncomplete_toDto_thenThrowIllegalArgumentException() {
-        // Arrange
-        Picture picture = Picture.builder().build();
-        picture.setId(UUID.randomUUID().toString()); // Picture object without ID and iso2Code
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> pictureMapper.toDto(picture));
-    }
-
-
-
 
     @Test
     public void whenDTO_thenToEntity() {
@@ -105,16 +93,7 @@ public class PictureMapperTest {
     }
 
 
-    @Test
-    public void whenDTOIncomplete_toEntity_thenThrowIllegalArgumentException() {
-        // Arrange
-        PictureDto pictureDto = PictureDto.builder().build();
-        pictureDto.setId(UUID.randomUUID().toString()); // PictureDto object without ID and iso2Code
 
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> pictureMapper.toEntity(pictureDto));
-    }
 
     @Test
     public void whenMultipleFilePart_toEntity() throws IOException {
