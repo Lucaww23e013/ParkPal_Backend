@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 public class EventMapper {
 
     private ParkService parkService;
+
+    public EventMapper(ParkService parkService) {
+        this.parkService = parkService;
+    }
+
     public EventDto toDto(Event event) {
         return EventDto.builder()
                 .id(event.getId())
