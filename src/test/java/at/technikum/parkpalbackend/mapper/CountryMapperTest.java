@@ -85,5 +85,4 @@ public class CountryMapperTest {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> countryMapper.toEntity(countryDto));
     }
-
 }
