@@ -2,6 +2,7 @@ package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.dto.CountryDto;
 import at.technikum.parkpalbackend.dto.PictureDto;
+import at.technikum.parkpalbackend.dto.VideoDto;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Gender;

@@ -7,15 +7,17 @@ import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.dto.CountryDto;
 import at.technikum.parkpalbackend.model.Country;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 
 import java.util.UUID;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class CountryMapperTest {
 
-    @Autowired
+    @InjectMocks
     private CountryMapper countryMapper;
 
     @Test
