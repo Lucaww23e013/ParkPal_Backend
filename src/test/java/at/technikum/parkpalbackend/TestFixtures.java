@@ -1,6 +1,9 @@
 package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.dto.PictureDto;
+import at.technikum.parkpalbackend.dto.VideoDto;
+import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
+import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Gender;
@@ -24,6 +27,10 @@ public class TestFixtures {
     public static Park alternateParkWithEvents = createParkWithEvents("alternateParkWithEvents");
 
     public static Park parkLuca = createParkWithOutEvents("Park only For Lucas");
+
+    public static ParkDto testParkDto = createTestParkDto("testParkDto");
+
+    public static CreateParkDto testCreateParkDto = createCreateParkDto("testCreateParkDto");
 
    /* public static Media testMedia = createMedia();*/
    /* public static List<Media> mediaList = createMediaList();*/
@@ -145,12 +152,33 @@ public class TestFixtures {
                /* .parkMedia(createMediaList())*/
                 .build();
     }
+
+    private static ParkDto createTestParkDto(String parkDtoName) {
+        return ParkDto.builder()
+                .name(parkDtoName)
+                .description("ParkDTO Test")
+                .address(parkAddress)
+                .parkVideos(videoList())
+                .parkPictures(pictureList())
+                .parkEvents(createEventList())
+                .build();
+    }
+
+    private static CreateParkDto createCreateParkDto (String createParkDto) {
+        return CreateParkDto.builder()
+                .name(createParkDto)
+                .description("CreateParkDTO Test")
+                .address(parkAddress)
+                .build();
+    }
+
     private static Park createParkWithEvents(String parkName) {
         return Park.builder()
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
-               // .parkMedia(createMediaList())
+                .parkVideos(videoList())
+                .parkPictures(pictureList())
                 .parkEvents(createEventList())
                 .build();
     }

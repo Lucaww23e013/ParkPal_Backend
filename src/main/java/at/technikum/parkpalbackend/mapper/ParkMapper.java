@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 public class ParkMapper {
 
     public ParkDto toDto(Park park){
+        if (park == null) {
+            throw new IllegalArgumentException("Park entity or its fields cannot be null");
+        }
         return ParkDto.builder()
                 .id(park.getId())
                 .name(park.getName())
@@ -18,8 +21,10 @@ public class ParkMapper {
                 .parkVideos(park.getParkVideos())
                 .build();
     }
-
     public Park toEntity(ParkDto parkDto) {
+        if (parkDto == null) {
+            throw new IllegalArgumentException("ParkDto or its fields cannot be null");
+        }
         return Park.builder()
                 .id(parkDto.getId())
                 .name(parkDto.getName())
@@ -29,8 +34,10 @@ public class ParkMapper {
                 .parkVideos(parkDto.getParkVideos())
                 .build();
     }
-
     public CreateParkDto toCreateParkDto(Park park){
+        if (park == null) {
+            throw new IllegalArgumentException("Park entity or its fields cannot be null");
+        }
         return CreateParkDto.builder()
                 .parkId(park.getId())
                 .name(park.getName())
@@ -40,6 +47,9 @@ public class ParkMapper {
     }
 
     public Park createParkDtoToEntity(CreateParkDto createParkDto) {
+        if (createParkDto == null) {
+            throw new IllegalArgumentException("CreateParkDto or its fields cannot be null");
+        }
         return Park.builder()
                 .id(createParkDto.getParkId())
                 .name(createParkDto.getName())
