@@ -3,6 +3,7 @@ package at.technikum.parkpalbackend.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -22,8 +23,12 @@ public class Event {
     @Column(name = "event_Id")
     private String id;
 
+    @Version
+    private long version;
+
     private String title;
 
+    @Length(max = 1000, message = "Description is too long")
     private String description;
 
     private LocalDateTime startTS;
