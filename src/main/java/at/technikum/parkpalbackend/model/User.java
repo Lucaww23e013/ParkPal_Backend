@@ -1,7 +1,7 @@
 package at.technikum.parkpalbackend.model;
 
 import at.technikum.parkpalbackend.model.enums.Role;
-import at.technikum.parkpalbackend.model.enums.Salutation;
+import at.technikum.parkpalbackend.model.enums.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -31,7 +31,9 @@ public class User {
     private String id;
 
     @Enumerated(EnumType.STRING)
-    private Salutation salutation;
+    private Gender gender;
+
+    private String salutation;
 
     @Column(unique = true, name = "user_name")
     private String userName;
@@ -54,9 +56,11 @@ public class User {
     @Size(min = 12, message = "Password must be at least 12 characters long")
     private String password;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "country_id", foreignKey = @ForeignKey(name = "fk_user_2_country"))
     private Country country;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

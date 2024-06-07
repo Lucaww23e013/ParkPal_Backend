@@ -1,11 +1,13 @@
 package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.dto.CountryDto;
+import at.technikum.parkpalbackend.dto.PictureDto;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.model.enums.Role;
-import at.technikum.parkpalbackend.model.enums.Salutation;
+import at.technikum.parkpalbackend.model.enums.Gender;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -16,8 +18,8 @@ public class TestFixtures {
 
     public static CountryDto austriaDTO = CountryDto.builder().name("AustriaDTO").iso2Code("ATDTO").build();
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
-    public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN);
-    public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER);
+    public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
     public static Park parkAwesome = createParkWithOutEvents("Awesome Park");
 
     public static Park parkWithEvents = createParkWithEvents("parkWithEvents");
@@ -40,23 +42,30 @@ public class TestFixtures {
     public static EventTag familyEventTag = createEventTag("Family", grilling, pickNickWithYourFamily);
     public static EventTag gamesEventTag = createEventTag("Games", chessMaster, chessMaster);
 
-    public static byte[] testFile;
+    public static byte[] testFile = new byte[100];
     public static Picture testPicture = Picture.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testFile).build();
+
+    public static PictureDto testPictureDto = PictureDto.builder().id(UUID.randomUUID().toString())
+            .userId(normalUser.getId())
+            .uploadDate(LocalDateTime.now())
+            .build();
 
     public static Picture alternateTestPicture = Picture.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testFile).build();
 
-    public static byte[] testVideoFile;
+    public static byte[] testVideoFile = new byte[100];
     public static Video testVideo = Video.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testVideoFile).build();
-
+    public static VideoDto testVideoDto = VideoDto.builder().id(UUID.randomUUID().toString())
+            .userId(normalUser.getId())
+            .uploadDate(LocalDateTime.now()).build();
     public static Video alternateTestVideo = Video.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
@@ -121,8 +130,8 @@ public class TestFixtures {
         Event event = Event.builder()
                 .title(title)
                 .description("Runaway Park")
-                .startTS(LocalDateTime.now().plusHours(1))
-                .endTS( LocalDateTime.now().plusHours(2))
+                .startTS(LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.MINUTES))
+                .endTS( LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES))
                 .park(parkAwesome)
                 .creator(adminUser)
                 .joinedUsers(createUserlist())
@@ -155,9 +164,11 @@ public class TestFixtures {
                 .build();
     }*/
 
-    private static User createUser(String userName, String email, String firstName, String lastName, Role role) {
+    private static User createUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return User.builder()
-                .salutation(Salutation.MALE)
+                .id(UUID.randomUUID().toString())
+                .salutation(salutation)
+                .gender(gender)
                 .userName(userName)
                 .firstName(firstName)
                 .lastName(lastName)

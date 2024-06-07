@@ -1,9 +1,7 @@
 package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
-import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
-import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.Event;
@@ -39,19 +37,6 @@ public class UserController {
         this.eventService = eventService;
         this.userMapper = userMapper;
         this.eventMapper = eventMapper;
-    }
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserDto createUser(@RequestBody @Valid CreateUserDto createUserDto) {
-        User user = userMapper.toEntity(createUserDto);
-        user = userService.create(user);
-        return userMapper.toCreateUserDto(user);
-    }
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public LoginUserDto loginUser(String email, String password) {
-        User user = userService.login(email, password);
-        return userMapper.toLoginUserDto(user);
     }
 
     @GetMapping

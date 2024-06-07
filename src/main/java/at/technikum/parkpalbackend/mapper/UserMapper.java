@@ -5,7 +5,9 @@ import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.service.CountryService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
@@ -20,6 +22,7 @@ public class UserMapper {
     public UserDto toDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
+                .gender(user.getGender())
                 .salutation(user.getSalutation())
                 .userName(user.getUserName())
                 .firstName(user.getFirstName())
@@ -35,6 +38,7 @@ public class UserMapper {
     public User toEntity(UserDto userDto) {
         return User.builder()
                 .id(userDto.getId())
+                .gender(userDto.getGender())
                 .salutation(userDto.getSalutation())
                 .userName(userDto.getUserName())
                 .firstName(userDto.getFirstName())
@@ -55,19 +59,22 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
+                .role(user.getRole())
+                .countryId(user.getCountry().getId())
                 .password(user.getPassword())
                 .build();
     }
 
     public User toEntity(CreateUserDto createUserDto) {
         return User.builder()
-                .id(createUserDto.getId())
+                //.id(createUserDto.getId())
                 .salutation(createUserDto.getSalutation())
                 .userName(createUserDto.getUserName())
                 .firstName(createUserDto.getFirstName())
                 .lastName(createUserDto.getLastName())
                 .email(createUserDto.getEmail())
-                .password(createUserDto.getPassword())
+                .role(Role.USER)
+                .password(new BCryptPasswordEncoder().encode(createUserDto.getPassword()))
                 .country(countryService.findCountryByCountryId(createUserDto.getCountryId()))
                 .build();
     }
