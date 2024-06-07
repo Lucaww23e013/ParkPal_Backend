@@ -18,7 +18,8 @@ public class PictureMapper {
 
     public PictureDto toDto(Picture picture) {
         if (picture == null || picture.getId() == null
-                || picture.getUser() == null || picture.getFile() == null || picture.getUploadDate() == null) {
+                || picture.getUser() == null || picture.getFile() == null
+                || picture.getUploadDate() == null) {
             throw new IllegalArgumentException("Picture entity or its fields cannot be null");
         }
         return PictureDto.builder()
