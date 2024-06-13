@@ -62,6 +62,10 @@ public class UploadService {
                 ". Allowed video types: " + String.join(", ", ALLOWED_VIDEO_TYPES));
     }
     public byte[] transferToBytes(MultipartFile file) throws IOException {
-        return file.getBytes();
+        try {
+            return file.getBytes();
+        } catch (IOException e) {
+            throw new IOException("Failed to read bytes from MultipartFile", e);
+        }
     }
 }
