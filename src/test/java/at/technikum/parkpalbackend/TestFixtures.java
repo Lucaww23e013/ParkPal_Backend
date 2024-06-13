@@ -89,7 +89,7 @@ public class TestFixtures {
             .uploadDate(LocalDateTime.now())
             .file(testVideoFile).build();
 
-    private static List<EventTag> createEventTagListForAnEvent(Event event) {
+private static List<EventTag> createEventTagListForAnEvent(Event event) {
         List<EventTag> eventTags = new ArrayList<>();
         eventTags.add(createEventTag("Family", event));
         eventTags.add(createEventTag("Football", event));
