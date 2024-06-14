@@ -29,7 +29,5 @@ jobs:
           files: |
             ./target/.jar  # Path to your generated JAR file
           tag_name: ${{ github.sha }}
-          release_name: Release ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: osama004/ParkPal-Backend
-          distribution: public
