@@ -20,9 +20,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - run: mkdir download && cp target/spring-rest-backend-0.0.1.jar download
+      - name: Run Maven
+        run: mvn -B package --file pom.xml
+
+      - run: mkdir -p download && cp target/*.jar download
       - name: Upload JAR to GitHub Releases
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ParkPalBackend
           path: download
