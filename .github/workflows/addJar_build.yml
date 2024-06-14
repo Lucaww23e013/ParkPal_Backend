@@ -20,10 +20,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build JAR
-        run: mvn -B package --file pom.xml
-
-
       - run: mkdir download cp target/*.jar download
       - name: Upload JAR to GitHub Releases
         uses: actions/upload-artifact@v2
