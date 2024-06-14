@@ -1,0 +1,32 @@
+name: Upload JAR to Releases
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
+
+      - name: Build JAR
+        run: mvn -B package --file pom.xml
+
+      - name: Upload JAR to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./target/.jar  # Path to your generated JAR file
+          tag_name: ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: osama004/ParkPal-Backend
