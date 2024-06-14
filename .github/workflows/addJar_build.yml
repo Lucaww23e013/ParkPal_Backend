@@ -29,4 +29,5 @@ jobs:
           files: |
             ./target/spring-rest-backend-0.0.1.jar
           tag_name: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository: osama004/ParkPal-Backend
