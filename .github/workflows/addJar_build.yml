@@ -27,7 +27,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./target/spring-rest-backend-0.0.1.jar
-          tag_name: ${{ github.sha }}
-          token: ${{ secrets.SECRET }}
+            ./target/spring-rest-backend-0.0.1.jar  # Adjust path and filename as needed
+          tag_name: v1.0.0  # Example: Use a proper tag name
+          name: Release v1.0.0
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository: osama004/ParkPal-Backend
