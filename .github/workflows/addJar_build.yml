@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up JDK 21
         uses: actions/setup-java@v3
@@ -23,12 +23,10 @@ jobs:
       - name: Build JAR
         run: mvn -B package --file pom.xml
 
+
+      - run: mkdir download  cp target/*.jar download
       - name: Upload JAR to GitHub Releases
-        uses: softprops/action-gh-release@v1
+        uses: actions/upload-artifact@v2
         with:
-          files: |
-            ./target/spring-rest-backend-0.0.1.jar  # Adjust path and filename as needed
-          tag_name: v1.0.0  # Example: Use a proper tag name
-          name: Release v1.0.0
-          token: ${{ secrets.SECRET }}
-          repository: osama004/ParkPal-Backend
+          name: ParkPalBackend
+          path: download
