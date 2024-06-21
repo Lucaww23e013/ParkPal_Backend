@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -20,7 +19,7 @@ public class VideoDto {
     @NotNull(message="Video must belong to a User. Please add a User")
     private String userId;
 
-    @NotBlank(message = "File must have an uploadDate")
+    @NotNull(message = "File must have an uploadDate")
     private LocalDateTime uploadDate;
 
 }
