@@ -52,8 +52,7 @@ public class ParkController {
         return parkMapper.toDto(park);
     }
 
-    @PutMapping("/{parkId}")
-    //@Preauthorize with Spring security later
+    @PatchMapping("/update/{parkId}")
     public ParkDto updatePark(@PathVariable String parkId,
                               @RequestBody @Valid ParkDto updatedParkDto){
         Park updatedPark = parkMapper.toEntity(updatedParkDto);
