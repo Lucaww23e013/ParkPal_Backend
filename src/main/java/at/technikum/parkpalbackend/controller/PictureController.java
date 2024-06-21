@@ -49,7 +49,7 @@ public class PictureController {
         return pictureMapper.toDto(picture);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public List<PictureDto> getPictureByUserId(@PathVariable @Valid String userId){
         User user = userService.findByUserId(userId);
         List<Picture> selectedPictures = pictureService.findPicturesByUser(user);
