@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -30,7 +31,11 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new NoSuchElementException("No users found");
+        }
+        return users;
     }
 
     public User create(User user) {
@@ -38,14 +43,6 @@ public class UserService {
             throw new IllegalArgumentException("User cannot be null");
         }
         return userRepository.save(user);
-    }
-
-    public User login(String email, String password) {
-        User user = findByUserEmail(email); //username always equals email
-        if (user.getPassword().equals(password)) return user;
-        else {
-            throw new EntityNotFoundException("User not found or invalid password");
-        }
     }
 
     public User update(String userId, User newUser) {
