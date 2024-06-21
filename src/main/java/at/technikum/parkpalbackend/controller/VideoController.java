@@ -49,7 +49,7 @@ public class VideoController {
     }
 
     @GetMapping
-    public List<VideoDto> getAllPicture() {
+    public List<VideoDto> getAllVideos() {
         List<Video> videos = videoService.findAllVideos();
         return videos.stream().map(video -> videoMapper.toDto(video)).toList();
 
@@ -61,7 +61,7 @@ public class VideoController {
         return videoMapper.toDto(video);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("user/{userId}")
     public List<VideoDto> getVideoByUserId(@PathVariable @Valid String userId){
         User user = userService.findByUserId(userId);
         List<Video> selectedVideos = videoService.findVideosByUser(user);
