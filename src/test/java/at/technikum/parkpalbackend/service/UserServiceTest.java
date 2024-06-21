@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
-import static at.technikum.parkpalbackend.TestFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -172,68 +171,6 @@ class UserServiceTest {
     }
 
     @Test
-    void whenLoginUser_thenReturnUser() {
-        // Arrange
-        User user = TestFixtures.adminUser;
-        user.setId(UUID.randomUUID().toString());
-        user.setEmail("test@test.com");
-        user.setPassword("Test123467890!");
-
-        when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
-
-        // Act
-        User loggedInUser = userService.login(user.getEmail(), user.getPassword());
-
-        // Assert
-        Assertions.assertNotNull(loggedInUser);
-        Assertions.assertEquals(user, loggedInUser);
-        verify(userRepository).findUserByEmail(user.getEmail());
-    }
-
-    @Test
-    void whenLoginUser_withNullEmail_thenThrowEntityNotFoundException() {
-        //Arrange
-        User user = TestFixtures.adminUser;
-        adminUser.setEmail(null);
-        when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.empty());
-
-        // Act & Assert
-        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.login(user.getEmail(), user.getPassword()));
-        verify(userRepository).findUserByEmail(user.getEmail());
-    }
-
-    @Test
-    void whenLoginUserWithInvalidPassword_thenThrowEntityNotFoundException() {
-        // Arrange
-        User user = TestFixtures.normalUser;
-        user.setId(UUID.randomUUID().toString());
-        user.setEmail("test@test.com");
-        user.setPassword("Test123467890!");
-
-        // Mock the repository to return the user when the email is found
-        when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
-
-        // Act & Assert
-        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.login(user.getEmail(), "WrongPassword"));
-
-        // Verify the repository interaction
-        verify(userRepository).findUserByEmail(user.getEmail());
-    }
-
-
-    @Test
-    void whenLoginUser_withNullPassword_thenThrowEntityNotFoundException() {
-        // Arrange
-        User user = TestFixtures.adminUser;
-        adminUser.setPassword(null);
-        when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.empty());
-
-        // Act & Assert
-        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.login(user.getEmail(), user.getPassword()));
-        verify(userRepository).findUserByEmail(user.getEmail());
-    }
-
-    @Test
     void whenUpdateUser_thenReturnUpdatedUser() {
         // Arrange
         User existingUser = TestFixtures.adminUser;
@@ -281,7 +218,8 @@ class UserServiceTest {
         User user = TestFixtures.adminUser;
         user.setId(UUID.randomUUID().toString());
 
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user)).thenReturn(Optional.empty());
+        // Mock the delete method to do nothing
         doNothing().when(userRepository).delete(user);
 
         // Act
@@ -290,6 +228,9 @@ class UserServiceTest {
         // Assert
         verify(userRepository).findById(user.getId());
         verify(userRepository).delete(user);
+
+        Optional<User> deletedUserOptional = userRepository.findById(user.getId());
+        Assertions.assertFalse(deletedUserOptional.isPresent());
     }
 
     @Test

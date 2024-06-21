@@ -45,14 +45,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User login(String email, String password) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(EntityNotFoundException::new); //username always equals email
-        if (user.getPassword().equals(password)) return user;
-        else {
-            throw new EntityNotFoundException("User not found or invalid password");
-        }
-    }
-
     public User update(String userId, User newUser) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(EntityNotFoundException::new);
