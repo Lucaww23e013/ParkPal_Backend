@@ -1,8 +1,10 @@
 package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.dto.CountryDto;
+import at.technikum.parkpalbackend.dto.EventTagDto;
 import at.technikum.parkpalbackend.dto.PictureDto;
 import at.technikum.parkpalbackend.dto.VideoDto;
+import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
@@ -60,6 +62,10 @@ public class TestFixtures {
     public static EventTag familyEventTag = createEventTag("Family", grilling, pickNickWithYourFamily);
     public static EventTag gamesEventTag = createEventTag("Games", chessMaster, chessMaster);
 
+    public static EventDto testEventDto = createEventDto();
+    public static EventDto secondTestEventDto = createEventDto();
+    public static EventTagDto testEventTagDto = createEventTagDto();
+    public static Set<EventDto> eventDtoSet = createEventDtoSet();
     public static byte[] testFile = new byte[100];
     public static Picture testPicture = Picture.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
@@ -272,4 +278,52 @@ private static List<EventTag> createEventTagListForAnEvent(Event event) {
                 .country(austria)
                 .build();
     }
+
+    private static EventTagDto createEventTagDto() {
+        return EventTagDto.builder()
+                .eventDtoSet(eventDtoSet)
+                .name("Test")
+                .build();
+    }
+
+    private static EventDto createEventDto() {
+        return EventDto.builder()
+                .id(UUID.randomUUID().toString())
+                .description("Test")
+                .creator(TestFixtures.adminUser)
+                .startTS(LocalDateTime.now())
+                .endTS(LocalDateTime.now())
+                .parkId(TestFixtures.parkWithEvents.getId())
+                .joinedUsers(userList)
+                .eventVideos(videoList())
+                .eventPictures(pictureList())
+                .eventTags(testEventTagSet)
+                .build();
+    }
+
+    private static Set<EventDto> createEventDtoSet() {
+        Set<EventDto> eventDtoSet = new HashSet<>();
+        eventDtoSet.add(testEventDto);
+        eventDtoSet.add(secondTestEventDto);
+        return eventDtoSet;
+    }
+
+    private static Set<EventTag> createEventTagSet() {
+        Set<EventTag> eventTagSet = new HashSet<>();
+        eventTagSet.add(familyEventTag);
+        eventTagSet.add(gamesEventTag);
+        return eventTagSet;
+    }
+
+    private static Set<Event> createEventSet() {
+        Set<Event> eventSet = new HashSet<>();
+        eventSet.add(grilling);
+        eventSet.add(chessMaster);
+        return eventSet;
+    }
+
+
+    public static Set<EventTag> testEventTagSet = createEventTagSet();
+
+    public static Set<Event> testEventSet = createEventSet();
 }

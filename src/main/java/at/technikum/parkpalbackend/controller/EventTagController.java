@@ -46,9 +46,8 @@ public class EventTagController {
                 .collect(Collectors.toSet());
     }
     @GetMapping("/{eventTagId}")
-    public EventTagDto getEventTagById(@RequestBody @Valid String eventTagId) {
+    public EventTagDto getEventTagById(@PathVariable @Valid String eventTagId) {
         EventTag eventTag = eventTagService.findTagById(eventTagId);
         return eventTagMapper.toDto(eventTag);
     }
-
 }
