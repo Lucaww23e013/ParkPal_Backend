@@ -21,7 +21,6 @@ public class EventTagDto {
     @NotBlank(message = "Event Tag cannot be empty.")
     private String name;
 
-    private Set<EventDto> eventDtoSet;
 
 }
 
