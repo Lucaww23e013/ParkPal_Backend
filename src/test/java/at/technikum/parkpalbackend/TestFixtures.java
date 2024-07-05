@@ -4,6 +4,7 @@ import at.technikum.parkpalbackend.dto.CountryDto;
 import at.technikum.parkpalbackend.dto.EventTagDto;
 import at.technikum.parkpalbackend.dto.PictureDto;
 import at.technikum.parkpalbackend.dto.VideoDto;
+import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
@@ -94,8 +95,21 @@ public class TestFixtures {
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testVideoFile).build();
+    public static CreateEventDto testCreateEventDto = createCreateEventDto(normalUser, "title1", "a description", parkWithEvents);
 
-private static List<EventTag> createEventTagListForAnEvent(Event event) {
+    public static CreateEventDto createCreateEventDto (User creator, String title, String description, Park park) {
+        CreateEventDto createEventDto = CreateEventDto.builder()
+                .creatorUserId(creator.getId())
+                .title(title)
+                .description(description)
+                .startTS(LocalDateTime.now())
+                .endTS(LocalDateTime.now().plusHours(1))
+                .parkId(park.getId())
+                .build();
+        return createEventDto;
+    }
+
+    private static List<EventTag> createEventTagListForAnEvent(Event event) {
         List<EventTag> eventTags = new ArrayList<>();
         eventTags.add(createEventTag("Family", event));
         eventTags.add(createEventTag("Football", event));

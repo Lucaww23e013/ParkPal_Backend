@@ -47,9 +47,6 @@ class EventTagMapperTest {
         // Arrange
         EventTagDto eventTagDto = EventTagDto.builder().build();
         eventTagDto.setName("Test Event Tag");
-        HashSet<EventDto> eventDtoSet = new HashSet<>();
-        eventDtoSet.add(EventDto.builder().build());
-        eventTagDto.setEventDtoSet(eventDtoSet);
         // Act
         EventTag eventTag = eventTagMapper.toEntity(eventTagDto);
         // Assert

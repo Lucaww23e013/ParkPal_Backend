@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -30,5 +31,6 @@ public class EventTag {
 
     @ManyToMany(mappedBy = "tags")
     @ToString.Exclude
+    @JsonIgnore
     private Set<Event> events = new HashSet<>();
 }

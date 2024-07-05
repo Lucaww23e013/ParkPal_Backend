@@ -25,7 +25,6 @@ public class EventTagMapper {
         return EventTagDto.builder()
                 .id(eventTag.getId())
                 .name(eventTag.getName())
-                .eventDtoSet(toEventDtos(eventTag.getEvents()))
                 .build();
     }
 
@@ -33,7 +32,6 @@ public class EventTagMapper {
         return EventTag.builder()
                 .id(eventTagDto.getId())
                 .name(eventTagDto.getName())
-                .events(toEvents(eventTagDto.getEventDtoSet()))
                 .build();
     }
 
