@@ -1,9 +1,7 @@
 package at.technikum.parkpalbackend.service;
 
-import at.technikum.parkpalbackend.mapper.PictureMapper;
-import at.technikum.parkpalbackend.mapper.VideoMapper;
-import at.technikum.parkpalbackend.model.Picture;
-import at.technikum.parkpalbackend.model.Video;
+import at.technikum.parkpalbackend.mapper.FileMapper;
+import at.technikum.parkpalbackend.model.File;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,16 +25,11 @@ import static org.mockito.Mockito.*;
 public class UploadServiceTest {
 
     @Mock
-    private PictureService pictureService;
+    private FileService fileService;
 
     @Mock
-    private VideoService videoService;
+    private FileMapper fileMapper;
 
-    @Mock
-    private PictureMapper pictureMapper;
-
-    @Mock
-    private VideoMapper videoMapper;
 
     @Mock
     private MultipartFile mockFile;
@@ -53,43 +46,22 @@ public class UploadServiceTest {
         MultipartFile file = new MockMultipartFile(
                 "file", "test.jpg", "image/jpeg", "test data".getBytes());
 
-        Picture mockPicture = Picture.builder().build();
-        mockPicture.setId(UUID.randomUUID().toString()); // Example: Set any specific attributes or mock behaviors
-        when(pictureMapper.fromMultipartFileToEntity(any(MultipartFile.class))).thenReturn(mockPicture);
+        File mockFile = File.builder().build();
+        mockFile.setId(UUID.randomUUID().toString()); // Example: Set any specific attributes or mock behaviors
+        when(fileMapper.fromMultipartFileToEntity(any(MultipartFile.class))).thenReturn(mockFile);
 
         // Act
         ResponseEntity<String> result = uploadService.processAndSaveFile(file);
 
         // Verify
-        verify(pictureMapper, times(1)).fromMultipartFileToEntity(any(MultipartFile.class));
-        verify(pictureService, times(1)).save(mockPicture);
+        verify(fileMapper, times(1)).fromMultipartFileToEntity(any(MultipartFile.class));
+        verify(fileService, times(1)).save(mockFile);
 
         // Assert
         Assertions.assertEquals(HttpStatus.OK, result.getStatusCode(), "HTTP Status code should be OK");
-        Assertions.assertEquals("Picture uploaded successfully", result.getBody(), "Response body should match");
+        Assertions.assertEquals("File uploaded successfully", result.getBody(), "Response body should match");
     }
 
-    @Test
-    void testProcessAndSaveFile_ValidVideoFile_Success() throws IOException {
-        // Arrange
-        MultipartFile file = new MockMultipartFile(
-                "file", "test.mp4", "video/mp4", "test data".getBytes());
-
-        Video mockVideo = Video.builder().build();
-        mockVideo.setId(UUID.randomUUID().toString());
-        when(videoMapper.fromMultipartFileToEntity(any(MultipartFile.class))).thenReturn(mockVideo);
-
-        // Act
-        ResponseEntity<String> result = uploadService.processAndSaveFile(file);
-
-        // Verify
-        verify(videoMapper, times(1)).fromMultipartFileToEntity(any(MultipartFile.class));
-        verify(videoService, times(1)).save(mockVideo);
-
-        // Assert
-        Assertions.assertEquals(HttpStatus.OK, result.getStatusCode(), "HTTP Status code should be OK");
-        Assertions.assertEquals("Video uploaded successfully", result.getBody(), "Response body should match");
-    }
 
     @Test
     void testProcessAndSaveFile_InvalidFileType() throws IOException {

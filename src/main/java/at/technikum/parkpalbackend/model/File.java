@@ -14,10 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 
 @Entity
-public class Video {
+public class File {
+
     @Id
     @UuidGenerator
-    @Column(name = "video_id")
+    @Column(name = "picture_id")
     private String id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

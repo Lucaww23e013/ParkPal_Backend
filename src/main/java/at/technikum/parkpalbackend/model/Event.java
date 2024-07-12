@@ -68,16 +68,14 @@ public class Event {
                     foreignKey = @ForeignKey(name = "fk_event_picture_user")))
     @Builder.Default
     @ToString.Exclude
-    private List<Picture> eventPictures = new ArrayList<>();
+    private List<File> eventFiles = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "event_event_videos", joinColumns = @JoinColumn(name = "video_id",
             foreignKey = @ForeignKey(name = "fk_event_video_event")),
             inverseJoinColumns = @JoinColumn(name = "event_video_id",
                     foreignKey = @ForeignKey(name = "fk_event_video_user")))
-    @Builder.Default
-    @ToString.Exclude
-    private List<Video> eventVideos = new ArrayList<>();
+
 
     public Event addJoinedUsers(User... users) {
         Arrays.stream(users).forEach(user -> this.joinedUsers.add(user));
@@ -99,13 +97,13 @@ public class Event {
         return this;
     }
 
-    public Event addEventMedia(Picture... media) {
-        Arrays.stream(media).forEach(m -> this.eventPictures.add(m));
+    public Event addEventMedia(File... media) {
+        Arrays.stream(media).forEach(m -> this.eventFiles.add(m));
         return this;
     }
 
-    public Event removeEventMedia(Picture... media) {
-        Arrays.stream(media).forEach(m -> this.eventPictures.remove(m));
+    public Event removeEventMedia(File... media) {
+        Arrays.stream(media).forEach(m -> this.eventFiles.remove(m));
         return this;
     }
 

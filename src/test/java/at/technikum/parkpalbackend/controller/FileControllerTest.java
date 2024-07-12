@@ -1,13 +1,13 @@
 package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.TestFixtures;
-import at.technikum.parkpalbackend.dto.PictureDto;
-import at.technikum.parkpalbackend.mapper.PictureMapper;
-import at.technikum.parkpalbackend.model.Picture;
+import at.technikum.parkpalbackend.dto.FileDto;
+import at.technikum.parkpalbackend.mapper.FileMapper;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.filter.JwtAuthenticationFilter;
 import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
-import at.technikum.parkpalbackend.service.PictureService;
+import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -28,21 +28,21 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PictureController.class)
+@WebMvcTest(FileController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class PictureControllerTest {
+public class FileControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private PictureService pictureService;
+    private FileService fileService;
 
     @MockBean
     private UserService userService;
 
     @MockBean
-    private PictureMapper pictureMapper;
+    private FileMapper fileMapper;
 
     @MockBean
     private JwtDecoder jwtDecoder;
@@ -56,20 +56,20 @@ public class PictureControllerTest {
     @Test
     public void testCreatePicture() throws Exception {
         // Arrange
-        PictureDto pictureDto = TestFixtures.testPictureDto;
-        pictureDto.setId("1");
+        FileDto fileDto = TestFixtures.testFileDto;
+        fileDto.setId("1");
 
-        Picture createdPicture = TestFixtures.testPicture;
-        createdPicture.setId("1");
+        File createdFile = TestFixtures.testFileTypeFile;
+        createdFile.setId("1");
 
-        when(pictureMapper.toEntity(any(PictureDto.class))).thenReturn(createdPicture);
-        when(pictureService.save(any(Picture.class))).thenReturn(createdPicture);
-        when(pictureMapper.toDto(any(Picture.class))).thenReturn(pictureDto);
+        when(fileMapper.toEntity(any(FileDto.class))).thenReturn(createdFile);
+        when(fileService.save(any(File.class))).thenReturn(createdFile);
+        when(fileMapper.toDto(any(File.class))).thenReturn(fileDto);
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/pictures")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(pictureDto)))
+                        .content(objectMapper.writeValueAsString(fileDto)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value("1")); // Adjust as per your DTO structure
@@ -78,11 +78,11 @@ public class PictureControllerTest {
     @Test
     public void testGetAllPictures() throws Exception {
         // Arrange
-        List<Picture> mockPictures = Collections.singletonList(Picture.builder().build());
-        List<PictureDto> mockPictureDtos = Collections.singletonList(TestFixtures.testPictureDto);
+        List<File> mockFiles = Collections.singletonList(File.builder().build());
+        List<FileDto> mockFileDtos = Collections.singletonList(TestFixtures.testFileDto);
 
-        when(pictureService.findAllPictures()).thenReturn(mockPictures);
-        when(pictureMapper.toDto(any(Picture.class))).thenReturn(TestFixtures.testPictureDto);
+        when(fileService.findAllPictures()).thenReturn(mockFiles);
+        when(fileMapper.toDto(any(File.class))).thenReturn(TestFixtures.testFileDto);
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/pictures")
@@ -90,18 +90,18 @@ public class PictureControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(TestFixtures.testPictureDto.getId()));
+                .andExpect(jsonPath("$[0].id").value(TestFixtures.testFileDto.getId()));
     }
 
     @Test
     public void testGetPictureByPictureId() throws Exception {
         // Arrange
         String pictureId = "1";
-        PictureDto pictureDto = TestFixtures.testPictureDto;
-        pictureDto.setId(pictureId);
+        FileDto fileDto = TestFixtures.testFileDto;
+        fileDto.setId(pictureId);
 
-        when(pictureService.findPictureByPictureId(ArgumentMatchers.eq(pictureId))).thenReturn(TestFixtures.testPicture);
-        when(pictureMapper.toDto(any(Picture.class))).thenReturn(pictureDto);
+        when(fileService.findPictureByPictureId(ArgumentMatchers.eq(pictureId))).thenReturn(TestFixtures.testFileTypeFile);
+        when(fileMapper.toDto(any(File.class))).thenReturn(fileDto);
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/pictures/{pictureId}", pictureId)
@@ -118,14 +118,14 @@ public class PictureControllerTest {
         User user = TestFixtures.adminUser;
         user.setId(userId);
 
-        PictureDto pictureDto = TestFixtures.testPictureDto;
-        pictureDto.setId("1");
+        FileDto fileDto = TestFixtures.testFileDto;
+        fileDto.setId("1");
 
-        List<Picture> mockPictures = Collections.singletonList(Picture.builder().build());
+        List<File> mockFiles = Collections.singletonList(File.builder().build());
 
         when(userService.findByUserId(ArgumentMatchers.eq(userId))).thenReturn(user);
-        when(pictureService.findPicturesByUser(ArgumentMatchers.eq(user))).thenReturn(mockPictures);
-        when(pictureMapper.toDto(any(Picture.class))).thenReturn(pictureDto);
+        when(fileService.findPicturesByUser(ArgumentMatchers.eq(user))).thenReturn(mockFiles);
+        when(fileMapper.toDto(any(File.class))).thenReturn(fileDto);
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/pictures/user/{userId}", userId)
@@ -138,20 +138,20 @@ public class PictureControllerTest {
     public void testUpdatePicture() throws Exception {
         // Arrange
         String pictureId = "1";
-        PictureDto updatedPictureDto = TestFixtures.testPictureDto;
-        updatedPictureDto.setId(pictureId);
+        FileDto updatedFileDto = TestFixtures.testFileDto;
+        updatedFileDto.setId(pictureId);
 
-        Picture updatedPicture = TestFixtures.testPicture;
-        updatedPicture.setId(pictureId);
+        File updatedFile = TestFixtures.testFileTypeFile;
+        updatedFile.setId(pictureId);
 
-        when(pictureService.updatePicture(ArgumentMatchers.eq(pictureId), any(Picture.class))).thenReturn(updatedPicture);
-        when(pictureMapper.toEntity(any(PictureDto.class))).thenReturn(updatedPicture);
-        when(pictureMapper.toDto(any(Picture.class))).thenReturn(updatedPictureDto);
+        when(fileService.updatePicture(ArgumentMatchers.eq(pictureId), any(File.class))).thenReturn(updatedFile);
+        when(fileMapper.toEntity(any(FileDto.class))).thenReturn(updatedFile);
+        when(fileMapper.toDto(any(File.class))).thenReturn(updatedFileDto);
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.patch("/pictures/{pictureId}", pictureId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedPictureDto)))
+                        .content(objectMapper.writeValueAsString(updatedFileDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(pictureId));
     }
@@ -166,6 +166,6 @@ public class PictureControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        Mockito.verify(pictureService, Mockito.times(1)).deletePictureByPictureId(ArgumentMatchers.eq(pictureId));
+        Mockito.verify(fileService, Mockito.times(1)).deletePictureByPictureId(ArgumentMatchers.eq(pictureId));
     }
 }

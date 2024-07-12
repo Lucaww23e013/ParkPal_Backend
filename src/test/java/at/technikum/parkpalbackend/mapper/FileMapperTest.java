@@ -1,8 +1,8 @@
 package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.TestFixtures;
-import at.technikum.parkpalbackend.dto.VideoDto;
-import at.technikum.parkpalbackend.model.Video;
+import at.technikum.parkpalbackend.dto.FileDto;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.service.UploadService;
 import at.technikum.parkpalbackend.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +24,8 @@ import static org.mockito.Mockito.when;
 
 //@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class VideoMapperTest {
+public class FileMapperTest {
+
 
     @Mock
     private UserService userService;
@@ -36,21 +37,21 @@ public class VideoMapperTest {
     private MultipartFile file;
 
     @InjectMocks
-    private VideoMapper videoMapper;
+    private FileMapper fileMapper;
 
     @Test
     public void whenEntity_thenToDto() {
         // Arrange
-        Video video = TestFixtures.testVideo;
-        video.setId(UUID.randomUUID().toString());
+        File file = TestFixtures.testFileTypeFile;
+        file.setId(UUID.randomUUID().toString());
 
         // Act
-        VideoDto videoDto = videoMapper.toDto(video);
+        FileDto fileDto = fileMapper.toDto(file);
 
         // Assert
-        Assertions.assertEquals(video.getId(), videoDto.getId());
-        Assertions.assertEquals(video.getUser().getId(), videoDto.getUserId());
-        Assertions.assertEquals(video.getUploadDate(), videoDto.getUploadDate());
+        assertEquals(file.getId(), fileDto.getId());
+        assertEquals(file.getUser().getId(), fileDto.getUserId());
+        assertEquals(file.getUploadDate(), fileDto.getUploadDate());
 
     }
 
@@ -58,35 +59,41 @@ public class VideoMapperTest {
     @Test
     public void whenEntityNull_toDto_thenThrowIllegalArgumentException() {
         // Arrange
-        Video video = null;
+        File file = null;
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> videoMapper.toDto(video));
+        assertThrows(IllegalArgumentException.class, () -> fileMapper.toDto(file));
     }
+
+
 
     @Test
     public void whenDTO_thenToEntity() {
         // Arrange
-        VideoDto videoDto = TestFixtures.testVideoDto;
-        videoDto.setId(UUID.randomUUID().toString());
+        FileDto fileDto = TestFixtures.testFileDto;
+        fileDto.setId(UUID.randomUUID().toString());
 
         // Act
-        Video video = videoMapper.toEntity(videoDto);
+        File file = fileMapper.toEntity(fileDto);
 
 
         // Assert
-        Assertions.assertEquals(videoDto.getId(), video.getId());
-        Assertions.assertEquals(userService.findByUserId(videoDto.getUserId()), video.getUser());
-        Assertions.assertEquals(videoDto.getUploadDate(), video.getUploadDate());
+        assertEquals(fileDto.getId(), file.getId());
+        assertEquals(userService.findByUserId(fileDto.getUserId()), file.getUser());
+        assertEquals(fileDto.getUploadDate(), file.getUploadDate());
     }
     @Test
     public void whenDTONull_toEntity_thenThrowIllegalArgumentException() {
         // Arrange
-        VideoDto videoDto = null;
+        FileDto fileDto = null;
+
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> videoMapper.toEntity(videoDto));
+        assertThrows(IllegalArgumentException.class, () -> fileMapper.toEntity(fileDto));
     }
+
+
+
 
     @Test
     public void whenMultipleFilePart_toEntity() throws IOException {
@@ -96,10 +103,10 @@ public class VideoMapperTest {
 
         //Act
         when(uploadService.transferToBytes(any(MultipartFile.class))).thenReturn(fileBytes);
-        Video video = videoMapper.fromMultipartFileToEntity(file);
+        File picture = fileMapper.fromMultipartFileToEntity(file);
         //Assert
-        Assertions.assertNotNull(video);
-        Assertions.assertArrayEquals(fileBytes, video.getFile());
+        Assertions.assertNotNull(picture);
+        Assertions.assertArrayEquals(fileBytes, picture.getFile());
     }
 
 }

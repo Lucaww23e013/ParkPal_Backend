@@ -69,8 +69,7 @@ public class EventService {
         existingEvent.setPark(updatedEvent.getPark());
         existingEvent.setJoinedUsers(updatedEvent.getJoinedUsers());
         existingEvent.setTags(updatedEvent.getTags());
-        existingEvent.setEventPictures(updatedEvent.getEventPictures());
-        existingEvent.setEventVideos(updatedEvent.getEventVideos());
+        existingEvent.setEventFiles(updatedEvent.getEventFiles());
         return eventRepository.save(existingEvent);
 
     }

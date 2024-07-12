@@ -15,7 +15,7 @@ entity User {
     - country: Country
     - role: Role
     - joinedEvents: List<Event>
-    - profilePicture: Picture
+    - profilePicture: File
 }
 
 enum Gender {
@@ -38,34 +38,27 @@ entity Event {
     - creator: User
     - joinedUsers: List<User>
     - tags: Set<EventTag>
-    - pictures: List<Picture>
-    - videos: List<Videos>
+    - files: List<File>
 }
 
 enum EventTag {
     name: string
-    events: Set<Event>
+
 }
 
-entity Picture {
+entity File {
     - user: User
     - LocalDateTime: uploadDate
     - byte[]: file
 }
 
-entity Video {
-    - user: User
-    - LocalDateTime: uploadDate
-    - byte[]: file
-}
 
 entity Park {
     - name: String
     - description: String
     - parkAddress: Address
     - parkEvents: List<Event>
-    - parkPictures: List<Picture>
-    - parkVideos: List<Video>
+    - parkFiles: List<File>
 }
 
 class Address <<(V, #FF7700) value-object>> {
@@ -87,14 +80,14 @@ Event --> "1..n" Park : has <
 'Event --- "n..m" User : joined By
 Event "n..1" --* EventTag : has >
 'EventTag "n..1" --* Event : has <
-'Picture "n..m" <-- Event
-Event "n..m" --> Picture
+'File "n..m" <-- Event
+Event "n..m" --> File
 'Video "n..m" <-- Event
-Event "n..m" --> Video
-User -- "1..n" Picture  : User create Picture
-Park "1..n" -up-> Picture
-User -- "1..n" Video  : User create Video
-Park "1..n" -up-> Video
+Event "n..m" --> File
+User -- "1..n" File  : User create File
+Park "1..n" -up-> File
+User -- "1..n" File  : User create File
+Park "1..n" -up-> File
 User -> Country
 Address -right-> Country
 Park -> "0..1" Address
