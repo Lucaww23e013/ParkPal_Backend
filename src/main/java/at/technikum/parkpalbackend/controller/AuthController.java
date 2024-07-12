@@ -46,13 +46,24 @@ public class AuthController {
         this.userMapper = userMapper;
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody @Valid CreateUserDto createUserDto) {
+        User user = userMapper.toEntity(createUserDto);
+        user = userService.create(user);
+
+        return ResponseEntity.ok(userMapper.toCreateUserDto(user));
+    }
+
     @PostMapping("/login")
     public TokenResponse login(@RequestBody @Valid LoginRequest loginRequest,
                                HttpServletResponse response) {
+        User user = userService.findByUserNameOrEmail(loginRequest.getUsername());
+
+
         // pass the username and password to springs in-build security manager
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
+                        user.getUserName(),
                         loginRequest.getPassword()
                 )
         );
@@ -60,6 +71,19 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(auth);
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
         // issue the jwt with the user information
+        return getTokenResponse(response, principal);
+    }
+
+    @PostMapping("/refresh")
+    public TokenResponse refresh(HttpServletResponse response) {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        return getTokenResponse(response, principal);
+    }
+
+    private TokenResponse getTokenResponse(HttpServletResponse response, UserPrincipal principal) {
         List<String> roles = principal.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
@@ -75,34 +99,6 @@ public class AuthController {
         cookie.setHttpOnly(true);
         cookie.setPath("/"); // for all paths is the cookie available
         response.addCookie(cookie);
-
-        return new TokenResponse(token);
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid CreateUserDto createUserDto) {
-        User user = userMapper.toEntity(createUserDto);
-        user = userService.create(user);
-
-        return ResponseEntity.ok(userMapper.toCreateUserDto(user));
-    }
-
-    @PostMapping("/refresh")
-    public TokenResponse refresh() {
-        UserPrincipal principal = (UserPrincipal) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-        List<String> roles = principal.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-
-        String token = jwtIssuer.issue(
-                principal.getId(),
-                principal.getUsername(),
-                roles
-        );
 
         return new TokenResponse(token);
     }

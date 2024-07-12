@@ -1,15 +1,13 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class LoginRequest {
 
     @NotBlank
