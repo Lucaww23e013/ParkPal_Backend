@@ -1,9 +1,7 @@
 package at.technikum.parkpalbackend.service;
 
-import at.technikum.parkpalbackend.mapper.PictureMapper;
-import at.technikum.parkpalbackend.mapper.VideoMapper;
-import at.technikum.parkpalbackend.model.Picture;
-import at.technikum.parkpalbackend.model.Video;
+import at.technikum.parkpalbackend.mapper.FileMapper;
+import at.technikum.parkpalbackend.model.File;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -24,36 +22,26 @@ public class UploadService {
             = new ArrayList<>(Arrays.asList("mp4", "avi", "mov"));
 
 
-    private final PictureMapper pictureMapper;
-    private final VideoMapper videoMapper;
-    private final PictureService pictureService;
-    private final VideoService videoService;
+    private final FileMapper fileMapper;
+    private final FileService fileService;
 
-    public UploadService(PictureMapper pictureMapper, VideoMapper videoMapper,
-                         PictureService pictureService, VideoService videoService) {
-        this.pictureMapper = pictureMapper;
-        this.videoMapper = videoMapper;
-        this.pictureService = pictureService;
-        this.videoService = videoService;
+    public UploadService(FileMapper fileMapper, FileService fileService) {
+        this.fileMapper = fileMapper;
+        this.fileService = fileService;
     }
 
     public ResponseEntity<String> processAndSaveFile(MultipartFile file) throws IOException {
         String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
 
         if (fileExtension != null) {
-            if (ALLOWED_PICTURE_TYPES.contains(fileExtension.toLowerCase())) {
-                Picture picture = pictureMapper.fromMultipartFileToEntity(file);
+            if (ALLOWED_PICTURE_TYPES.contains(fileExtension.toLowerCase())
+                    ||
+                    ALLOWED_VIDEO_TYPES.contains(fileExtension.toLowerCase())) {
+                File picture = fileMapper.fromMultipartFileToEntity(file);
                 picture.setUploadDate(LocalDateTime.now());
-                pictureService.save(picture);
+                fileService.save(picture);
 
-                return ResponseEntity.ok("Picture uploaded successfully");
-
-            } else if (ALLOWED_VIDEO_TYPES.contains(fileExtension.toLowerCase())) {
-                Video video = videoMapper.fromMultipartFileToEntity(file);
-                video.setUploadDate(LocalDateTime.now());
-                videoService.save(video);
-
-                return ResponseEntity.ok("Video uploaded successfully");
+                return ResponseEntity.ok("File uploaded successfully");
             }
         }
 

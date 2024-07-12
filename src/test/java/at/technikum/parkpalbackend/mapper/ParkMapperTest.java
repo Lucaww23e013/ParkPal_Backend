@@ -35,8 +35,7 @@ public class ParkMapperTest {
         Assertions.assertEquals(park.getName(), parkDto.getName());
         Assertions.assertEquals(park.getDescription(), parkDto.getDescription());
         Assertions.assertEquals(park.getParkEvents(), parkDto.getParkEvents());
-        Assertions.assertEquals(park.getParkPictures(), parkDto.getParkPictures());
-        Assertions.assertEquals(park.getParkVideos(), parkDto.getParkVideos());
+        Assertions.assertEquals(park.getParkFiles(), parkDto.getParkFiles());
     }
 
 
@@ -63,8 +62,7 @@ public class ParkMapperTest {
         Assertions.assertEquals(parkDto.getName(), park.getName());
         Assertions.assertEquals(parkDto.getDescription(), park.getDescription());
         Assertions.assertEquals(parkDto.getParkEvents(), park.getParkEvents());
-        Assertions.assertEquals(parkDto.getParkPictures(), park.getParkPictures());
-        Assertions.assertEquals(parkDto.getParkVideos(), park.getParkVideos());
+        Assertions.assertEquals(parkDto.getParkFiles(), park.getParkFiles());
     }
     @Test
     public void whenDTONull_toEntity_thenThrowIllegalArgumentException() {

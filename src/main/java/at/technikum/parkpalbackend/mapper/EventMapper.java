@@ -25,8 +25,7 @@ public class EventMapper {
                 .endTS(event.getEndTS())
                 .parkId(event.getPark().getId())
                 .creator(event.getCreator())
-                .eventPictures(event.getEventPictures())
-                .eventVideos(event.getEventVideos())
+                .eventFiles(event.getEventFiles())
                 .build();
     }
 
@@ -41,8 +40,7 @@ public class EventMapper {
                 .creator(event.getCreator())
                 .joinedUsers(event.getJoinedUsers())
                 .eventTags(event.getTags())
-                .eventPictures(event.getEventPictures())
-                .eventVideos(event.getEventVideos())
+                .eventFiles(event.getEventFiles())
                 .build();
     }
 
@@ -80,7 +78,7 @@ public class EventMapper {
                 .creator(eventDto.getCreator())
                 .joinedUsers(eventDto.getJoinedUsers())
                 .tags(eventDto.getEventTags())
-                .eventPictures(eventDto.getEventPictures())
+                .eventFiles(eventDto.getEventFiles())
                 .build();
     }
 

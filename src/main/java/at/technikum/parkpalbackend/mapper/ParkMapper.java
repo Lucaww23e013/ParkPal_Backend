@@ -17,8 +17,7 @@ public class ParkMapper {
                 .name(park.getName())
                 .description(park.getDescription())
                 .parkEvents(park.getParkEvents())
-                .parkPictures(park.getParkPictures())
-                .parkVideos(park.getParkVideos())
+                .parkFiles(park.getParkFiles())
                 .build();
     }
     public Park toEntity(ParkDto parkDto) {
@@ -30,8 +29,7 @@ public class ParkMapper {
                 .name(parkDto.getName())
                 .description(parkDto.getDescription())
                 .parkEvents(parkDto.getParkEvents())
-                .parkPictures(parkDto.getParkPictures())
-                .parkVideos(parkDto.getParkVideos())
+                .parkFiles(parkDto.getParkFiles())
                 .build();
     }
     public CreateParkDto toCreateParkDto(Park park){

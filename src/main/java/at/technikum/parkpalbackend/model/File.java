@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 
 @Entity
-public class Picture {
+public class File {
 
     @Id
     @UuidGenerator

@@ -37,11 +37,7 @@ public class Park {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
-    private List<Picture> parkPictures = new ArrayList<>();
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @ToString.Exclude
-    private List<Video> parkVideos = new ArrayList<>();
+    private List<File> parkFiles = new ArrayList<>();
 
     public Park addParkEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.parkEvents.add(event));
@@ -53,13 +49,13 @@ public class Park {
         return this;
     }
 
-    public Park addParkMedia(Picture... media) {
-        Arrays.stream(media).forEach(med -> this.parkPictures.add(med));
+    public Park addParkMedia(File... media) {
+        Arrays.stream(media).forEach(med -> this.parkFiles.add(med));
         return this;
     }
 
-    public Park removeParkMedia(Picture... media) {
-        Arrays.stream(media).forEach(med -> this.parkPictures.remove(med));
+    public Park removeParkMedia(File... media) {
+        Arrays.stream(media).forEach(med -> this.parkFiles.remove(med));
         return this;
     }
 

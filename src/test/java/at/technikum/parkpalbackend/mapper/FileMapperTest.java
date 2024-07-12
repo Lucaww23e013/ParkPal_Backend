@@ -1,8 +1,8 @@
 package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.TestFixtures;
-import at.technikum.parkpalbackend.dto.PictureDto;
-import at.technikum.parkpalbackend.model.Picture;
+import at.technikum.parkpalbackend.dto.FileDto;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.service.UploadService;
 import at.technikum.parkpalbackend.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 //@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class PictureMapperTest {
+public class FileMapperTest {
 
 
     @Mock
@@ -37,21 +37,21 @@ public class PictureMapperTest {
     private MultipartFile file;
 
     @InjectMocks
-    private PictureMapper pictureMapper;
+    private FileMapper fileMapper;
 
     @Test
     public void whenEntity_thenToDto() {
         // Arrange
-        Picture picture = TestFixtures.testPicture;
-        picture.setId(UUID.randomUUID().toString());
+        File file = TestFixtures.testFileTypeFile;
+        file.setId(UUID.randomUUID().toString());
 
         // Act
-        PictureDto pictureDto = pictureMapper.toDto(picture);
+        FileDto fileDto = fileMapper.toDto(file);
 
         // Assert
-        assertEquals(picture.getId(), pictureDto.getId());
-        assertEquals(picture.getUser().getId(), pictureDto.getUserId());
-        assertEquals(picture.getUploadDate(), pictureDto.getUploadDate());
+        assertEquals(file.getId(), fileDto.getId());
+        assertEquals(file.getUser().getId(), fileDto.getUserId());
+        assertEquals(file.getUploadDate(), fileDto.getUploadDate());
 
     }
 
@@ -59,10 +59,10 @@ public class PictureMapperTest {
     @Test
     public void whenEntityNull_toDto_thenThrowIllegalArgumentException() {
         // Arrange
-        Picture picture = null;
+        File file = null;
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> pictureMapper.toDto(picture));
+        assertThrows(IllegalArgumentException.class, () -> fileMapper.toDto(file));
     }
 
 
@@ -70,26 +70,26 @@ public class PictureMapperTest {
     @Test
     public void whenDTO_thenToEntity() {
         // Arrange
-        PictureDto pictureDto = TestFixtures.testPictureDto;
-        pictureDto.setId(UUID.randomUUID().toString());
+        FileDto fileDto = TestFixtures.testFileDto;
+        fileDto.setId(UUID.randomUUID().toString());
 
         // Act
-        Picture picture = pictureMapper.toEntity(pictureDto);
+        File file = fileMapper.toEntity(fileDto);
 
 
         // Assert
-        assertEquals(pictureDto.getId(), picture.getId());
-        assertEquals(userService.findByUserId(pictureDto.getUserId()), picture.getUser());
-        assertEquals(pictureDto.getUploadDate(), picture.getUploadDate());
+        assertEquals(fileDto.getId(), file.getId());
+        assertEquals(userService.findByUserId(fileDto.getUserId()), file.getUser());
+        assertEquals(fileDto.getUploadDate(), file.getUploadDate());
     }
     @Test
     public void whenDTONull_toEntity_thenThrowIllegalArgumentException() {
         // Arrange
-        PictureDto pictureDto = null;
+        FileDto fileDto = null;
 
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> pictureMapper.toEntity(pictureDto));
+        assertThrows(IllegalArgumentException.class, () -> fileMapper.toEntity(fileDto));
     }
 
 
@@ -103,7 +103,7 @@ public class PictureMapperTest {
 
         //Act
         when(uploadService.transferToBytes(any(MultipartFile.class))).thenReturn(fileBytes);
-        Picture picture = pictureMapper.fromMultipartFileToEntity(file);
+        File picture = fileMapper.fromMultipartFileToEntity(file);
         //Assert
         Assertions.assertNotNull(picture);
         Assertions.assertArrayEquals(fileBytes, picture.getFile());

@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Valid
-public class PictureDto {
+public class FileDto {
 
     private String id;
 
-    @NotNull(message="Picture must belong to a User. Please add a User")
+    @NotNull(message="File must belong to a User. Please add a User")
     private String userId;
 
     @NotNull(message = "File must have an uploadDate")

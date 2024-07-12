@@ -2,8 +2,7 @@ package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.dto.CountryDto;
 import at.technikum.parkpalbackend.dto.EventTagDto;
-import at.technikum.parkpalbackend.dto.PictureDto;
-import at.technikum.parkpalbackend.dto.VideoDto;
+import at.technikum.parkpalbackend.dto.FileDto;
 import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
@@ -68,33 +67,23 @@ public class TestFixtures {
     public static EventTagDto testEventTagDto = createEventTagDto();
     public static Set<EventDto> eventDtoSet = createEventDtoSet();
     public static byte[] testFile = new byte[100];
-    public static Picture testPicture = Picture.builder().id(UUID.randomUUID().toString())
+    public static File testFileTypeFile = File.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testFile).build();
 
-    public static PictureDto testPictureDto = PictureDto.builder().id(UUID.randomUUID().toString())
+    public static FileDto testFileDto = FileDto.builder().id(UUID.randomUUID().toString())
             .userId(normalUser.getId())
             .uploadDate(LocalDateTime.now())
             .build();
 
-    public static Picture alternateTestPicture = Picture.builder().id(UUID.randomUUID().toString())
+    public static File alternateTestFile = File.builder().id(UUID.randomUUID().toString())
             .user(normalUser)
             .uploadDate(LocalDateTime.now())
             .file(testFile).build();
 
     public static byte[] testVideoFile = new byte[100];
-    public static Video testVideo = Video.builder().id(UUID.randomUUID().toString())
-            .user(normalUser)
-            .uploadDate(LocalDateTime.now())
-            .file(testVideoFile).build();
-    public static VideoDto testVideoDto = VideoDto.builder().id(UUID.randomUUID().toString())
-            .userId(normalUser.getId())
-            .uploadDate(LocalDateTime.now()).build();
-    public static Video alternateTestVideo = Video.builder().id(UUID.randomUUID().toString())
-            .user(normalUser)
-            .uploadDate(LocalDateTime.now())
-            .file(testVideoFile).build();
+
     public static CreateEventDto testCreateEventDto = createCreateEventDto(normalUser, "title1", "a description", parkWithEvents);
 
     public static CreateEventDto createCreateEventDto (User creator, String title, String description, Park park) {
@@ -136,17 +125,11 @@ public class TestFixtures {
     }
 
 
-    public static List<Picture> pictureList() {
-        List<Picture> pictureList = new ArrayList<>();
-        pictureList.add(testPicture);
-        pictureList.add(alternateTestPicture);
-        return pictureList;
-    }
-    public static List<Video> videoList() {
-        List<Video> videoList = new ArrayList<>();
-        videoList.add(testVideo);
-        videoList.add(alternateTestVideo);
-        return videoList;
+    public static List<File> fileList() {
+        List<File> fileList = new ArrayList<>();
+        fileList.add(testFileTypeFile);
+        fileList.add(alternateTestFile);
+        return fileList;
     }
 
 
@@ -183,7 +166,6 @@ public class TestFixtures {
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
-               /* .parkMedia(createMediaList())*/
                 .build();
     }
 
@@ -192,8 +174,7 @@ public class TestFixtures {
                 .name(parkDtoName)
                 .description("ParkDTO Test")
                 .address(parkAddress)
-                .parkVideos(videoList())
-                .parkPictures(pictureList())
+                .parkFiles(fileList())
                 .parkEvents(createEventList())
                 .build();
     }
@@ -211,8 +192,7 @@ public class TestFixtures {
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
-                .parkVideos(videoList())
-                .parkPictures(pictureList())
+                .parkFiles(fileList())
                 .parkEvents(createEventList())
                 .build();
     }
@@ -309,8 +289,7 @@ public class TestFixtures {
                 .endTS(LocalDateTime.now())
                 .parkId(TestFixtures.parkWithEvents.getId())
                 .joinedUsers(userList)
-                .eventVideos(videoList())
-                .eventPictures(pictureList())
+                .eventFiles(fileList())
                 .eventTags(testEventTagSet)
                 .build();
     }
