@@ -26,6 +26,18 @@ public class UserService {
         return userRepository.findUserByUserName(name).orElseThrow(EntityNotFoundException::new);
     }
 
+    public User findByUserNameOrEmail(String input) {
+        if (input == null || input.isEmpty()) {
+            throw new IllegalArgumentException("Username or email is not Valid");
+        }
+
+        if (input.contains("@")) {
+            return findByUserEmail(input);
+        } else {
+            return findByUserName(input);
+        }
+    }
+
     public User findByUserId(String userId) {
         return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
     }
