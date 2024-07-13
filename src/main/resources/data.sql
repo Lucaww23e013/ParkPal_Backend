@@ -251,6 +251,6 @@ VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8e', 'Aruba', 'AW'),
        ('71864c56-a025-43cd-9249-0ae11cdca8f1', 'Zambia', 'ZM'),
        ('9e02a546-ec64-4892-84aa-991af13d7743', 'Zimbabwe', 'ZW');
 
-INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation) VALUES
+INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation, gender) VALUES
 ('ADMIN', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'ww23e016@technikum-wien.at', 'Osama', 'Madani', '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
- 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'MALE');
+ 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'Mr.', 'MALE');

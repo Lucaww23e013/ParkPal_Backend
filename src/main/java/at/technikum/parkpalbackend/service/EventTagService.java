@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
+import at.technikum.parkpalbackend.exception.ResourceAccessException;
 import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.persistence.EventTagRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,7 @@ public class EventTagService {
                     .formatted(eventTagId));
         } catch (DataAccessException e) {
             log.warn("DatabaseError:Failed to access tag with ID: {}", eventTagId, e);
-            throw new RuntimeException("Failed to delete Tag: %s".formatted(e.getMessage()));
+            throw new ResourceAccessException("Failed to delete Tag: %s".formatted(e.getMessage()));
         } catch (Throwable e) {
             log.warn("Unknown Error:Failed to delete tag with ID: {}\n", eventTagId, e);
             throw new RuntimeException("Failed to delete Tag: %s".formatted(e.getMessage()));
@@ -69,7 +70,7 @@ public class EventTagService {
                     .formatted(eventTagId));
         } catch (DataAccessException e) {
             log.error("DatabaseError:Failed to access tag with ID: {}", eventTagId, e);
-            throw new RuntimeException("Failed to update Tag: %s".formatted(e.getMessage()));
+            throw new ResourceAccessException("Failed to update Tag: %s".formatted(e.getMessage()));
         } catch (Throwable e) {
             log.error("Unknown Error:Failed to update tag with ID: {}\n", eventTagId, e);
             throw new RuntimeException("Failed to update Tag: %s".formatted(e.getMessage()));

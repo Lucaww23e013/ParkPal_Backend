@@ -23,7 +23,9 @@ public class FileService {
     }
 
     public File findPictureByPictureId(String pictureId) {
-        return fileRepository.findById(pictureId).orElseThrow(EntityNotFoundException::new);
+        return fileRepository.findById(pictureId).orElseThrow(
+                () -> new EntityNotFoundException("Picture with id %s not found "
+                .formatted(pictureId)));
     }
 
     public List<File> findPicturesByUser(User user) {
@@ -35,19 +37,18 @@ public class FileService {
     }
 
     public File updatePicture(String pictureId, File updatedFile) {
-        File file = fileRepository
-                .findById(pictureId)
-                .orElseThrow(EntityNotFoundException::new);
-
+        File file = fileRepository.findById(pictureId)
+                .orElseThrow(() -> new EntityNotFoundException("Picture with id %s not found "
+                        .formatted(pictureId)));
         file.setId(updatedFile.getId());
         file.setUser(updatedFile.getUser());
         return fileRepository.save(file);
     }
 
     public File deletePictureByPictureId(String pictureId) {
-        File file = fileRepository
-                .findById(pictureId)
-                .orElseThrow(EntityNotFoundException::new);
+        File file = fileRepository.findById(pictureId)
+                .orElseThrow(() -> new EntityNotFoundException("Picture with id %s not found "
+                        .formatted(pictureId)));
         fileRepository.delete(file);
         return file;
     }
