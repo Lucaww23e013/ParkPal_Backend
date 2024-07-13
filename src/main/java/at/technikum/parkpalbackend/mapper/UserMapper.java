@@ -55,18 +55,19 @@ public class UserMapper {
                 .joinedEvents(userDto.getJoinedEvents())
                 .build();
     }
+
     public CreateUserDto toCreateUserDto(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User entity or its fields cannot be null");
         }
         return CreateUserDto.builder()
                 .id(user.getId())
+                .gender(user.getGender())
                 .salutation(user.getSalutation())
                 .userName(user.getUserName())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
-                .role(user.getRole())
                 .countryId(user.getCountry().getId())
                 .password(user.getPassword())
                 .build();
@@ -75,8 +76,10 @@ public class UserMapper {
         if (createUserDto == null) {
             throw new IllegalArgumentException("CreateUserDto or its fields cannot be null");
         }
+
         return User.builder()
                 .id(createUserDto.getId())
+                .gender(createUserDto.getGender())
                 .salutation(createUserDto.getSalutation())
                 .userName(createUserDto.getUserName())
                 .firstName(createUserDto.getFirstName())
