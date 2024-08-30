@@ -130,7 +130,7 @@ class ParkServiceTest {
         updatedPark.setName(parkLuca.getName());
         updatedPark.setAddress(parkWithEvents.getAddress());
         updatedPark.setDescription(parkLuca.getDescription());
-        updatedPark.setParkFiles(fileList());
+        //updatedPark.setParkFiles(fileList());
 
         when(parkRepository.findById(parkId)).thenReturn(Optional.of(oldPark));
         when(parkRepository.save(any(Park.class))).thenReturn(updatedPark);
@@ -167,7 +167,7 @@ class ParkServiceTest {
         updatedPark.setName(parkLuca.getName());
         updatedPark.setAddress(parkWithEvents.getAddress());
         updatedPark.setDescription(parkLuca.getDescription());
-        updatedPark.setParkFiles(fileList());
+        //updatedPark.setParkFiles(fileList());
 
         when(parkRepository.findById(parkId)).thenReturn(Optional.of(oldPark));
         when(parkRepository.save(any(Park.class))).thenThrow(new RuntimeException());

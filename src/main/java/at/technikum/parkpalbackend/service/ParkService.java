@@ -27,6 +27,7 @@ public class ParkService {
         return parkRepository.save(park);
     }
 
+    // TODO add parkFiles
     public Park updatePark(String parkId, Park updatedPark) {
         Park park = parkRepository.findById(parkId).orElseThrow(
                 () -> new EntityNotFoundException("Park with id %s not found "
@@ -37,7 +38,6 @@ public class ParkService {
         park.setDescription(updatedPark.getDescription());
         park.setAddress(updatedPark.getAddress());
         park.setParkEvents(updatedPark.getParkEvents());
-        park.setParkFiles(updatedPark.getParkFiles());
 
         return parkRepository.save(park);
     }

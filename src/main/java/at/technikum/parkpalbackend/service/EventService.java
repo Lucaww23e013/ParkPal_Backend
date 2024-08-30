@@ -51,6 +51,7 @@ public class EventService {
         return eventToDelete;
     }
 
+    // TODO add Files
     public Event updateEvent(String id, Event updatedEvent) {
         if (id == null) {
             log.error("Invalid Event ID in updateEvent(). Event ID is null.");
@@ -69,7 +70,6 @@ public class EventService {
         existingEvent.setPark(updatedEvent.getPark());
         existingEvent.setJoinedUsers(updatedEvent.getJoinedUsers());
         existingEvent.setTags(updatedEvent.getTags());
-        existingEvent.setEventFiles(updatedEvent.getEventFiles());
         return eventRepository.save(existingEvent);
 
     }
