@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.dto.eventdtos;
 
 import at.technikum.parkpalbackend.model.EventTag;
-import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -49,7 +48,7 @@ public class EventDto {
 
     private List<User> joinedUsers;
 
-    private List<File> eventFiles;
+    //private List<File> eventFiles;
 
     private Set<EventTag> eventTags;
 }

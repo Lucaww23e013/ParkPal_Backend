@@ -16,6 +16,7 @@ public class EventMapper {
         this.parkService = parkService;
     }
 
+    // TODO add eventFiles
     public EventDto toDto(Event event) {
         return EventDto.builder()
                 .id(event.getId())
@@ -25,7 +26,6 @@ public class EventMapper {
                 .endTS(event.getEndTS())
                 .parkId(event.getPark().getId())
                 .creator(event.getCreator())
-                .eventFiles(event.getEventFiles())
                 .build();
     }
 
@@ -40,10 +40,10 @@ public class EventMapper {
                 .creator(event.getCreator())
                 .joinedUsers(event.getJoinedUsers())
                 .eventTags(event.getTags())
-                .eventFiles(event.getEventFiles())
                 .build();
     }
 
+    // TODO add eventFiles
     public CreateEventDto toDtoCreateEvent(Event event) {
         return CreateEventDto.builder()
                 .title(event.getTitle())
@@ -57,6 +57,7 @@ public class EventMapper {
                 .build();
     }
 
+    // TODO add eventFiles
     public Event toEntity(EventDto eventDto) {
         return Event.builder()
                 .title(eventDto.getTitle())
@@ -68,6 +69,7 @@ public class EventMapper {
                 .build();
     }
 
+    // TODO add eventFiles
     public Event toEntityAllArgs(EventDto eventDto) {
         return Event.builder()
                 .title(eventDto.getTitle())
@@ -78,7 +80,6 @@ public class EventMapper {
                 .creator(eventDto.getCreator())
                 .joinedUsers(eventDto.getJoinedUsers())
                 .tags(eventDto.getEventTags())
-                .eventFiles(eventDto.getEventFiles())
                 .build();
     }
 

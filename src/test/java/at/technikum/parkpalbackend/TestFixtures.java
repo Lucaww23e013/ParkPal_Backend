@@ -66,23 +66,7 @@ public class TestFixtures {
     public static EventDto secondTestEventDto = createEventDto();
     public static EventTagDto testEventTagDto = createEventTagDto();
     public static Set<EventDto> eventDtoSet = createEventDtoSet();
-    public static byte[] testFile = new byte[100];
-    public static File testFileTypeFile = File.builder().id(UUID.randomUUID().toString())
-            .user(normalUser)
-            .uploadDate(LocalDateTime.now())
-            .file(testFile).build();
 
-    public static FileDto testFileDto = FileDto.builder().id(UUID.randomUUID().toString())
-            .userId(normalUser.getId())
-            .uploadDate(LocalDateTime.now())
-            .build();
-
-    public static File alternateTestFile = File.builder().id(UUID.randomUUID().toString())
-            .user(normalUser)
-            .uploadDate(LocalDateTime.now())
-            .file(testFile).build();
-
-    public static byte[] testVideoFile = new byte[100];
 
     public static CreateEventDto testCreateEventDto = createCreateEventDto(normalUser, "title1", "a description", parkWithEvents);
 
@@ -125,21 +109,6 @@ public class TestFixtures {
     }
 
 
-    public static List<File> fileList() {
-        List<File> fileList = new ArrayList<>();
-        fileList.add(testFileTypeFile);
-        fileList.add(alternateTestFile);
-        return fileList;
-    }
-
-
-   /* private static List<Media> createMediaList() {
-        List<Media> mediaList = new ArrayList<>();
-        mediaList.add(createMedia());
-        mediaList.add(createMedia());
-        return mediaList;
-    }*/
-
     private static List<Event> createEventList() {
         List<Event> eventList = new ArrayList<>();
         eventList.add(createEvent("EventTitle"));
@@ -174,11 +143,10 @@ public class TestFixtures {
                 .name(parkDtoName)
                 .description("ParkDTO Test")
                 .address(parkAddress)
-                .parkFiles(fileList())
                 .parkEvents(createEventList())
                 .build();
     }
-
+    // TODO Check me
     private static CreateParkDto createCreateParkDto (String createParkDto) {
         return CreateParkDto.builder()
                 .name(createParkDto)
@@ -186,13 +154,12 @@ public class TestFixtures {
                 .address(parkAddress)
                 .build();
     }
-
+    // TODO Check me
     private static Park createParkWithEvents(String parkName) {
         return Park.builder()
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
-                .parkFiles(fileList())
                 .parkEvents(createEventList())
                 .build();
     }
@@ -280,6 +247,7 @@ public class TestFixtures {
                 .build();
     }
 
+    // TODO Check me
     private static EventDto createEventDto() {
         return EventDto.builder()
                 .id(UUID.randomUUID().toString())
@@ -289,7 +257,6 @@ public class TestFixtures {
                 .endTS(LocalDateTime.now())
                 .parkId(TestFixtures.parkWithEvents.getId())
                 .joinedUsers(userList)
-                .eventFiles(fileList())
                 .eventTags(testEventTagSet)
                 .build();
     }

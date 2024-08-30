@@ -14,18 +14,28 @@ import java.time.LocalDateTime;
 @Builder
 
 @Entity
-public class File {
+public class FileMetadata {
+
+    @Version
+    private long version;
 
     @Id
     @UuidGenerator
-    @Column(name = "picture_id")
+    @Column(name = "file_id")
     private String id;
+
+    @Column(length = 2048)
+    private String path;
+
+    @Column(length = 2048)
+    private String filename;
+
+    @Builder.Default
+    private LocalDateTime uploadDate = LocalDateTime.now();
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
     private User user;
 
-    private LocalDateTime uploadDate;
-
-    private byte[] file;
+    private boolean assigned;
 }
