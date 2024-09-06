@@ -105,7 +105,7 @@ public class AuthController {
         );
 
         Cookie cookie = new Cookie("token", token);
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(false);
         cookie.setPath("/"); // for all paths is the cookie available
         response.addCookie(cookie);
 

@@ -1,7 +1,5 @@
 package at.technikum.parkpalbackend.dto.eventdtos;
 
-import at.technikum.parkpalbackend.model.EventTag;
-import at.technikum.parkpalbackend.model.User;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -43,12 +41,17 @@ public class EventDto {
     @NotNull(message = "Park not found. All Events need to take place in a Park")
     private String parkId;
 
-    @NotNull(message = "Creator not found. All Events need to have been created by an User")
-    private User creator;
 
-    private List<User> joinedUsers;
+    @NotNull(message = "Creator not found. All Events need to have been created by an User")
+    private String creatorUserId;
+
+    private String creatorName;
+
+    private List<String> joinedUserIds;
 
     //private List<File> eventFiles;
 
-    private Set<EventTag> eventTags;
+    private Set<String> eventTagsIds;
+
+    private Set<String> eventTagNames;
 }
