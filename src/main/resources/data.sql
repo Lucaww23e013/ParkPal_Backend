@@ -1,6 +1,6 @@
 -- choose spring schema
 USE
-    spring;
+spring
 
 INSERT INTO country (country_Id, name, iso2Code)
 VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8e', 'Aruba', 'AW'),
