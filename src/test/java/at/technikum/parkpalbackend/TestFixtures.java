@@ -2,13 +2,11 @@ package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.dto.CountryDto;
 import at.technikum.parkpalbackend.dto.EventTagDto;
-import at.technikum.parkpalbackend.dto.FileDto;
 import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
-import at.technikum.parkpalbackend.dto.userdtos.DeleteUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.model.*;
@@ -29,7 +27,6 @@ public class TestFixtures {
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
     public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
 
-    public static DeleteUserDto adminDeleteUserDto = createDelteUserDto();
     public static LoginUserDto adminLoginUserDto = createLoginUserDto();
 
 
@@ -199,13 +196,6 @@ public class TestFixtures {
                 .countryId(austria.getId())
                 .role(Role.ADMIN)
                 .build();
-    }
-
-    private static DeleteUserDto createDelteUserDto() {
-        return DeleteUserDto.builder()
-                .userId(UUID.randomUUID().toString())
-                .build();
-
     }
 
     private static LoginUserDto createLoginUserDto() {

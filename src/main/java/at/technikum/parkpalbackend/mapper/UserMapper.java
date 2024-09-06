@@ -1,6 +1,5 @@
 package at.technikum.parkpalbackend.mapper;
 
-import at.technikum.parkpalbackend.dto.userdtos.DeleteUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
@@ -88,24 +87,6 @@ public class UserMapper {
                 .role(Role.USER)
                 .password(new BCryptPasswordEncoder().encode(createUserDto.getPassword()))
                 .country(countryService.findCountryByCountryId(createUserDto.getCountryId()))
-                .build();
-    }
-
-    public DeleteUserDto toDeleteUserDto(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User entity or its fields cannot be null");
-        }
-        return DeleteUserDto.builder()
-                .userId(user.getId())
-                .build();
-    }
-
-    public User toEntity(DeleteUserDto deleteUserDto) {
-        if (deleteUserDto == null) {
-            throw new IllegalArgumentException("DeleteUserDto or its fields cannot be null");
-        }
-        return User.builder()
-                .id(deleteUserDto.getUserId())
                 .build();
     }
 

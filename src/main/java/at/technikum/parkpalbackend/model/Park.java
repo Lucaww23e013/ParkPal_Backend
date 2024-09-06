@@ -23,9 +23,10 @@ public class Park {
     @Column(name = "park_id")
     private String id;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 65535)
     private String name;
 
+    @Column(length = 65535)
     private String description;
 
     @Embedded

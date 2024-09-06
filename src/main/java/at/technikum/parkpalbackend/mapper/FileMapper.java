@@ -2,7 +2,7 @@ package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.dto.FileDto;
 
-import at.technikum.parkpalbackend.model.FileMetadata;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.service.FileUploadService;
 import at.technikum.parkpalbackend.service.UserService;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class FileMapper {
     public UserService userService;
     public FileUploadService fileUploadService;
 
-    public FileDto toDto(FileMetadata file) {
+    public FileDto toDto(File file) {
         if (file == null) {
             throw new IllegalArgumentException("File entity or its fields cannot be null");
         }
@@ -25,11 +25,11 @@ public class FileMapper {
                 .build();
     }
 
-    public FileMetadata toEntity(FileDto fileDto) {
+    public File toEntity(FileDto fileDto) {
         if (fileDto == null) {
             throw new IllegalArgumentException("FileDTO or its fields cannot be null");
         }
-        return FileMetadata.builder()
+        return File.builder()
                 .id(fileDto.getId())
                 .user(userService.findByUserId(fileDto.getUserId()))
                 .uploadDate(fileDto.getUploadDate())

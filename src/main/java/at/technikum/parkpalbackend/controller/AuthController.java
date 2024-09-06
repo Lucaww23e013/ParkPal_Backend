@@ -3,6 +3,7 @@ package at.technikum.parkpalbackend.controller;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginRequest;
 import at.technikum.parkpalbackend.dto.userdtos.TokenResponse;
+import at.technikum.parkpalbackend.exception.InvalidJwtTokenException;
 import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.jwt.JwtIssuer;
@@ -11,7 +12,7 @@ import at.technikum.parkpalbackend.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -55,32 +56,40 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public TokenResponse login(@RequestBody @Valid LoginRequest loginRequest,
+    public ResponseEntity<?>  login(@RequestBody @Valid LoginRequest loginRequest,
                                HttpServletResponse response) {
-        User user = userService.findByUserNameOrEmail(loginRequest.getUsername());
+        try {
+            User user = userService.findByUserNameOrEmail(loginRequest.getUsername());
 
 
-        // pass the username and password to springs in-build security manager
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getUserName(),
-                        loginRequest.getPassword()
-                )
-        );
+            // pass the username and password to springs in-build security manager
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getUserName(),
+                            loginRequest.getPassword()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-        // issue the jwt with the user information
-        return getTokenResponse(response, principal);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+            // issue the jwt with the user information
+            return ResponseEntity.ok(getTokenResponse(response, principal));
+        } catch (InvalidJwtTokenException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+        }
     }
 
     @PostMapping("/refresh")
-    public TokenResponse refresh(HttpServletResponse response) {
-        UserPrincipal principal = (UserPrincipal) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return getTokenResponse(response, principal);
+    public ResponseEntity<?> refresh(HttpServletResponse response) {
+        try {
+            UserPrincipal principal = (UserPrincipal) SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getPrincipal();
+            return ResponseEntity.ok(getTokenResponse(response, principal));
+        } catch (InvalidJwtTokenException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+        }
     }
 
     private TokenResponse getTokenResponse(HttpServletResponse response, UserPrincipal principal) {

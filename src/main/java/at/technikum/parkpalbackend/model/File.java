@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 
 @Entity
-public class FileMetadata {
+public class File {
 
     @Version
     private long version;
