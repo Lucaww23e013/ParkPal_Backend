@@ -52,6 +52,11 @@ public class UserService {
                         .formatted(userId)));
     }
 
+    public List<User> findUsersByIds(List<String> userIds) {
+        List<User> users = userRepository.findAllById(userIds); // Find all users by IDs
+        return users;
+    }
+
     public List<User> findAll() {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {

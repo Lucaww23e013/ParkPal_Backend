@@ -1,5 +1,6 @@
 -- choose spring schema
-USE spring;
+USE
+    spring;
 
 INSERT INTO country (country_Id, name, iso2Code)
 VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8e', 'Aruba', 'AW'),
@@ -251,31 +252,71 @@ VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8e', 'Aruba', 'AW'),
        ('71864c56-a025-43cd-9249-0ae11cdca8f1', 'Zambia', 'ZM'),
        ('9e02a546-ec64-4892-84aa-991af13d7743', 'Zimbabwe', 'ZW');
 
-INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation, gender) VALUES
-('ADMIN', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'ww23e016@technikum-wien.at', 'Osama', 'Madani', '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
- 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'Mr.', 'MALE');
+INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
+                        gender)
+VALUES ('ADMIN', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'ww23e016@technikum-wien.at', 'Osama', 'Madani',
+        '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'Mr.', 'MALE');
 
 -- create another 2 normal users
-INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation, gender) VALUES
-    ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'os235.ma22@gmail.com', 'Osama', 'Madani', '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
-     'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'oneandtheonly', 'Master of Disasters', 'MALE');
+INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
+                        gender)
+VALUES ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'os235.ma22@gmail.com', 'Osama', 'Madani',
+        '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'oneandtheonly', 'Master of Disasters', 'MALE');
 
-INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation, gender) VALUES
-    ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'forkg71@gmail.com', 'Osama', 'Madani', '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
-     'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'OsamaAllMighty', 'Master of Disasters', 'MALE');
+INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
+                        gender)
+VALUES ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'forkg71@gmail.com', 'Osama', 'Madani',
+        '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'OsamaAllMighty', 'Master of Disasters', 'MALE');
 
 -- create a park
-INSERT INTO spring.park(park_id, name, description,street_number, city, zip_code, country_id) VALUES
-    ('c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater', 'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.', '1020', 'Vienna', '1020', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id)
+VALUES ('c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater',
+        'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.',
+        '1020', 'Vienna', '1020', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
 
 -- create a park
-INSERT INTO spring.park(park_id, name, description,street_number, city, zip_code, country_id) VALUES
-    ('c07cd7cb-ce44-4709-32af-9d8d2d568264', 'Schönbrunn', 'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.', '1130', 'Vienna', '1130', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id)
+VALUES ('c07cd7cb-ce44-4709-32af-9d8d2d568264', 'Schönbrunn',
+        'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.',
+        '1130', 'Vienna', '1130', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
 
 -- user oneandtheonly create an event
-INSERT INTO spring.event(event.version,event_2_user_id, event_id, title, description, startts, endts, event_park_id) VALUES
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264','c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater Event', 'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.', '2030-06-01', '2030-06-30', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
+VALUES (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater Event',
+        'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.',
+        '2030-06-01', '2030-06-30', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
 
 -- user OsamaAllMighty create an event
-INSERT INTO spring.event(event.version,event_2_user_id, event_id, title, description, startts, endts, event_park_id) VALUES
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265','c07cd7cb-ca44-4709-a9b6-9d8d2d568266', 'Schönbrunn Event', 'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.', '2030-06-01', '2030-06-30', 'c07cd7cb-ce44-4709-32af-9d8d2d568264');
+INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
+VALUES (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'c07cd7cb-ca44-4709-a9b6-9d8d2d568266', 'Schönbrunn Event',
+        'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.',
+        '2030-06-01', '2030-06-30', 'c07cd7cb-ce44-4709-32af-9d8d2d568264');
+
+-- Additional events for Prater park
+INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
+VALUES
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Prater Summer Festival', 'Join us for a fun-filled summer festival at Prater with games, food, and music.', '2030-07-01', '2030-07-02', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Prater Music Concert', 'Experience an amazing live music concert at Prater featuring local bands.', '2030-07-03', '2030-07-04', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'Prater Food Fair', 'Taste a variety of delicious foods from different cuisines at the Prater Food Fair.', '2030-07-05', '2030-07-06', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'Prater Art Exhibition', 'Explore beautiful artworks by local artists at the Prater Art Exhibition.', '2030-07-07', '2030-07-08', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'Prater Movie Night', 'Enjoy a movie night under the stars at Prater.', '2030-07-09', '2030-07-09', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'ffffffff-ffff-ffff-ffff-ffffffffffff', 'Prater Sports Day', 'Participate in various sports activities at Prater.', '2030-07-10', '2030-07-10', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '00000000-0000-0000-0000-000000000000', 'Prater Book Fair', 'Explore a wide range of books at the Prater Book Fair.', '2030-07-11', '2030-07-11', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '11111111-1111-1111-1111-111111111111', 'Prater Science Expo', 'Discover scientific wonders at the Prater Science Expo.', '2030-07-12', '2030-07-12', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '22222222-2222-2222-2222-222222222222', 'Prater Dance Festival', 'Join us for a vibrant dance festival at Prater.', '2030-07-13', '2030-07-13', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+
+-- Additional events for Schönbrunn park
+INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
+VALUES
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '33333333-3333-3333-3333-333333333333', 'Schönbrunn Garden Tour', 'Take a guided tour of the beautiful gardens at Schönbrunn Palace.', '2030-07-01', '2030-07-02', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '44444444-4444-4444-4444-444444444444', 'Schönbrunn Historical Walk', 'Learn about the rich history of Schönbrunn Palace on this historical walk.', '2030-07-03', '2030-07-04', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '55555555-5555-5555-5555-555555555555', 'Schönbrunn Family Picnic', 'Enjoy a relaxing family picnic in the scenic grounds of Schönbrunn Palace.', '2030-07-05', '2030-07-06', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '66666666-6666-6666-6666-666666666666', 'Schönbrunn Evening Gala', 'Attend an elegant evening gala at Schönbrunn Palace with live music and fine dining.', '2030-07-07', '2030-07-08', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '77777777-7777-7777-7777-777777777777', 'Schönbrunn Photography Workshop', 'Learn photography skills at Schönbrunn Palace.', '2030-07-09', '2030-07-09', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '88888888-8888-8888-8888-888888888888', 'Schönbrunn Yoga Session', 'Relax with a yoga session in the gardens of Schönbrunn.', '2030-07-10', '2030-07-10', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '99999999-9999-9999-9999-999999999999', 'Schönbrunn Wine Tasting', 'Enjoy a wine tasting event at Schönbrunn Palace.', '2030-07-11', '2030-07-11', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'aaetetet-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Schönbrunn Classical Concert', 'Attend a classical music concert at Schönbrunn Palace.', '2030-07-12', '2030-07-12', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '3535a53b-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Schönbrunn Art Workshop', 'Participate in an art workshop at Schönbrunn Palace.', '2030-07-13', '2030-07-13', 'c07cd7cb-ce44-4709-32af-9d8d2d568264');

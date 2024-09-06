@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,6 +40,25 @@ public class EventTagService {
                     .formatted(eventTagId));
         }
     }
+
+    public Set<EventTag> findTagsByIds(Set<String> eventTagIds) {
+        Set<EventTag> eventTags = new HashSet<>(eventTagRepository.findAllById(eventTagIds));
+
+        // Check if all IDs were found
+        if (eventTags.size() != eventTagIds.size()) {
+            Set<String> foundIds = eventTags.stream()
+                    .map(EventTag::getId)
+                    .collect(Collectors.toSet());
+            Set<String> missingIds = new HashSet<>(eventTagIds);
+            missingIds.removeAll(foundIds);
+
+            log.warn("Failed to find tags with IDs: {}", missingIds);
+            throw new EntityNotFoundException("Tags with IDs %s not found".formatted(missingIds));
+        }
+
+        return eventTags;
+    }
+
 
     public EventTag deleteTagById(String eventTagId) {
         try {

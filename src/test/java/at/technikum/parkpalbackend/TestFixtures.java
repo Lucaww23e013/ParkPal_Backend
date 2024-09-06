@@ -242,12 +242,11 @@ public class TestFixtures {
         return EventDto.builder()
                 .id(UUID.randomUUID().toString())
                 .description("Test")
-                .creator(TestFixtures.adminUser)
+                .creatorName(TestFixtures.adminUser.getUserName())
+                .creatorUserId(TestFixtures.adminUser.getId())
                 .startTS(LocalDateTime.now())
                 .endTS(LocalDateTime.now())
                 .parkId(TestFixtures.parkWithEvents.getId())
-                .joinedUsers(userList)
-                .eventTags(testEventTagSet)
                 .build();
     }
 
