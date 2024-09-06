@@ -23,6 +23,7 @@ public class JwtIssuer {
                 .withSubject(userId)
                 .withExpiresAt(Instant.now().plus(Duration.of(1, ChronoUnit.DAYS)))
                 .withClaim("username", username)
+                .withClaim("userId", userId)
                 .withClaim("roles", roles)
                 .sign(Algorithm.HMAC256(jwtProperties.getSecret()));
     }

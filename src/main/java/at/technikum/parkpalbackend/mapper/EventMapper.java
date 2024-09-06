@@ -3,17 +3,19 @@ package at.technikum.parkpalbackend.mapper;
 import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.ParkService;
+import at.technikum.parkpalbackend.service.UserService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventMapper {
 
-    private ParkService parkService;
+    private final ParkService parkService;
+    private final UserService userService;
 
-    public EventMapper(ParkService parkService) {
+    public EventMapper(ParkService parkService, UserService userService) {
         this.parkService = parkService;
+        this.userService = userService;
     }
 
     // TODO add eventFiles
@@ -89,7 +91,7 @@ public class EventMapper {
                 .description(createEventDto.getDescription())
                 .startTS(createEventDto.getStartTS())
                 .endTS(createEventDto.getEndTS())
-                .creator(User.builder().id(createEventDto.getCreatorUserId()).build())
+                .creator(userService.findByUserId(createEventDto.getCreatorUserId()))
                 .park(parkService.findParkByParkId(createEventDto.getParkId()))
                 .build();
     }

@@ -5,6 +5,7 @@ import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.service.ParkService;
+import at.technikum.parkpalbackend.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +21,13 @@ class EventMapperTest {
 
     private EventMapper eventMapper;
 
+    @Mock
+    private UserService userService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        eventMapper = new EventMapper(parkService);
+        eventMapper = new EventMapper(parkService, userService);
     }
 
     @Test

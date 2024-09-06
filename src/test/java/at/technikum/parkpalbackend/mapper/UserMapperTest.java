@@ -2,7 +2,6 @@ package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
-import at.technikum.parkpalbackend.dto.userdtos.DeleteUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.model.User;
@@ -47,7 +46,6 @@ public class UserMapperTest {
         Assertions.assertEquals(user.getJoinedEvents(), userDto.getJoinedEvents());
     }
 
-
     @Test
     public void whenEntityNull_toDto_thenThrowIllegalArgumentException() {
         // Arrange
@@ -78,6 +76,7 @@ public class UserMapperTest {
         Assertions.assertEquals(countryService.findCountryByCountryId(userDto.getCountryId()), user.getCountry());
         Assertions.assertEquals(userDto.getJoinedEvents(), user.getJoinedEvents());
     }
+
     @Test
     public void whenDTONull_toEntity_thenThrowIllegalArgumentException() {
         // Arrange
@@ -106,7 +105,6 @@ public class UserMapperTest {
         Assertions.assertEquals(user.getCountry().getId(), createUserDto.getCountryId());
     }
 
-
     @Test
     public void whenEntityNull_toCreateParkDto_thenThrowIllegalArgumentException() {
         // Arrange
@@ -124,7 +122,6 @@ public class UserMapperTest {
         // Act
         User user = userMapper.toEntity(createUserDto);
 
-
         // Assert
         Assertions.assertEquals(createUserDto.getId(), user.getId());
         Assertions.assertEquals(createUserDto.getSalutation(), user.getSalutation());
@@ -135,6 +132,7 @@ public class UserMapperTest {
         Assertions.assertNotEquals(createUserDto.getPassword(), user.getPassword());
         Assertions.assertEquals(countryService.findCountryByCountryId(createUserDto.getCountryId()), user.getCountry());
     }
+
     @Test
     public void whenCreateUserDTONull_toEntity_thenThrowIllegalArgumentException() {
         // Arrange
@@ -142,47 +140,6 @@ public class UserMapperTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> userMapper.toEntity(createUserDto));
-    }
-
-    @Test
-    public void whenUserEntity_thenDeleteUserDto() {
-        // Arrange
-        User user = TestFixtures.adminUser;
-
-        // Act
-        DeleteUserDto deleteUserDto = userMapper.toDeleteUserDto(user);
-
-        // Assert
-        Assertions.assertEquals(user.getId(), deleteUserDto.getUserId());
-    }
-
-
-    @Test
-    public void whenEntityNull_toDeleteParkDto_thenThrowIllegalArgumentException() {
-        // Arrange
-        User user = null;
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> userMapper.toDeleteUserDto(user));
-    }
-
-    @Test
-    public void whenDeleteUserDTO_thenToUserEntity() {
-        // Arrange
-        DeleteUserDto deleteUserDto = TestFixtures.adminDeleteUserDto;
-
-        // Act
-        User user = userMapper.toEntity(deleteUserDto);
-        // Assert
-        Assertions.assertEquals(deleteUserDto.getUserId(), user.getId());
-    }
-    @Test
-    public void whenDeleteUserDTONull_toEntity_thenThrowIllegalArgumentException() {
-        // Arrange
-        DeleteUserDto deleteUserDto = null;
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> userMapper.toEntity(deleteUserDto));
     }
 
     @Test
@@ -195,9 +152,7 @@ public class UserMapperTest {
 
         // Assert
         Assertions.assertEquals(user.getEmail(), loginUserDto.getEmail());
-
     }
-
 
     @Test
     public void whenEntityNull_toLoginParkDto_thenThrowIllegalArgumentException() {
@@ -218,6 +173,7 @@ public class UserMapperTest {
         // Assert
         Assertions.assertEquals(loginUserDto.getEmail(), user.getEmail());
     }
+
     @Test
     public void whenLoginUserDTONull_toEntity_thenThrowIllegalArgumentException() {
         // Arrange
@@ -226,6 +182,4 @@ public class UserMapperTest {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> userMapper.toEntity(loginUserDto));
     }
-
-
 }

@@ -1,6 +1,6 @@
 package at.technikum.parkpalbackend.service;
 
-import at.technikum.parkpalbackend.model.FileMetadata;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.persistence.FileMetadataRepository;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class FileUploadService {
             String objectName = folderNa + "/" + uuid;
             minioService.uploadFile(objectName, inputStream, contentType);
             // Save file metadata
-            FileMetadata fileMetadata = FileMetadata.builder()
+            File fileMetadata = File.builder()
                     .path(objectName)
                     .assigned(false)
                     .filename(fileNa)

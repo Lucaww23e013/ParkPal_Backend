@@ -67,6 +67,17 @@ public class User {
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
+    @OneToMany(mappedBy = "creator", orphanRemoval = false)
+    @ToString.Exclude
+    private List<Event> createdEvents = new ArrayList<>();
+
+    @PreRemove
+    private void preRemove() {
+        for (Event event : createdEvents) {
+            event.setCreator(null);
+        }
+    }
+
     public User addJoinedEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.joinedEvents.add(event));
         return this;
