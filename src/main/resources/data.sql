@@ -254,3 +254,28 @@ VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8e', 'Aruba', 'AW'),
 INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation, gender) VALUES
 ('ADMIN', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'ww23e016@technikum-wien.at', 'Osama', 'Madani', '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
  'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'Mr.', 'MALE');
+
+-- create another 2 normal users
+INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation, gender) VALUES
+    ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'os235.ma22@gmail.com', 'Osama', 'Madani', '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
+     'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'oneandtheonly', 'Master of Disasters', 'MALE');
+
+INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation, gender) VALUES
+    ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'forkg71@gmail.com', 'Osama', 'Madani', '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
+     'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'OsamaAllMighty', 'Master of Disasters', 'MALE');
+
+-- create a park
+INSERT INTO spring.park(park_id, name, description,street_number, city, zip_code, country_id) VALUES
+    ('c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater', 'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.', '1020', 'Vienna', '1020', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+
+-- create a park
+INSERT INTO spring.park(park_id, name, description,street_number, city, zip_code, country_id) VALUES
+    ('c07cd7cb-ce44-4709-32af-9d8d2d568264', 'Schönbrunn', 'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.', '1130', 'Vienna', '1130', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+
+-- user oneandtheonly create an event
+INSERT INTO spring.event(event.version,event_2_user_id, event_id, title, description, startts, endts, event_park_id) VALUES
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264','c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater Event', 'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.', '2030-06-01', '2030-06-30', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+
+-- user OsamaAllMighty create an event
+INSERT INTO spring.event(event.version,event_2_user_id, event_id, title, description, startts, endts, event_park_id) VALUES
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265','c07cd7cb-ca44-4709-a9b6-9d8d2d568266', 'Schönbrunn Event', 'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.', '2030-06-01', '2030-06-30', 'c07cd7cb-ce44-4709-32af-9d8d2d568264');

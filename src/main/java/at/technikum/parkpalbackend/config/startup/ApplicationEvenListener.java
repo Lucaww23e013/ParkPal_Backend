@@ -21,6 +21,7 @@ public class ApplicationEvenListener {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new org.springframework.core.io.ClassPathResource("data.sql"));
         populator.execute(dataSource);
+        System.out.println("Database populator executed successfully");
         log.info("ApplicationReadyEvent fired Now");
     }
 
