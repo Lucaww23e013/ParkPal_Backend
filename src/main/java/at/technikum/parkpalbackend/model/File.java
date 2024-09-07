@@ -24,6 +24,8 @@ public class File {
     @Column(name = "file_id")
     private String id;
 
+    private String externalId;
+
     @Column(length = 2048)
     private String path;
 

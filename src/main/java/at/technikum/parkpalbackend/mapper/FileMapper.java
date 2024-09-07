@@ -3,7 +3,7 @@ package at.technikum.parkpalbackend.mapper;
 import at.technikum.parkpalbackend.dto.FileDto;
 
 import at.technikum.parkpalbackend.model.File;
-import at.technikum.parkpalbackend.service.FileUploadService;
+import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.UserService;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class FileMapper {
 
     public UserService userService;
-    public FileUploadService fileUploadService;
+    public FileService fileService;
 
     public FileDto toDto(File file) {
         if (file == null) {
