@@ -2,6 +2,8 @@ package at.technikum.parkpalbackend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.Length;
 
@@ -43,6 +45,7 @@ public class Event {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "event_2_user_id", foreignKey = @ForeignKey(name = "fk_event_2_user"))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private User creator;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

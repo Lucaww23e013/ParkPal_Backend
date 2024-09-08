@@ -1,9 +1,11 @@
 package at.technikum.parkpalbackend.model;
 
-import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Gender;
+import at.technikum.parkpalbackend.model.enums.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -63,20 +65,18 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(name = "event_joined_user",
+            joinColumns = @JoinColumn(name = "user_id",
+                    foreignKey = @ForeignKey(name = "fk_joined_user_user")),
+            inverseJoinColumns = @JoinColumn(name = "event_id",
+                    foreignKey = @ForeignKey(name = "fk_joined_user_event")))
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
-    @OneToMany(mappedBy = "creator", orphanRemoval = false)
+    @OneToMany(mappedBy = "creator")
     @ToString.Exclude
     private List<Event> createdEvents = new ArrayList<>();
-
-    @PreRemove
-    private void preRemove() {
-        for (Event event : createdEvents) {
-            event.setCreator(null);
-        }
-    }
 
     public User addJoinedEvents(Event... events) {
         Arrays.stream(events).forEach(event -> this.joinedEvents.add(event));

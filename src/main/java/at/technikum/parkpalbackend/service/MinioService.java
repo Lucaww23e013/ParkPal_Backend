@@ -64,4 +64,21 @@ public class MinioService {
                         .build()
         );
     }
+/*
+    public void deleteFile(String path) {
+        try {
+            if (path == null || path.isEmpty()) {
+                return;
+            }
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(path)
+                            .build()
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+ */
 }

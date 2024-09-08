@@ -33,6 +33,10 @@ public class Park {
     private Address address;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(name = "park_events", joinColumns = @JoinColumn(name = "park_id",
+            foreignKey = @ForeignKey(name = "fk_park_2_event")),
+            inverseJoinColumns = @JoinColumn(name = "event_id",
+                    foreignKey = @ForeignKey(name = "fk_event_2_park")))
     @ToString.Exclude
     private List<Event> parkEvents = new ArrayList<>();
 
