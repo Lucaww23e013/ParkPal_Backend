@@ -51,6 +51,7 @@ public class EventController {
                 .map(getEventDto -> eventMapper.toDto(getEventDto))
                 .toList();
     }
+
     @GetMapping("/{eventId}")
     public EventDto getEventByID(@PathVariable String eventId) {
         return eventMapper.toDto(eventService.findByEventId(eventId));

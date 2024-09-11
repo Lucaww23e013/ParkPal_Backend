@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,9 +36,11 @@ public class CreateEventDto {
     @NotNull(message = "Event End Time not found. All Events need to have a Start and End Time")
     private LocalDateTime endTS;
 
-    @NotBlank(message = "Park not found. All Events need to take place in a Park")
+    //@NotBlank(message = "Park not found. All Events need to take place in a Park")
     private String parkId;
 
-    @NotBlank(message = "Creator not found. All Events need to have been created by an User")
+    //@NotBlank(message = "Creator not found. All Events need to have been created by an User")
     private String creatorUserId;
+
+    private List<String> createMediaFileIds;
 }

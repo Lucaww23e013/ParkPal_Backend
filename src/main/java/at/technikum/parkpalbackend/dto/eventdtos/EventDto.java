@@ -49,7 +49,7 @@ public class EventDto {
 
     private List<String> joinedUserIds;
 
-    //private List<File> eventFiles;
+    public List<String> mediaFileIds;
 
     private Set<String> eventTagsIds;
 
