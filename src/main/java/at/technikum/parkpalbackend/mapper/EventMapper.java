@@ -9,6 +9,7 @@ import at.technikum.parkpalbackend.service.ParkService;
 import at.technikum.parkpalbackend.service.UserService;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class EventMapper {
 
@@ -65,6 +66,7 @@ public class EventMapper {
                 .endTS(event.getEndTS())
                 .parkId(event.getPark().getId())
                 .creatorUserId(eventService.findEventCreatorUserId(event.getId()))
+                .createMediaFileIds(eventService.getFileIdsFromMediaFiles(event.getMediaFiles()))
                 // .joinedUsers(event.getJoinedUsers())
                 // .eventTags(event.getEventTags())
                 .build();
@@ -106,8 +108,9 @@ public class EventMapper {
                 .description(createEventDto.getDescription())
                 .startTS(createEventDto.getStartTS())
                 .endTS(createEventDto.getEndTS())
-                //.creator(userService.findByUserId(createEventDto.getCreatorUserId()))
+                .creator(userService.findByUserId(createEventDto.getCreatorUserId()))
                 .park(parkService.findParkByParkId(createEventDto.getParkId()))
+                .mediaFiles(eventService.getFilesByIds(createEventDto.getCreateMediaFileIds()))
                 .build();
     }
 }

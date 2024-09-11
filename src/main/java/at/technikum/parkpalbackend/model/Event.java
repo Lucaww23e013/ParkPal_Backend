@@ -66,6 +66,11 @@ public class Event {
     @ToString.Exclude
     private Set<EventTag> tags = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_id")
+    private List<File> mediaFiles;
+
+
 //    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 //    @JoinTable(name = "event_event_pictures", joinColumns = @JoinColumn(name = "picture_id",
 //            foreignKey = @ForeignKey(name = "fk_event_pictures_event")),

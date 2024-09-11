@@ -3,12 +3,15 @@ package at.technikum.parkpalbackend.service;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.EventTag;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.EventRepository;
+import at.technikum.parkpalbackend.persistence.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -16,10 +19,13 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserService userService;
+    private final FileRepository fileRepository;
 
-    public EventService(EventRepository eventRepository, UserService userService) {
+    public EventService(EventRepository eventRepository, UserService userService,
+                        FileRepository fileRepository) {
         this.eventRepository = eventRepository;
         this.userService = userService;
+        this.fileRepository = fileRepository;
     }
 
     public Event save(Event event) {
@@ -126,5 +132,15 @@ public class EventService {
         existingEvent.setTags(updatedEvent.getTags());
         return eventRepository.save(existingEvent);
 
+    }
+
+    public List<String> getFileIdsFromMediaFiles(List<File> mediaFiles) {
+        return mediaFiles.stream()
+                .map(File::getExternalId)
+                .collect(Collectors.toList());
+    }
+
+    public List<File> getFilesByIds(List<String> fileIds) {
+        return fileRepository.findAllById(fileIds);
     }
 }
