@@ -3,13 +3,17 @@ package at.technikum.parkpalbackend.controller;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginRequest;
 import at.technikum.parkpalbackend.dto.userdtos.TokenResponse;
+import at.technikum.parkpalbackend.dto.userdtos.UserResponseDto;
 import at.technikum.parkpalbackend.exception.InvalidJwtTokenException;
 import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
 import at.technikum.parkpalbackend.security.jwt.JwtIssuer;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.UserService;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -19,10 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,17 +35,20 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final JwtDecoder jwtDecoder;
 
     public AuthController(
             JwtIssuer jwtIssuer,
             AuthenticationManager authenticationManager,
             UserService userService,
-            UserMapper userMapper
+            UserMapper userMapper,
+            JwtDecoder jwtDecoder
     ) {
         this.jwtIssuer = jwtIssuer;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.userMapper = userMapper;
+        this.jwtDecoder = jwtDecoder;
     }
 
     @PostMapping("/register")
@@ -105,10 +109,65 @@ public class AuthController {
         );
 
         Cookie cookie = new Cookie("token", token);
-        cookie.setHttpOnly(false);
+        cookie.setHttpOnly(true);
         cookie.setPath("/"); // for all paths is the cookie available
         response.addCookie(cookie);
 
         return new TokenResponse(token);
     }
+
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
+        try {
+            // Get the JWT token from the cookies (HttpOnly)
+            String token = extractTokenFromCookie(request);
+            if (token == null || token.isEmpty()) {
+                return ResponseEntity.status(401).body("Token is missing or invalid");
+            }
+
+            // Decode the JWT token
+            DecodedJWT decodedJWT = jwtDecoder.decode(token);
+            String userId = decodedJWT.getSubject();
+
+            // Fetch the user details from the database
+            User user = userService.findByUserId(userId);
+            if (user == null) {
+                return ResponseEntity.status(404).body("User not found");
+            }
+
+            // Map to DTO (UserResponseDto) and return
+            UserResponseDto userResponseDto = userMapper.toUserResponseDto(user);
+            return ResponseEntity.ok(userResponseDto);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Invalid or expired token");
+        }
+    }
+
+    // Utility method to extract JWT from cookies
+    private String extractTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        Cookie jwtToken = new Cookie("token", null);
+        jwtToken.setHttpOnly(true);
+        jwtToken.setPath("/"); // Match the path where the cookie is used
+        jwtToken.setMaxAge(0); // Immediately expire the cookie
+
+        response.addCookie(jwtToken);
+
+        // Clear security context for logging out user on the server
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok().build();
+    }
 }
+
