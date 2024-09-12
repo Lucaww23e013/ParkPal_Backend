@@ -4,6 +4,7 @@ import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginRequest;
 import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
 import at.technikum.parkpalbackend.security.jwt.JwtIssuer;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.UserService;
@@ -30,6 +31,7 @@ public class AuthControllerTest {
 
     @Mock
     private JwtIssuer jwtIssuer;
+    private JwtDecoder jwtDecoder;
 
     @Mock
     private AuthenticationManager authenticationManager;

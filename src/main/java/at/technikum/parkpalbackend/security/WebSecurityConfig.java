@@ -64,7 +64,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/videos/**").permitAll()
                 .requestMatchers("/upload/**").permitAll()
                 .requestMatchers("/files/**").permitAll()
-                .requestMatchers("/auth/login", "/auth/register").permitAll()
+                .requestMatchers("/auth/login", "/auth/register", "auth/logout").permitAll()
                 // allow errors so that @ResponseStatus() will show and not 401
                 .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated());

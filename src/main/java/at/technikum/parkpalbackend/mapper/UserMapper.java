@@ -3,6 +3,7 @@ package at.technikum.parkpalbackend.mapper;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
+import at.technikum.parkpalbackend.dto.userdtos.UserResponseDto;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.service.CountryService;
@@ -109,4 +110,10 @@ public class UserMapper {
                 .build();
     }
 
+    public UserResponseDto toUserResponseDto(User user) {
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .role(user.getRole())
+                .build();
+    }
 }
