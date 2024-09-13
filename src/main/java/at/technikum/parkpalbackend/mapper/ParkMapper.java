@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ParkMapper {
+    private final EventMapper eventMapper;
+
+    public ParkMapper(EventMapper eventMapper) {
+        this.eventMapper = eventMapper;
+    }
+
     // TODO add parkFiles
     public ParkDto toDto(Park park){
         if (park == null) {
@@ -16,7 +22,10 @@ public class ParkMapper {
                 .id(park.getId())
                 .name(park.getName())
                 .description(park.getDescription())
-                .parkEvents(park.getParkEvents())
+                .address(park.getAddress())
+                .parkEventDtos(park.getParkEvents().stream()
+                        .map(event -> eventMapper.toDto(event))
+                        .toList())  //
                 .build();
     }
     // TODO add parkFiles
@@ -28,7 +37,9 @@ public class ParkMapper {
                 .id(parkDto.getId())
                 .name(parkDto.getName())
                 .description(parkDto.getDescription())
-                .parkEvents(parkDto.getParkEvents())
+                .address(parkDto.getAddress())
+                .parkEvents(parkDto.getParkEventDtos().stream()
+                        .map(eventDto -> eventMapper.toEntity(eventDto)).toList())
                 .build();
     }
     public CreateParkDto toCreateParkDto(Park park){
