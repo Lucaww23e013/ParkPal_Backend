@@ -16,6 +16,7 @@ public class ParkMapper {
                 .id(park.getId())
                 .name(park.getName())
                 .description(park.getDescription())
+                .address(park.getAddress())
                 .parkEvents(park.getParkEvents())
                 .build();
     }
@@ -28,6 +29,7 @@ public class ParkMapper {
                 .id(parkDto.getId())
                 .name(parkDto.getName())
                 .description(parkDto.getDescription())
+                .address(parkDto.getAddress())
                 .parkEvents(parkDto.getParkEvents())
                 .build();
     }

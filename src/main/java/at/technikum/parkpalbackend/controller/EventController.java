@@ -57,6 +57,14 @@ public class EventController {
         return eventMapper.toDto(eventService.findByEventId(eventId));
     }
 
+    @GetMapping("/parks/{parkId}")
+    public List<EventDto> getEventsByParkId(@PathVariable String parkId) {
+        List <Event> events = eventService.findByParkId(parkId);
+        return events.stream()
+                .map(getEventDto -> eventMapper.toDto(getEventDto))
+                .toList();
+    }
+
     @PutMapping("/{eventID}")
     public ResponseEntity<EventDto> updateEventDto(@RequestBody @Valid EventDto newEventDto,
                                                    @PathVariable String eventID) {

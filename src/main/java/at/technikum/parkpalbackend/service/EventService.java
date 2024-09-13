@@ -46,6 +46,14 @@ public class EventService {
                         .formatted(eventId)));
     }
 
+    public List<Event> findByParkId(String parkId) {
+        List<Event> events = eventRepository.findEventByParkId(parkId);
+        if (events == null || events.isEmpty()) {
+            throw new EntityNotFoundException("Failed find events with ID:%s.".formatted(parkId));
+        }
+        return events;
+    }
+
     public List<Event> findAllEventsCreatedByUser(String userId) {
         if (userService.findByUserId(userId) != null) {
             return eventRepository.findAllByCreatorId(userId);

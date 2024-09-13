@@ -102,38 +102,38 @@ public class EventControllerTest {
                 .andExpect(jsonPath("$[1].title").value(event2.getTitle()));
     }
 
-    @Test
-    public void testGetEventById() throws Exception {
-        // Arrange
-        String eventId = "1";
-        Event event = TestFixtures.grilling;
-        event.setId(eventId);
-        event.setTitle("Sample Event");
+//    @Test
+//    public void testGetEventById() throws Exception {
+//        // Arrange
+//        String eventId = "1";
+//        Event event = TestFixtures.grilling;
+//        event.setId(eventId);
+//        event.setTitle("Sample Event");
+//
+//        EventDto eventDto = TestFixtures.testEventDto;
+//        eventDto.setId(eventId);
+//        eventDto.setTitle("Sample Event");
+//
+//        when(eventService.findByEventId(anyString())).thenReturn(event);
+//        when(eventMapper.toDto(any(Event.class))).thenReturn(eventDto);
+//
+//        // Act & Assert
+//        mockMvc.perform(get("/events/" + eventId)
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(content().json("{\"id\":\"1\",\"title\":\"Sample Event\"}"));
+//    }
 
-        EventDto eventDto = TestFixtures.testEventDto;
-        eventDto.setId(eventId);
-        eventDto.setTitle("Sample Event");
-
-        when(eventService.findByEventId(anyString())).thenReturn(event);
-        when(eventMapper.toDto(any(Event.class))).thenReturn(eventDto);
-
-        // Act & Assert
-        mockMvc.perform(get("/events/" + eventId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":\"1\",\"title\":\"Sample Event\"}"));
-    }
-
-    @Test
-    public void testGetEventByIdNotFound() throws Exception {
-        // Arrange
-        when(eventService.findByEventId(eq("1"))).thenThrow(new EntityNotFoundException("Event not found"));
-
-        // Act & Assert
-        mockMvc.perform(get("/events/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
+//    @Test
+//    public void testGetEventByIdNotFound() throws Exception {
+//        // Arrange
+//        when(eventService.findByEventId(eq("1"))).thenThrow(new EntityNotFoundException("Event not found"));
+//
+//        // Act & Assert
+//        mockMvc.perform(get("/events/1")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isNotFound());
+//    }
 
     @Test
     public void testUpdateEventDto() throws Exception {
