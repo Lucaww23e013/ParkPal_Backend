@@ -113,6 +113,14 @@ public class TestFixtures {
         return eventList;
     }
 
+
+    private static List<EventDto> createEventDtoList() {
+        List<EventDto> eventDtoList = new ArrayList<>();
+        eventDtoList.add(createEventDto());
+        eventDtoList.add(createEventDto());
+        return eventDtoList;
+    }
+
     private static Event createEvent(String title) {
         Event event = Event.builder()
                 .title(title)
@@ -140,7 +148,7 @@ public class TestFixtures {
                 .name(parkDtoName)
                 .description("ParkDTO Test")
                 .address(parkAddress)
-                .parkEvents(createEventList())
+                .parkEventDtos(createEventDtoList())
                 .build();
     }
     // TODO Check me
