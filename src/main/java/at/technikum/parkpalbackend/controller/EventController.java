@@ -64,6 +64,7 @@ public class EventController {
         Event updatedEvent = eventService.updateEvent(eventID, mappedEntity);
         return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
     }
+
     @DeleteMapping("/{eventID}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteEventDto(@PathVariable @Valid String eventID) {

@@ -116,7 +116,25 @@ public class AuthController {
         return new TokenResponse(token);
     }
 
+    // for debugging
+    @GetMapping("/{userId}")
+    public String currentUserOrAdmin(@PathVariable String userId) {
+        return "Your are logged in as Current User or Admin";
+    }
 
+    // for debugging
+    @GetMapping("/user")
+    public String user() {
+        return "Your are logged in as an authenticated User";
+    }
+
+    // for debugging
+    @GetMapping("/admin")
+    public String admin() {
+        return "Your are logged in as Admin";
+    }
+
+    // for debugging
     @GetMapping("/me")
     public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
         try {

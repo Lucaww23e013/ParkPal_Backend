@@ -39,7 +39,6 @@ public class ParkController {
         return parkMapper.toCreateParkDto(park);
     }
 
-
     @GetMapping
     public List<ParkDto> getAllParks() {
         List<Park> allParks = parkService.findAllParks();
@@ -61,7 +60,6 @@ public class ParkController {
     }
 
     @DeleteMapping("/{parkId}")
-    //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
     public ParkDto deleteParkByParkById(@PathVariable @Valid String parkId){
         parkService.deleteParkByParkId(parkId);

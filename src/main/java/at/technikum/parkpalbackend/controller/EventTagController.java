@@ -30,6 +30,7 @@ public class EventTagController {
         this.eventService = eventService;
         this.eventTagMapper = eventTagMapper;
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventTagDto createEventTag(@RequestBody @Valid EventTagDto eventTagDto) {
@@ -45,6 +46,7 @@ public class EventTagController {
                 .map(eventTag -> eventTagMapper.toDto(eventTag))
                 .collect(Collectors.toSet());
     }
+
     @GetMapping("/{eventTagId}")
     public EventTagDto getEventTagById(@PathVariable @Valid String eventTagId) {
         EventTag eventTag = eventTagService.findTagById(eventTagId);

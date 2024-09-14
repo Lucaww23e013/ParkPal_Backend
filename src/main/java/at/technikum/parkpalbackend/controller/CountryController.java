@@ -24,7 +24,6 @@ public class CountryController {
     }
 
     @PostMapping
-    //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.CREATED)
     public CountryDto addCountries(@RequestBody @Valid CountryDto countryDto){
         Country country = countryMapper.toEntity(countryDto);
@@ -32,17 +31,18 @@ public class CountryController {
         return countryMapper.toDto(country);
     }
 
-
     @GetMapping()
     public List<CountryDto> getAllCountries() {
         List<Country> allCountries = countryService.findAllCountries();
         return allCountries.stream().map(country -> countryMapper.toDto(country)).toList();
     }
+
     @GetMapping("/{countryId}")
     public CountryDto getCountryById(@PathVariable @Valid String countryId){
         Country country = countryService.findCountryByCountryId(countryId);
         return countryMapper.toDto(country);
     }
+
     @PutMapping("/{countryId}")
     public CountryDto updateCountry(@PathVariable String countryId,
                                     @RequestBody @Valid CountryDto updatedCountryDto){
@@ -52,7 +52,6 @@ public class CountryController {
     }
 
     @DeleteMapping("/{countryId}")
-    //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.OK)
     public CountryDto deleteCountryByCountryId(@PathVariable @Valid String countryId){
         countryService.deleteCountryByCountryId(countryId);
