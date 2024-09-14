@@ -3,7 +3,6 @@ package at.technikum.parkpalbackend.service;
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
 import io.minio.*;
 import io.minio.errors.ErrorResponseException;
-import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +44,8 @@ public class MinioService {
                 throw new FileNotFoundException("File not found: " + objectName);
             }
             throw e;
+        } catch (Exception e) {
+            throw e;
         }
     }
 
@@ -55,16 +56,13 @@ public class MinioService {
                 .build()).contentType();
     }
 
-    public String getFileUrl(String fileName) throws Exception {
-        return minioClient.getPresignedObjectUrl(
-                GetPresignedObjectUrlArgs.builder()
-                        .bucket(bucketName)
-                        .object(fileName)
-                        .method(Method.GET)
-                        .build()
-        );
-    }
-/*
+    /*
+        * Deletes a file from the Minio bucket.
+        * ignores the governance mode.
+        * This means that the file will be deleted even if it is under retention.
+        * @param path The path of the file to be deleted.
+        * @throws RuntimeException If the file could not be deleted.
+     */
     public void deleteFile(String path) {
         try {
             if (path == null || path.isEmpty()) {
@@ -74,11 +72,25 @@ public class MinioService {
                     RemoveObjectArgs.builder()
                             .bucket(bucketName)
                             .object(path)
+                            .bypassGovernanceMode(true)
                             .build()
             );
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ErrorResponseException e) {
+            if (!e.errorResponse().code().equals("NoSuchKey")) {
+                throw new RuntimeException("Failed to delete file: " + path, e);
+            }
+        }catch (Exception e) {
+            throw new RuntimeException("Failed to delete file: " + path, e);
         }
     }
- */
+
+    public boolean doesFileExist(String objectName) {
+        try {
+            minioClient.statObject(
+                    StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
