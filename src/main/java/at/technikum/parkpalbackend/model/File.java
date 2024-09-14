@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend.model;
 
+import at.technikum.parkpalbackend.listener.FileEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 
 @Entity
+@EntityListeners(FileEntityListener.class)
 public class File {
 
     @Version
