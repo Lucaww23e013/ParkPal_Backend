@@ -32,7 +32,6 @@ public class CustomAuthorizationManager
     }
 
     public boolean isCurrentUserOrAdmin(Authentication authentication, String userId) {
-        System.out.println("2222");  // Debug print statement
 
         if (!(authentication.getPrincipal() instanceof UserPrincipal)) {
             // If the principal is not UserPrincipal, it could be anonymous or invalid
