@@ -130,16 +130,11 @@ public class WebSecurityConfig {
             AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager
     ) throws Exception {
         http.authorizeHttpRequests(registry -> registry
-                .requestMatchers(
-                        "/auth/login",
-                        "/auth/me",
-                        "/auth/refresh",
-                        "/auth/register"
-                ).permitAll()
                 .requestMatchers("/auth/logout", "/auth/user").authenticated()
                 .requestMatchers("/auth/admin").hasAuthority("ADMIN")
-                .requestMatchers("/auth/{userId}")
+                .requestMatchers("/auth/currentUserOrAdmin/{userId}")
                 .access(customAuthorizationManager)
+                .requestMatchers("auth/**").permitAll()
         );
     }
 
@@ -152,6 +147,7 @@ public class WebSecurityConfig {
     private void configureErrorEndpoints(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(registry -> registry
                 .requestMatchers("/error").permitAll()
+                .anyRequest().authenticated()
         );
     }
 

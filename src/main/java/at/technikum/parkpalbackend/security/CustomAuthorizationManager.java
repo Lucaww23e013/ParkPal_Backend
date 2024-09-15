@@ -26,7 +26,6 @@ public class CustomAuthorizationManager
 
         String userId = object.getVariables().get("userId");
 
-        // Ensure that isCurrentUserOrAdmin is correctly checking the userId
         boolean isAuthorized = isCurrentUserOrAdmin(authentication, userId);
         return new AuthorizationDecision(isAuthorized);
     }
