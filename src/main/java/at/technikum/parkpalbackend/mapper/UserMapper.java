@@ -1,12 +1,10 @@
 package at.technikum.parkpalbackend.mapper;
 
-import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
-import at.technikum.parkpalbackend.dto.userdtos.UserDto;
-import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
-import at.technikum.parkpalbackend.dto.userdtos.UserResponseDto;
+import at.technikum.parkpalbackend.dto.userdtos.*;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.service.CountryService;
+import at.technikum.parkpalbackend.service.EventService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
     private final CountryService countryService;
+    private final EventService eventService;
 
-    public UserMapper(CountryService countryService) {
+    public UserMapper(CountryService countryService, EventService eventService) {
         this.countryService = countryService;
+        this.eventService = eventService;
     }
     public UserDto toDto(User user) {
         if (user == null) {
@@ -53,6 +53,22 @@ public class UserMapper {
                 .country(countryService.findCountryByCountryId(userDto.getCountryId()))
                 .role(userDto.getRole())
                 .joinedEvents(userDto.getJoinedEvents())
+                .build();
+    }
+
+    public User toEntity(UpdateUserDto updateUserDto) {
+        if (updateUserDto == null) {
+            throw new IllegalArgumentException("updateUserDto  or its fields cannot be null");
+        }
+        return User.builder()
+                .gender(updateUserDto.getGender())
+                .salutation(updateUserDto.getSalutation())
+                .userName(updateUserDto.getUserName())
+                .firstName(updateUserDto.getFirstName())
+                .lastName(updateUserDto.getLastName())
+                .email(updateUserDto.getEmail())
+                .country(countryService.findCountryByCountryId(updateUserDto.getCountryId()))
+                .joinedEvents(eventService.findAllEventsJoinedByUser(updateUserDto.getId()))
                 .build();
     }
 

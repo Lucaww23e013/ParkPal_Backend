@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
+import at.technikum.parkpalbackend.dto.userdtos.UpdateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.mapper.UserMapper;
@@ -60,9 +61,11 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public UserDto updateUser(@PathVariable String id, @RequestBody @Valid UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        user = userService.update(id, user);
+    public UserDto updateUser(@PathVariable String userId,
+                              @RequestBody @Valid UpdateUserDto updateUserDto) {
+        User user = userMapper.toEntity(updateUserDto);
+
+        user = userService.update(userId, user);
 
         return userMapper.toDto(user);
     }

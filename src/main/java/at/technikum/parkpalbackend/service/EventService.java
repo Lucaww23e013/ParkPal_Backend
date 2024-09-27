@@ -53,6 +53,13 @@ public class EventService {
         return Collections.emptyList();
     }
 
+    public List<Event> findAllEventsJoinedByUser(String userId) {
+        if (userService.findByUserId(userId) != null) {
+            return eventRepository.findAllByJoinedUsersId(userId);
+        }
+        return Collections.emptyList();
+    }
+
     public String findEventCreatorUserId(String eventId) {
         Event event = findByEventId(eventId);
         if (event != null) {
