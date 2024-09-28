@@ -99,7 +99,9 @@ public class UserService {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User with Id %s not found "
                         .formatted(userId)));
-        BeanUtils.copyProperties(newUser, existingUser, userId);
+        BeanUtils.copyProperties(newUser, existingUser,
+                userId, "id", "password", "role");
+
         return userRepository.save(existingUser);
     }
 
