@@ -3,6 +3,7 @@ package at.technikum.parkpalbackend.service;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.exception.UserWithUserNameOrEmailAlreadyExists;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.persistence.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -123,21 +124,20 @@ public class UserService {
     }
 
     @Transactional
-    public void lockUser(String userId) {
-        setUserLockStatus(userId, true);
-    }
-
-    @Transactional
-    public void unlockUser(String userId) {
-        setUserLockStatus(userId, false);
-    }
-
-    private void setUserLockStatus(String userId, boolean locked) {
+    public void setUserLockStatus(String userId, boolean isLocked) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User with Id %s not found "
                         .formatted(userId)));
-        user.setLocked(locked);
+        user.setLocked(isLocked);
         userRepository.save(user);
     }
 
+    @Transactional
+    public void updateUserRole(String userId, Role role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with Id %s not found "
+                        .formatted(userId)));
+        user.setRole(role);
+        userRepository.save(user);
+    }
 }

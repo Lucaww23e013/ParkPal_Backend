@@ -75,16 +75,4 @@ public class UserController {
         userService.delete(userId);
     }
 
-    @PostMapping("/{userId}/lock")
-    @ResponseStatus(HttpStatus.OK)
-    public void lockUser(@PathVariable String userId) {
-        userService.lockUser(userId);
-    }
-
-    @PostMapping("/{userId}/unlock")
-    @ResponseStatus(HttpStatus.OK)
-    public void unlockUser(@PathVariable String userId) {
-        userService.unlockUser(userId);
-    }
-
 }
