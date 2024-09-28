@@ -18,23 +18,27 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private final boolean locked;
+
     private final Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(String id,
-                         String username,
+                         String username, boolean locked,
                          Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
+        this.locked = locked;
         this.authorities = authorities;
     }
 
     public UserPrincipal(String id,
                          String username,
-                         String password,
+                         String password, boolean locked,
                          Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.locked = locked;
         this.authorities = authorities;
     }
 
@@ -60,7 +64,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
 
     @Override

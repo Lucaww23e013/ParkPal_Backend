@@ -56,6 +56,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
 
+                .requestMatchers("/users/{userId}/**").hasAuthority("ADMIN")
                 .requestMatchers("/users/**").permitAll()
                 .requestMatchers("/countries/**").permitAll()
                 .requestMatchers("/events/**").permitAll()

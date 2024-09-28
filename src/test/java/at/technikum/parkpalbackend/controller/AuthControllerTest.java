@@ -20,11 +20,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthControllerTest {
@@ -87,6 +84,7 @@ public class AuthControllerTest {
                 "1",
                 user.getUserName(),
                 loginRequest.getPassword(),
+                false,
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
         );
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
