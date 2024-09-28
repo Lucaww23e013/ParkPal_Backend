@@ -1,7 +1,7 @@
 package at.technikum.parkpalbackend.security.principal;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +14,7 @@ public class JwtToPrincipalConverter {
         return new UserPrincipal(
                 jwt.getSubject(),
                 jwt.getClaim("username").asString(),
+                false,
                 extractAuthoritiesFromClaim(jwt)
         );
     }

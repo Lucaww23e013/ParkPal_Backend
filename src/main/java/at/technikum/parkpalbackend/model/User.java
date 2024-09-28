@@ -58,6 +58,9 @@ public class User {
     @Size(min = 12, message = "Password must be at least 12 characters long")
     private String password;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean locked;
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "country_id", foreignKey = @ForeignKey(name = "fk_user_2_country"))
     private Country country;
