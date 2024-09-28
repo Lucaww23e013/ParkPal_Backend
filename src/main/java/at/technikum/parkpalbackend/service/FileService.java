@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -81,6 +83,13 @@ public class FileService {
         }
     }
 
+    public List<File> findAllFilesByIds(List<String> fileIds) {
+        if (fileIds == null || fileIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return fileRepository.findAllById(fileIds);
+    }
+
 
     @Nullable
     private ResponseEntity<String> checkMaxFileSizeAndSendResponse(MultipartFile file) {
@@ -136,24 +145,15 @@ public class FileService {
         fileRepository.save(fileDetails);
     }
 
-
-    /*
-    public ResponseEntity<String> deleteFile(String fileId) {
+    public ResponseEntity<String> deleteFileByExternalId(String externalId) {
         try {
-            // Find the file metadata by fileId
-            if (fileId == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Invalid file ID");
-            }
-            File fileMetadata = fileMetadataRepository.findById(fileId)
-                    .orElseThrow(() -> new FileNotFoundException("File not found: %s"
-                    .formatted(fileId)));
+            File fileDetails = fileRepository.findByExternalId(externalId)
+                    .orElseThrow(() -> new FileNotFoundException(
+                            "File not found: " + externalId));
 
-            // Delete the file from MinIO
-            minioService.deleteFile(fileMetadata.getPath());
-
-            // Remove the file metadata from the database
-            fileMetadataRepository.delete(fileMetadata);
+            // The file from minio will be automatically deleted by the FileEntityListener
+            // when the file is removed from the database
+            fileRepository.delete(fileDetails);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body("File deleted successfully.");
@@ -165,5 +165,8 @@ public class FileService {
                     .body("File deletion failed.");
         }
     }
-     */
+
+    public File save(File file) {
+        return fileRepository.save(file);
+    }
 }
