@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class FileService {
@@ -86,6 +83,14 @@ public class FileService {
     public List<File> findAllFilesByIds(List<String> fileIds) {
         if (fileIds == null || fileIds.isEmpty()) {
             return new ArrayList<>();
+        }
+        return fileRepository.findAllById(fileIds);
+    }
+
+
+    public List<File> findFilesByIds(List<String> fileIds) {
+        if (fileIds == null || fileIds.isEmpty()) {
+            return Collections.emptyList();
         }
         return fileRepository.findAllById(fileIds);
     }

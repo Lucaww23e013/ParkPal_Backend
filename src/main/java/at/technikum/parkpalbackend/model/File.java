@@ -38,8 +38,16 @@ public class File {
     private LocalDateTime uploadDate = LocalDateTime.now();
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_2_file"))
     private User user;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fk_event_2_file"))
+    private Event event;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "park_id", foreignKey = @ForeignKey(name = "fk_park_2_file"))
+    private Park park;
 
     private boolean assigned;
 }

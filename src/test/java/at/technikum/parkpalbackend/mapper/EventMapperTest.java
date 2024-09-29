@@ -4,17 +4,14 @@ import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.service.EventService;
-import at.technikum.parkpalbackend.service.EventTagService;
-import at.technikum.parkpalbackend.service.ParkService;
-import at.technikum.parkpalbackend.service.UserService;
+import at.technikum.parkpalbackend.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EventMapperTest {
 
@@ -33,10 +30,13 @@ class EventMapperTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private FileService fileService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        eventMapper = new EventMapper(parkService, userService, eventService, eventTagService);
+        eventMapper = new EventMapper(parkService, userService, eventService, eventTagService, fileService);
     }
 
     @Test

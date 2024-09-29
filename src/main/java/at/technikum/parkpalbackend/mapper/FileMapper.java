@@ -1,9 +1,7 @@
 package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.dto.FileDto;
-
 import at.technikum.parkpalbackend.model.File;
-import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.UserService;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileMapper {
 
-    public UserService userService;
-    public FileService fileService;
+    private final UserService userService;
+
+    public FileMapper(UserService userService) {
+        this.userService = userService;
+    }
 
     public FileDto toDto(File file) {
         if (file == null) {
@@ -20,7 +21,8 @@ public class FileMapper {
         }
         return FileDto.builder()
                 .id(file.getId())
-                .userId(file.getUser().getId())
+                .userId(file.getUser() != null ?
+                        file.getUser().getId() : null)
                 .uploadDate(file.getUploadDate())
                 .build();
     }

@@ -5,18 +5,23 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.service.CountryService;
 import at.technikum.parkpalbackend.service.EventService;
+import at.technikum.parkpalbackend.service.FileService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 
 @Component
 public class UserMapper {
     private final CountryService countryService;
     private final EventService eventService;
+    private final FileService fileService;
 
-    public UserMapper(CountryService countryService, EventService eventService) {
+    public UserMapper(CountryService countryService, EventService eventService, FileService fileService) {
         this.countryService = countryService;
         this.eventService = eventService;
+        this.fileService = fileService;
     }
     public UserDto toDto(User user) {
         if (user == null) {
@@ -104,6 +109,7 @@ public class UserMapper {
                 .role(Role.USER)
                 .password(new BCryptPasswordEncoder().encode(createUserDto.getPassword()))
                 .country(countryService.findCountryByCountryId(createUserDto.getCountryId()))
+                .media(fileService.findAllFilesByIds(List.of(createUserDto.getProfilePictureId())))
                 .build();
     }
 

@@ -12,6 +12,7 @@ entity User {
     - lastName: String
     - email: String
     - password: String
+    - locked: boolean
     - country: Country
     - role: Role
     - joinedEvents: List<Event>
