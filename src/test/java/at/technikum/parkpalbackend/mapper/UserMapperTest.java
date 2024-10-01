@@ -8,7 +8,6 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.CountryService;
 import at.technikum.parkpalbackend.service.FileService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +19,6 @@ import java.util.UUID;
 import static org.junit.Assert.assertThrows;
 
 //@SpringBootTest
-@Disabled
 @ExtendWith(MockitoExtension.class)
 public class UserMapperTest {
 

@@ -7,6 +7,7 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
 import at.technikum.parkpalbackend.security.jwt.JwtIssuer;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
+import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,9 @@ public class AuthControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private FileService fileService;
 
     @Mock
     private HttpServletResponse response;

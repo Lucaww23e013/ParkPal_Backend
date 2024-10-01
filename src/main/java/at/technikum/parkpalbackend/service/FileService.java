@@ -3,6 +3,7 @@ package at.technikum.parkpalbackend.service;
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
 import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.persistence.FileRepository;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +45,7 @@ public class FileService {
     }
 
     @Transactional
-    public ResponseEntity<String> uploadFile(MultipartFile file) {
+    public ResponseEntity<String> uploadFile(MultipartFile file, FileType fileType) {
         try {
             String fileName = getFileName(file);
             if (fileName == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -59,11 +60,10 @@ public class FileService {
 
             String uuid = UUID.randomUUID().toString();
             String objectName = uploadToMinio(file, folderName, uuid);
-            saveFileDetails(fileName, objectName, uuid);
+            saveFileDetails(fileName, objectName, uuid, fileType);
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body("File uploaded successfully. File ExternalId: %s"
-                    .formatted(objectName.split("/")[1]));
+                    .body(objectName.split("/")[1]);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("File upload failed.");
@@ -168,17 +168,25 @@ public class FileService {
     }
 
     @Transactional
-    public void assignProfilePicture(User user, String profilePictureId) {
+    public void assignProfilePicture(User user, String profilePictureId, boolean saveUser) {
         if (profilePictureId != null && !profilePictureId.isEmpty()) {
-            File profilePicture = this
-                    .retrieveAndAssignFileById(profilePictureId, user.getId(), null, null, true);
+            // Remove existing profile picture if any
             List<File> media = user.getMedia();
-            if (media == null) {
+            if (media != null) {
+                media.removeIf(file -> file.getFileType() == FileType.PROFILE_PICTURE);
+            } else {
                 media = new ArrayList<>();
             }
+
+            // Assign new profile picture
+            File profilePicture = this
+                    .retrieveAndAssignFileById(profilePictureId, user.getId(), null, null, true);
+            profilePicture.setFileType(FileType.PROFILE_PICTURE);
             media.add(profilePicture);
             user.setMedia(media);
-            userService.save(user);
+            if (saveUser) {
+                userService.save(user);
+            }
         }
     }
 
@@ -217,12 +225,16 @@ public class FileService {
         return file;
     }
 
-    private void saveFileDetails(String fileName, String objectName, String uuid) {
+    private void saveFileDetails(String fileName,
+                                 String objectName,
+                                 String uuid,
+                                 FileType fileType) {
         File fileDetails = File.builder()
                 .path(objectName)
                 .assigned(false)
                 .externalId(uuid)
                 .filename(fileName)
+                .fileType(fileType != null ? fileType : FileType.OTHER)
                 .build();
         fileRepository.save(fileDetails);
     }

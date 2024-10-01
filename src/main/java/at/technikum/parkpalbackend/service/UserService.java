@@ -5,7 +5,6 @@ import at.technikum.parkpalbackend.exception.UserWithUserNameOrEmailAlreadyExist
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.persistence.UserRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +50,7 @@ public class UserService {
         }
     }
 
-    @Transactional(readOnly = true)
+
     public User findByUserId(String userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("User with Id %s not found "
@@ -105,37 +104,37 @@ public class UserService {
 
     @Transactional
     public User update(String userId, User newUser) {
-        User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with Id %s not found "
-                        .formatted(userId)));
-        BeanUtils.copyProperties(newUser, existingUser,
-                userId, "id", "password", "role");
+        User existingUser = findByUserId(userId);
+        // Update fields of the existing user
+        existingUser.setGender(newUser.getGender());
+        existingUser.setSalutation(newUser.getSalutation());
+        existingUser.setUserName(newUser.getUserName());
+        existingUser.setFirstName(newUser.getFirstName());
+        existingUser.setLastName(newUser.getLastName());
+        existingUser.setEmail(newUser.getEmail());
+        existingUser.setCountry(newUser.getCountry());
+        existingUser.setJoinedEvents(newUser.getJoinedEvents());
+        existingUser.setMedia(newUser.getMedia());
 
         return userRepository.save(existingUser);
     }
 
     @Transactional
     public void delete(String userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with Id %s not found "
-                .formatted(userId)));
+        User user = findByUserId(userId);
         userRepository.delete(user);
     }
 
     @Transactional
     public void setUserLockStatus(String userId, boolean isLocked) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with Id %s not found "
-                        .formatted(userId)));
+        User user = findByUserId(userId);
         user.setLocked(isLocked);
         userRepository.save(user);
     }
 
     @Transactional
     public void updateUserRole(String userId, Role role) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with Id %s not found "
-                        .formatted(userId)));
+        User user = findByUserId(userId);
         user.setRole(role);
         userRepository.save(user);
     }

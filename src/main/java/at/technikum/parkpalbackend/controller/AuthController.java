@@ -59,9 +59,8 @@ public class AuthController {
         user = userService.save(user);
 
         String profilePictureId = createUserDto.getProfilePictureId();
-        if (profilePictureId != null && !profilePictureId.isEmpty())  {
-            fileService.assignProfilePicture(user, profilePictureId);
-        }
+        fileService.assignProfilePicture(user, profilePictureId, true);
+
         return ResponseEntity.ok(userMapper.toCreateUserDto(user));
     }
 

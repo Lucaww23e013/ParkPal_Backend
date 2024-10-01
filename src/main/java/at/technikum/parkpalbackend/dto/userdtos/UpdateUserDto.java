@@ -45,4 +45,6 @@ public class UpdateUserDto {
     @ToString.Exclude
     private List<String> joinedEventsIds;
 
+    private String profilePictureId;
+
 }
