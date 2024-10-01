@@ -1,11 +1,16 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
-import at.technikum.parkpalbackend.model.*;
-import at.technikum.parkpalbackend.model.enums.Role;
+import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.enums.Gender;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import at.technikum.parkpalbackend.model.enums.Role;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +55,11 @@ public class UserDto {
     private Role role;
 
     @ToString.Exclude
+    @Builder.Default
     private List<Event> joinedEvents = new ArrayList<>();
+
+    @ToString.Exclude
+    @Builder.Default
+    private List<String> mediaIds = new ArrayList<>();
 
 }

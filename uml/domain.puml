@@ -78,7 +78,7 @@ entity Country {
     - iso2Code: String
 }
 
-User "1..1" <-left- Event : created by
+User "n..1" <-left- Event : created by
 User -left- "n..m" Event : joined By
 Event --> "1..n" Park : has <
 Event "n..m" -- EventTag

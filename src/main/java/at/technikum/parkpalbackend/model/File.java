@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.model;
 
 import at.technikum.parkpalbackend.listener.FileEntityListener;
+import at.technikum.parkpalbackend.model.enums.FileType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -53,4 +54,8 @@ public class File {
     private Park park;
 
     private boolean assigned;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private FileType fileType = FileType.OTHER;
 }

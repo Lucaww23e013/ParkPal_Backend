@@ -61,13 +61,13 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public UserDto updateUser(@PathVariable String userId,
+    public UpdateUserDto updateUser(@PathVariable String userId,
                               @RequestBody @Valid UpdateUserDto updateUserDto) {
         User user = userMapper.toEntity(updateUserDto);
 
         user = userService.update(userId, user);
 
-        return userMapper.toDto(user);
+        return userMapper.toUpdateDto(user);
     }
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)

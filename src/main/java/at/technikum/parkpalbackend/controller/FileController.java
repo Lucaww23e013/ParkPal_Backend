@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend.controller;
 
+import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.service.FileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,11 @@ public class FileController {
     }
 
     @PostMapping
-    public ResponseEntity<String> uploadPictureOrVideo(@RequestParam("file") MultipartFile file) {
-        return fileService.uploadFile(file);
+    public ResponseEntity<String> uploadPictureOrVideo(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "fileType",
+                    required = false, defaultValue = "OTHER") FileType fileType) {
+        return fileService.uploadFile(file, fileType);
     }
 
     @GetMapping("/{externalId}")
