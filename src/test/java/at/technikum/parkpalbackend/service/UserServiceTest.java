@@ -11,10 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
@@ -144,14 +143,14 @@ class UserServiceTest {
     }
 
     @Test
-    void whenCreateUser_thenReturnUser() {
+    void whenSaveUser_thenReturnUser() {
         //Arrange
         User user = TestFixtures.adminUser;
         user.setId(UUID.randomUUID().toString());
         when(userRepository.save(user)).thenReturn(user);
 
         //Act
-        User savedUser = userService.create(user);
+        User savedUser = userService.save(user);
 
         //Assert
         Assertions.assertNotNull(savedUser);
@@ -161,12 +160,12 @@ class UserServiceTest {
     }
 
     @Test
-    void whenUserToCreateNull_thenThrowIllegalArgumentException() {
+    void whenUserToSaveNull_thenThrowIllegalArgumentException() {
         // Arrange
         User user = null;
 
         // Act & Assert
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userService.create(user));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userService.save(user));
         verify(userRepository, never()).save(any(User.class));
     }
 

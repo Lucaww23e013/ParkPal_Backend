@@ -74,15 +74,37 @@ public class User {
                     foreignKey = @ForeignKey(name = "fk_joined_user_user")),
             inverseJoinColumns = @JoinColumn(name = "event_id",
                     foreignKey = @ForeignKey(name = "fk_joined_user_event")))
+    @Builder.Default
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator")
+    @Builder.Default
     @ToString.Exclude
     private List<Event> createdEvents = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
+    @ToString.Exclude
+    private List<File> media = new ArrayList<>();
+
     public User addJoinedEvents(Event... events) {
-        Arrays.stream(events).forEach(event -> this.joinedEvents.add(event));
+        this.joinedEvents.addAll(Arrays.asList(events));
+        return this;
+    }
+
+    public User removeJoinedEvents(Event... events) {
+        Arrays.stream(events).forEach(event -> this.joinedEvents.remove(event));
+        return this;
+    }
+
+    public User addMedia(File... media) {
+        this.media.addAll(Arrays.asList(media));
+        return this;
+    }
+
+    public User removeMedia(File... media) {
+        Arrays.stream(media).forEach(med -> this.media.remove(med));
         return this;
     }
 

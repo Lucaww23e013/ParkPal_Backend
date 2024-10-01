@@ -1,7 +1,6 @@
 package at.technikum.parkpalbackend.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,9 +16,11 @@ public class FileDto {
 
     private String id;
 
-    @NotNull(message="File must belong to a User. Please add a User")
+    //@NotNull(message="File must belong to a User. Please add a User")
     private String userId;
 
-    @NotNull(message = "File must have an uploadDate")
-    private LocalDateTime uploadDate;
+    private String evenId;
+
+    @Builder.Default
+    private LocalDateTime uploadDate = LocalDateTime.now();
 }

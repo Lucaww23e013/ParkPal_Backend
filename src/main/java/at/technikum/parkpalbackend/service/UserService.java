@@ -60,8 +60,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<User> findUsersByIds(List<String> userIds) {
-        List<User> users = userRepository.findAllById(userIds); // Find all users by IDs
-        return users;
+        return userRepository.findAllById(userIds);
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +73,7 @@ public class UserService {
     }
 
     @Transactional
-    public User create(User user) {
+    public User save(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }

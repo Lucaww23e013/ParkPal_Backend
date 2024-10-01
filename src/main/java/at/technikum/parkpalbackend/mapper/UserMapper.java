@@ -8,15 +8,19 @@ import at.technikum.parkpalbackend.service.EventService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 
 @Component
 public class UserMapper {
     private final CountryService countryService;
     private final EventService eventService;
 
-    public UserMapper(CountryService countryService, EventService eventService) {
+    public UserMapper(CountryService countryService,
+                      EventService eventService) {
         this.countryService = countryService;
         this.eventService = eventService;
+
     }
     public UserDto toDto(User user) {
         if (user == null) {
@@ -86,6 +90,8 @@ public class UserMapper {
                 .email(user.getEmail())
                 .countryId(user.getCountry().getId())
                 .password(user.getPassword())
+                .profilePictureId(user.getMedia().isEmpty()
+                        ? null : user.getMedia().getFirst().getId())
                 .build();
     }
     public User toEntity(CreateUserDto createUserDto) {
@@ -104,6 +110,7 @@ public class UserMapper {
                 .role(Role.USER)
                 .password(new BCryptPasswordEncoder().encode(createUserDto.getPassword()))
                 .country(countryService.findCountryByCountryId(createUserDto.getCountryId()))
+                .media(new ArrayList<>())
                 .build();
     }
 

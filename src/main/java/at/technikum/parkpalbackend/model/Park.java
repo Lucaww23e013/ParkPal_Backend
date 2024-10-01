@@ -33,15 +33,17 @@ public class Park {
     private Address address;
 
     @OneToMany(mappedBy = "park", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
     @ToString.Exclude
     private List<Event> parkEvents = new ArrayList<>();
 
-//    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    @ToString.Exclude
-//    private List<File> parkFiles = new ArrayList<>();
+    @OneToMany(mappedBy = "park", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Builder.Default
+    @ToString.Exclude
+    private List<File> media = new ArrayList<>();
 
     public Park addParkEvents(Event... events) {
-        Arrays.stream(events).forEach(event -> this.parkEvents.add(event));
+        this.parkEvents.addAll(Arrays.asList(events));
         return this;
     }
 
@@ -50,14 +52,14 @@ public class Park {
         return this;
     }
 
-//    public Park addParkMedia(File... media) {
-//        Arrays.stream(media).forEach(med -> this.parkFiles.add(med));
-//        return this;
-//    }
-//
-//    public Park removeParkMedia(File... media) {
-//        Arrays.stream(media).forEach(med -> this.parkFiles.remove(med));
-//        return this;
-//    }
+    public Park addMedia(File... media) {
+        this.media.addAll(Arrays.asList(media));
+        return this;
+    }
+
+    public Park removeMedia(File... media) {
+        Arrays.stream(media).forEach(med -> this.media.remove(med));
+        return this;
+    }
 
 }

@@ -20,7 +20,8 @@ public class ParkService {
     }
     public Park findParkByParkId(String parkId) {
         return parkRepository.findById(parkId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Park with id %s not found "
+                        .formatted(parkId)));
     }
 
     public Park save(Park park) {

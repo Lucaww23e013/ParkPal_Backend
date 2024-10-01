@@ -31,7 +31,7 @@ public class Address {
     private String city;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_id", foreignKey = @ForeignKey(name = "fk_address_2_country"))
     private Country country;
 
 }

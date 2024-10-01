@@ -2,6 +2,7 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
 import at.technikum.parkpalbackend.model.File;
+import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.FileRepository;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,18 +12,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class FileService {
 
     private final MinioService minioService;
+    private final EventService eventService;
+    private final ParkService parkService;
+    private final UserService userService;
     private final FileRepository fileRepository;
     private static final String[] VALID_PICTURE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"};
     private static final String[] VALID_VIDEO_EXTENSIONS = {"mp4", "avi", "mov", "mkv", "webm"};
@@ -31,11 +33,17 @@ public class FileService {
     private long maxFileSizeMb;
 
     public FileService(MinioService minioService,
+                       EventService eventService,
+                       ParkService parkService, UserService userService,
                        FileRepository fileRepository) {
         this.minioService = minioService;
+        this.eventService = eventService;
+        this.parkService = parkService;
+        this.userService = userService;
         this.fileRepository = fileRepository;
     }
 
+    @Transactional
     public ResponseEntity<String> uploadFile(MultipartFile file) {
         try {
             String fileName = getFileName(file);
@@ -54,7 +62,7 @@ public class FileService {
             saveFileDetails(fileName, objectName, uuid);
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body("File uploaded successfully. FileID: %s"
+                    .body("File uploaded successfully. File ExternalId: %s"
                     .formatted(objectName.split("/")[1]));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -62,6 +70,7 @@ public class FileService {
         }
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity<?> downloadFile(String externalId) {
         try {
             File fileDetails = fileRepository.findByExternalId(externalId)
@@ -83,9 +92,10 @@ public class FileService {
         }
     }
 
-    public List<File> findAllFilesByIds(List<String> fileIds) {
+    @Transactional(readOnly = true)
+    public List<File> findFilesByIds(List<String> fileIds) {
         if (fileIds == null || fileIds.isEmpty()) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         return fileRepository.findAllById(fileIds);
     }
@@ -135,16 +145,7 @@ public class FileService {
         return objectName;
     }
 
-    private void saveFileDetails(String fileName, String objectName, String uuid) {
-        File fileDetails = File.builder()
-                .path(objectName)
-                .assigned(false)
-                .externalId(uuid)
-                .filename(fileName)
-                .build();
-        fileRepository.save(fileDetails);
-    }
-
+    @Transactional
     public ResponseEntity<String> deleteFileByExternalId(String externalId) {
         try {
             File fileDetails = fileRepository.findByExternalId(externalId)
@@ -166,7 +167,63 @@ public class FileService {
         }
     }
 
+    @Transactional
+    public void assignProfilePicture(User user, String profilePictureId) {
+        if (profilePictureId != null && !profilePictureId.isEmpty()) {
+            File profilePicture = this
+                    .retrieveAndAssignFileById(profilePictureId, user.getId(), null, null, true);
+            List<File> media = user.getMedia();
+            if (media == null) {
+                media = new ArrayList<>();
+            }
+            media.add(profilePicture);
+            user.setMedia(media);
+            userService.save(user);
+        }
+    }
+
+    @Transactional
     public File save(File file) {
         return fileRepository.save(file);
+    }
+
+    private File retrieveAndAssignFileById(String fileId,
+                                           String userId,
+                                           String eventId,
+                                           String parkId,
+                                           boolean throwException) {
+        if (fileId == null || fileId.isEmpty()) {
+            return null;
+        }
+
+        Optional<File> optionalFile = fileRepository.findByExternalId(fileId);
+        if (optionalFile.isEmpty() && throwException) {
+            throw new FileNotFoundException("File with id %s not found".formatted(fileId));
+        }
+
+        File file = optionalFile.orElse(null);
+        if (file != null) {
+            if (eventId != null) {
+                file.setEvent(eventService.findByEventId(eventId));
+            }
+            if (parkId != null) {
+                file.setPark(parkService.findParkByParkId(parkId));
+            }
+            if (userId != null) {
+                file.setUser(userService.findByUserId(userId));
+            }
+        }
+
+        return file;
+    }
+
+    private void saveFileDetails(String fileName, String objectName, String uuid) {
+        File fileDetails = File.builder()
+                .path(objectName)
+                .assigned(false)
+                .externalId(uuid)
+                .filename(fileName)
+                .build();
+        fileRepository.save(fileDetails);
     }
 }

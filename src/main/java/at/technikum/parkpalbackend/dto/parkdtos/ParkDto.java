@@ -2,6 +2,7 @@ package at.technikum.parkpalbackend.dto.parkdtos;
 
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Address;
+import at.technikum.parkpalbackend.model.File;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -33,6 +34,6 @@ public class ParkDto {
     @ToString.Exclude
     private List<EventDto> parkEventDtos = new ArrayList<>();
 
-//    @ToString.Exclude
-//    private List<File> parkFiles = new ArrayList<>();
+    @ToString.Exclude
+    private List<File> parkFiles = new ArrayList<>();
 }
