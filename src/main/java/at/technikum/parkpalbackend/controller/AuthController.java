@@ -10,6 +10,7 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
 import at.technikum.parkpalbackend.security.jwt.JwtIssuer;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
+import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.UserService;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.Cookie;
@@ -34,19 +35,20 @@ public class AuthController {
     private final JwtIssuer jwtIssuer;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+    private final FileService fileService;
     private final UserMapper userMapper;
     private final JwtDecoder jwtDecoder;
 
     public AuthController(
             JwtIssuer jwtIssuer,
             AuthenticationManager authenticationManager,
-            UserService userService,
+            UserService userService, FileService fileService,
             UserMapper userMapper,
-            JwtDecoder jwtDecoder
-    ) {
+            JwtDecoder jwtDecoder) {
         this.jwtIssuer = jwtIssuer;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.fileService = fileService;
         this.userMapper = userMapper;
         this.jwtDecoder = jwtDecoder;
     }
@@ -54,8 +56,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid CreateUserDto createUserDto) {
         User user = userMapper.toEntity(createUserDto);
-        user = userService.create(user);
+        user = userService.save(user);
 
+        String profilePictureId = createUserDto.getProfilePictureId();
+        if (profilePictureId != null && !profilePictureId.isEmpty())  {
+            fileService.assignProfilePicture(user, profilePictureId);
+        }
         return ResponseEntity.ok(userMapper.toCreateUserDto(user));
     }
 

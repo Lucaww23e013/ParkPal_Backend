@@ -3,6 +3,8 @@ package at.technikum.parkpalbackend.model;
 import at.technikum.parkpalbackend.listener.FileEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
@@ -39,6 +41,7 @@ public class File {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_2_file"))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private User user;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

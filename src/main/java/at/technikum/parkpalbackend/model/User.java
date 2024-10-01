@@ -74,10 +74,12 @@ public class User {
                     foreignKey = @ForeignKey(name = "fk_joined_user_user")),
             inverseJoinColumns = @JoinColumn(name = "event_id",
                     foreignKey = @ForeignKey(name = "fk_joined_user_event")))
+    @Builder.Default
     @ToString.Exclude
     private List<Event> joinedEvents = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator")
+    @Builder.Default
     @ToString.Exclude
     private List<Event> createdEvents = new ArrayList<>();
 

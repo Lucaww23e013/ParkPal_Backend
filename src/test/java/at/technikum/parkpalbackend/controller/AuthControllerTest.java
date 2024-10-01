@@ -60,11 +60,11 @@ public class AuthControllerTest {
                 .password("testPassword241!34")
                 .build();
         when(userMapper.toEntity(any(CreateUserDto.class))).thenReturn(user);
-        when(userService.create(any(User.class))).thenReturn(user);
+        when(userService.save(any(User.class))).thenReturn(user);
         // Act
         authController.register(createUserDto);
         // Assert
-        verify(userService, times(1)).create(any(User.class));
+        verify(userService, times(1)).save(any(User.class));
     }
 
     @Test
