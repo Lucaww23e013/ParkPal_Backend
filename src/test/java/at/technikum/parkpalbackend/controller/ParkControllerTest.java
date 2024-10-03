@@ -17,7 +17,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Collections;
@@ -26,7 +25,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ParkController.class)
@@ -120,41 +119,37 @@ public class ParkControllerTest {
                 .andExpect(jsonPath("$.id").value(parkId))
                 .andExpect(jsonPath("$.name").value("Test Park"));
     }
+
     @Test
     public void testUpdatePark() throws Exception {
         // Mock data
         String parkId = "1";
-        ParkDto updatedParkDto = ParkDto.builder().build();
-        updatedParkDto.setDescription("Update");
+        ParkDto updatedParkDto = ParkDto.builder().description("Update").build();
 
         // Mock the behavior of parkMapper
         Park updatedPark = Park.builder().build();
-        when(parkMapper.toEntity(updatedParkDto)).thenReturn(updatedPark);
+        when(parkMapper.toEntity(any(ParkDto.class))).thenReturn(updatedPark);
 
         // Mock the behavior of parkService
-        Park updatedParkResult = park; // You can mock the returned Park object
-        when(parkService.updatePark(eq(parkId), any(Park.class))).thenReturn(updatedParkResult);
-
-        when(parkMapper.toEntity(updatedParkDto)).thenReturn(updatedPark);
-        when(parkService.updatePark(eq(parkId), any(Park.class))).thenReturn(updatedParkResult);
-        when(parkMapper.toDto(updatedPark)).thenReturn(updatedParkDto);
+        when(parkService.updatePark(eq(parkId), any(Park.class))).thenReturn(updatedPark);
+        when(parkMapper.toDto(any(Park.class))).thenReturn(updatedParkDto);
 
         // Act & Assert
-        MvcResult result = mockMvc.perform(patch("/parks/update/{parkId}", parkId)
+        mockMvc.perform(put("/parks/{parkId}", parkId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"name\": \"Updated Park Name\" }"))
                 .andExpect(status().isOk())
-                .andReturn();
-
+                .andExpect(jsonPath("$.description").value("Update"));
     }
+
     @Test
-    public void testDeleteParkByParkById() throws Exception {
+    public void testDeleteParkById() throws Exception {
         // Arrange
         String parkId = "1";
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.delete("/parks/{parkId}", parkId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 }

@@ -161,6 +161,8 @@ public class AuthController {
         }
         return null;
     }
+
+    // TODO: only authenticated can logout
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         Cookie jwtToken = new Cookie("token", null);

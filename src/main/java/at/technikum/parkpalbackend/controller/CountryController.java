@@ -6,6 +6,7 @@ import at.technikum.parkpalbackend.model.Country;
 import at.technikum.parkpalbackend.service.CountryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,30 +33,30 @@ public class CountryController {
         return countryMapper.toDto(country);
     }
 
-
     @GetMapping()
     public List<CountryDto> getAllCountries() {
         List<Country> allCountries = countryService.findAllCountries();
         return allCountries.stream().map(country -> countryMapper.toDto(country)).toList();
     }
+
     @GetMapping("/{countryId}")
     public CountryDto getCountryById(@PathVariable @Valid String countryId){
         Country country = countryService.findCountryByCountryId(countryId);
         return countryMapper.toDto(country);
     }
+    // TODO: only Admins are allowed
     @PutMapping("/{countryId}")
-    public CountryDto updateCountry(@PathVariable String countryId,
-                                    @RequestBody @Valid CountryDto updatedCountryDto){
+    public ResponseEntity<CountryDto> updateCountry(@PathVariable String countryId,
+                                      @RequestBody @Valid CountryDto updatedCountryDto){
         Country updatedCountry = countryMapper.toEntity(updatedCountryDto);
         updatedCountry = countryService.updateCountry(countryId, updatedCountry);
-        return countryMapper.toDto(updatedCountry);
+        return ResponseEntity.ok(countryMapper.toDto(updatedCountry));
     }
-
+    // TODO: only Admins are allowed
     @DeleteMapping("/{countryId}")
     //@Preauthorize with Spring security later
-    @ResponseStatus(HttpStatus.OK)
-    public CountryDto deleteCountryByCountryId(@PathVariable @Valid String countryId){
+    public ResponseEntity<Void> deleteCountryByCountryId(@PathVariable String countryId) {
         countryService.deleteCountryByCountryId(countryId);
-        return null;
+        return ResponseEntity.noContent().build();
     }
 }

@@ -10,4 +10,8 @@ public interface EventRepository extends JpaRepository<Event, String> {
     List<Event> findAllByCreatorId(String creatorUserId);
 
     List<Event> findAllByJoinedUsersId(String userId);
+
+    List<Event> findAllByParkId(String parkId);
+
+    List<Event> findAllByCreatorIdAndParkId(String creatorUserId, String parkId);
 }
