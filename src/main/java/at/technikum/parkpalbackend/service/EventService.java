@@ -35,6 +35,10 @@ public class EventService {
     }
 
     public Event findByEventId(String eventId) {
+        if (eventId == null) {
+            log.error("Invalid Event ID in findByEventId(). Event ID is null.");
+            throw new EntityNotFoundException("The event ID Cannot be null.");
+        }
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Failed to find event with ID: %s."
                         .formatted(eventId)));
@@ -97,6 +101,14 @@ public class EventService {
         existingEvent.setTags(updatedEvent.getTags());
         return eventRepository.save(existingEvent);
 
+    }
+
+    public List<Event> findAllEventsByUserIdAndParkId(String userId, String parkId) {
+        return eventRepository.findAllByCreatorIdAndParkId(userId, parkId);
+    }
+
+    public List<Event> findAllEventsByParkId(String parkId) {
+        return eventRepository.findAllByParkId(parkId);
     }
 
 }

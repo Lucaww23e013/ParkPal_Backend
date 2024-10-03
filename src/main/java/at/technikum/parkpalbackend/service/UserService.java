@@ -126,16 +126,14 @@ public class UserService {
     }
 
     @Transactional
-    public void setUserLockStatus(String userId, boolean isLocked) {
+    public void updateUserStatus(String userId, Boolean locked, Role role) {
         User user = findByUserId(userId);
-        user.setLocked(isLocked);
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void updateUserRole(String userId, Role role) {
-        User user = findByUserId(userId);
-        user.setRole(role);
+        if (locked != null) {
+            user.setLocked(locked);
+        }
+        if (role != null) {
+            user.setRole(role);
+        }
         userRepository.save(user);
     }
 }
