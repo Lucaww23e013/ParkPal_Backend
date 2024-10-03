@@ -23,15 +23,17 @@ public class WebSecurityConfig {
 
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final CustomUserDetailService customUserDetailService;
+    private final CustomAuthorizationManager customAuthorizationManager;
 
     public WebSecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
-            CustomUserDetailService customUserDetailService
+            CustomUserDetailService customUserDetailService,
+            CustomAuthorizationManager customAuthorizationManager
     ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.customUserDetailService = customUserDetailService;
+        this.customAuthorizationManager = customAuthorizationManager;
     }
 
     /*
@@ -50,8 +52,6 @@ public class WebSecurityConfig {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         configureBasicSecurity(http);
         configureSessionManagement(http);
-        AuthorizationManager<RequestAuthorizationContext>
-                customAuthorizationManager = new CustomAuthorizationManager();
 
         // configure Authorization
         configureSwaggerAndApiEndpoints(http);

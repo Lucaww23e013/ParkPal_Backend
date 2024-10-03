@@ -1,17 +1,25 @@
 package at.technikum.parkpalbackend.security;
 
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.stereotype.Component;
-
+import at.technikum.parkpalbackend.service.EventService;
 import java.util.function.Supplier;
 
 @Component
 public class CustomAuthorizationManager
         implements AuthorizationManager<RequestAuthorizationContext> {
+
+    private final EventService eventService;
+
+    @Autowired
+    public CustomAuthorizationManager(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @Override
     public AuthorizationDecision check(
@@ -25,9 +33,18 @@ public class CustomAuthorizationManager
         }
 
         String userId = object.getVariables().get("userId");
-
-        boolean isAuthorized = isCurrentUserOrAdmin(authentication, userId);
-        return new AuthorizationDecision(isAuthorized);
+        String eventId = object.getVariables().get("eventId");
+        if (userId != null) {
+            boolean isAuthorized = isCurrentUserOrAdmin(authentication, userId);
+            return new AuthorizationDecision(isAuthorized);
+        } else if (eventId != null) {
+            String eventCreatorId = eventService.findEventCreatorUserId(eventId);
+            if (eventCreatorId != null) {
+                boolean isAuthorized = isCurrentUserOrAdmin(authentication, eventCreatorId);
+                return new AuthorizationDecision(isAuthorized);
+            }
+        }
+        return new AuthorizationDecision(false);
     }
 
     public boolean isCurrentUserOrAdmin(Authentication authentication, String userId) {
