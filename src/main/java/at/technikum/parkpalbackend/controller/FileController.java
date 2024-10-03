@@ -25,4 +25,10 @@ public class FileController {
             @PathVariable("externalId") String externalId) {
         return fileService.downloadFile(externalId);
     }
+
+    @DeleteMapping("/{externalId}")
+    public ResponseEntity<String> deletePictureOrVideo(
+            @PathVariable("externalId") String externalId) {
+        return fileService.deleteFileByExternalId(externalId);
+    }
 }
