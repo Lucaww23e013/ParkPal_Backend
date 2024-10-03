@@ -60,10 +60,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/users/**").permitAll()
                 .requestMatchers("/countries/**").permitAll()
                 .requestMatchers("/events/**").permitAll()
+                .requestMatchers("/event-tags/**").permitAll()
                 .requestMatchers("/parks/**").permitAll()
-                .requestMatchers("/pictures/**").permitAll()
-                .requestMatchers("/videos/**").permitAll()
-                .requestMatchers("/upload/**").permitAll()
                 .requestMatchers("/files/**").permitAll()
                 .requestMatchers("/auth/login", "/auth/register", "auth/logout").permitAll()
                 // allow errors so that @ResponseStatus() will show and not 401

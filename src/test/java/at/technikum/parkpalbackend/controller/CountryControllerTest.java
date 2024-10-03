@@ -5,8 +5,8 @@ import at.technikum.parkpalbackend.dto.CountryDto;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.mapper.CountryMapper;
 import at.technikum.parkpalbackend.model.Country;
-import at.technikum.parkpalbackend.service.CountryService;
 import at.technikum.parkpalbackend.security.filter.JwtAuthenticationFilter;
+import at.technikum.parkpalbackend.service.CountryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -149,7 +149,7 @@ public class CountryControllerTest {
         // Act & Assert
         mockMvc.perform(delete("/countries/" + countryId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         Mockito.verify(countryService, Mockito.times(1)).deleteCountryByCountryId(eq(countryId));
     }

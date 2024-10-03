@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FileService {
@@ -73,8 +74,7 @@ public class FileService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> downloadFile(String externalId) {
         try {
-            File fileDetails = fileRepository.findByExternalId(externalId)
-                    .orElseThrow(() -> new FileNotFoundException("File not found: " + externalId));
+            File fileDetails = findFileByExternalId(externalId);
 
             String objectName = fileDetails.getPath();
             InputStream inputStream = minioService.getFile(objectName);
@@ -91,6 +91,7 @@ public class FileService {
             return ResponseEntity.status(500).body("Internal server error");
         }
     }
+
 
     @Transactional(readOnly = true)
     public List<File> findFilesByIds(List<String> fileIds) {
@@ -145,12 +146,15 @@ public class FileService {
         return objectName;
     }
 
+    private File findFileByExternalId(String externalId) {
+        return fileRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new FileNotFoundException("File not found: " + externalId));
+    }
+
     @Transactional
     public ResponseEntity<String> deleteFileByExternalId(String externalId) {
         try {
-            File fileDetails = fileRepository.findByExternalId(externalId)
-                    .orElseThrow(() -> new FileNotFoundException(
-                            "File not found: " + externalId));
+            File fileDetails = findFileByExternalId(externalId);
 
             // The file from minio will be automatically deleted by the FileEntityListener
             // when the file is removed from the database
@@ -238,4 +242,22 @@ public class FileService {
                 .build();
         fileRepository.save(fileDetails);
     }
+
+    public List<String> listAllFiles(String eventId, String parkId, String userId) {
+        List<File> files;
+        if (eventId != null) {
+            files = fileRepository.findByEventId(eventId);
+        } else if (parkId != null) {
+            files = fileRepository.findByParkId(parkId);
+        } else if (userId != null) {
+            files = fileRepository.findByUserId(userId);
+        } else {
+            files = minioService.listAllFiles();
+        }
+        return files.stream()
+                .map(File::getExternalId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -2,7 +2,7 @@ package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.service.UserService;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,21 +15,23 @@ public class AdminController {
         this.userService = userService;
     }
 
+    // TODO: missing Authorization checks
+    @PostMapping("/{userId}/status")
+    public ResponseEntity<String> updateUserStatus(@PathVariable String userId,
+                                                   @RequestParam(required = false) Boolean locked,
+                                                   @RequestParam(required = false) Role role) {
+        if (locked == null && role == null) {
+            return ResponseEntity.badRequest()
+                    .body("At least one of 'locked' or 'role' parameters must be provided.");
+        }
+        userService.updateUserStatus(userId, locked, role);
+        return ResponseEntity.ok("User status updated successfully.");
+    }
+
+    // TODO: missing Authorization checks
     @DeleteMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable String userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
         userService.delete(userId);
-    }
-
-    @PostMapping("/{userId}/lock")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateUserLockStatus(@PathVariable String userId, @RequestParam boolean isLocked) {
-        userService.setUserLockStatus(userId, isLocked);
-    }
-
-    @PostMapping("/{userId}/role")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateUserRole(@PathVariable String userId, @RequestParam Role role) {
-        userService.updateUserRole(userId, role);
+        return ResponseEntity.noContent().build();
     }
 }
