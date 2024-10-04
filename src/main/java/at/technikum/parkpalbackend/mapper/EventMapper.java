@@ -144,24 +144,37 @@ public class EventMapper {
     }
 
     private static List<String> getJoinedUserIds(List<User> joinedUsers) {
+        if (joinedUsers == null) {
+            return null;
+        }
         return joinedUsers.stream()
                 .map(User::getId)
                 .collect(Collectors.toList());
     }
 
     private static List<String> getFileIdsFromMediaFiles(List<File> mediaFiles) {
+        if (mediaFiles == null) {
+            return null;
+        }
         return mediaFiles.stream()
                 .map(File::getExternalId)
                 .collect(Collectors.toList());
     }
 
     private static Set<String> getEventTagIds(Set<EventTag> eventTags) {
+        if (eventTags == null) {
+            return null;
+        }
         return eventTags.stream()
                 .map(EventTag::getId)
                 .collect(Collectors.toSet());
     }
 
     private static Set<String> getEventTagNames(Set<EventTag> eventTags) {
+        if (eventTags == null) {
+            return null;
+        }
+
         return eventTags.stream()
                 .map(EventTag::getName)
                 .collect(Collectors.toSet());

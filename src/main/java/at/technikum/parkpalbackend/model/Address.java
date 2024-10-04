@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -32,6 +33,7 @@ public class Address {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "country_id", foreignKey = @ForeignKey(name = "fk_address_2_country"))
+    @JsonDeserialize(using = CountryDeserializer.class)
     private Country country;
 
 }
