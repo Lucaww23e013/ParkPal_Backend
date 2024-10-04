@@ -2,8 +2,13 @@ package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
+import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.Park;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ParkMapper {
@@ -38,10 +43,19 @@ public class ParkMapper {
                 .name(parkDto.getName())
                 .description(parkDto.getDescription())
                 .address(parkDto.getAddress())
-                .parkEvents(parkDto.getParkEventDtos().stream()
-                        .map(eventDto -> eventMapper.toEntity(eventDto)).toList())
+                .parkEvents(getList(parkDto))
                 .build();
     }
+
+    @NotNull
+    private List<Event> getList(ParkDto parkDto) {
+        if (parkDto.getParkEventDtos() == null) {
+            return new ArrayList<>();
+        }
+        return parkDto.getParkEventDtos().stream()
+                .map(eventDto -> eventMapper.toEntity(eventDto)).toList();
+    }
+
     public CreateParkDto toCreateParkDto(Park park){
         if (park == null) {
             throw new IllegalArgumentException("Park entity or its fields cannot be null");

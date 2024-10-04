@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.security;
+package at.technikum.parkpalbackend.security.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

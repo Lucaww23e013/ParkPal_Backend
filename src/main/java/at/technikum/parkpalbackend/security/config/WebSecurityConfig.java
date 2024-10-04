@@ -1,5 +1,7 @@
-package at.technikum.parkpalbackend.security;
+package at.technikum.parkpalbackend.security.config;
 
+import at.technikum.parkpalbackend.security.CustomAuthorizationManager;
+import at.technikum.parkpalbackend.security.CustomUserDetailService;
 import at.technikum.parkpalbackend.security.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
