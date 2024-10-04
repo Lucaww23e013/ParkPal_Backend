@@ -2,16 +2,12 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.EventTag;
-import at.technikum.parkpalbackend.model.File;
-import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.EventRepository;
-import at.technikum.parkpalbackend.persistence.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -19,13 +15,11 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserService userService;
-    private final FileRepository fileRepository;
 
-    public EventService(EventRepository eventRepository, UserService userService,
-                        FileRepository fileRepository) {
+    public EventService(EventRepository eventRepository,
+                        UserService userService) {
         this.eventRepository = eventRepository;
         this.userService = userService;
-        this.fileRepository = fileRepository;
     }
 
     public Event save(Event event) {
@@ -41,6 +35,10 @@ public class EventService {
     }
 
     public Event findByEventId(String eventId) {
+        if (eventId == null) {
+            log.error("Invalid Event ID in findByEventId(). Event ID is null.");
+            throw new EntityNotFoundException("The event ID Cannot be null.");
+        }
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Failed to find event with ID: %s."
                         .formatted(eventId)));
@@ -76,42 +74,6 @@ public class EventService {
         return null;
     }
 
-    public List<String> getJoinedUserIds(List<User> joinedUsers) {
-        List<String> joinedUserIds = new ArrayList<>();
-
-        for (User user : joinedUsers) {
-            String userId = user.getId();
-            joinedUserIds.add(userId);
-        }
-
-        return joinedUserIds;
-    }
-
-    public Set<String> getEventTagIds(Set<EventTag> eventTags) {
-        Set<String> eventTagIds = new HashSet<>();
-
-        for (EventTag eventTag : eventTags) {
-            String eventTagId = eventTag.getId();
-            eventTagIds.add(eventTagId);
-        }
-
-        return eventTagIds;
-    }
-
-    public Set<String> getEventTagNames(Set<EventTag> eventTags) {
-        Set<String> eventTagNames = new HashSet<>();
-
-        for (EventTag eventTag : eventTags) {
-            String eventTagName = eventTag.getName();
-            eventTagNames.add(eventTagName);
-        }
-
-        return eventTagNames;
-    }
-
-
-
-
     public Event deleteEventById(String eventID) {
         Event eventToDelete = findByEventId(eventID);
         eventRepository.delete(eventToDelete);
@@ -141,13 +103,12 @@ public class EventService {
 
     }
 
-    public List<String> getFileIdsFromMediaFiles(List<File> mediaFiles) {
-        return mediaFiles.stream()
-                .map(File::getExternalId)
-                .collect(Collectors.toList());
+    public List<Event> findAllEventsByUserIdAndParkId(String userId, String parkId) {
+        return eventRepository.findAllByCreatorIdAndParkId(userId, parkId);
     }
 
-    public List<File> getFilesByIds(List<String> fileIds) {
-        return fileRepository.findAllById(fileIds);
+    public List<Event> findAllEventsByParkId(String parkId) {
+        return eventRepository.findAllByParkId(parkId);
     }
+
 }

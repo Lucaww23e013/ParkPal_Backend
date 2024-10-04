@@ -1,12 +1,15 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
+import at.technikum.parkpalbackend.model.File;
 import io.minio.*;
 import io.minio.errors.ErrorResponseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 public class MinioService {
@@ -91,6 +94,30 @@ public class MinioService {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public List<File> listAllFiles() {
+        try {
+            return StreamSupport.stream(minioClient
+                            .listObjects(ListObjectsArgs.builder().bucket(bucketName)
+                                    .recursive(true).build())
+                            .spliterator(), false)
+                    .map(result -> {
+                        try {
+                            return result.get();
+                        } catch (Exception e) {
+                            throw new RuntimeException("Failed to get item", e);
+                        }
+                    })
+                    .map(item -> File.builder()
+                            .path(item.objectName())
+                            .externalId(item.objectName().split("/")[1])
+                            .build())
+                    .filter(file -> file.getExternalId() != null)
+                    .toList();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to list files", e);
         }
     }
 }

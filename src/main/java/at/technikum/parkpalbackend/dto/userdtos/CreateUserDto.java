@@ -1,11 +1,14 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
-import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Gender;
+import at.technikum.parkpalbackend.model.enums.Role;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -50,5 +53,7 @@ public class CreateUserDto {
 
     @NotBlank(message = "Enter a Country")
     private String countryId;
+
+    private String profilePictureId;
 
 }

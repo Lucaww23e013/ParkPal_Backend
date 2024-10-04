@@ -2,6 +2,8 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
 import at.technikum.parkpalbackend.model.File;
+import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.persistence.FileRepository;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,18 +13,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FileService {
 
     private final MinioService minioService;
+    private final EventService eventService;
+    private final ParkService parkService;
+    private final UserService userService;
     private final FileRepository fileRepository;
     private static final String[] VALID_PICTURE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"};
     private static final String[] VALID_VIDEO_EXTENSIONS = {"mp4", "avi", "mov", "mkv", "webm"};
@@ -31,12 +35,18 @@ public class FileService {
     private long maxFileSizeMb;
 
     public FileService(MinioService minioService,
+                       EventService eventService,
+                       ParkService parkService, UserService userService,
                        FileRepository fileRepository) {
         this.minioService = minioService;
+        this.eventService = eventService;
+        this.parkService = parkService;
+        this.userService = userService;
         this.fileRepository = fileRepository;
     }
 
-    public ResponseEntity<String> uploadFile(MultipartFile file) {
+    @Transactional
+    public ResponseEntity<String> uploadFile(MultipartFile file, FileType fileType) {
         try {
             String fileName = getFileName(file);
             if (fileName == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -51,21 +61,20 @@ public class FileService {
 
             String uuid = UUID.randomUUID().toString();
             String objectName = uploadToMinio(file, folderName, uuid);
-            saveFileDetails(fileName, objectName, uuid);
+            saveFileDetails(fileName, objectName, uuid, fileType);
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body("File uploaded successfully. FileID: %s"
-                    .formatted(objectName.split("/")[1]));
+                    .body(objectName.split("/")[1]);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("File upload failed.");
         }
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity<?> downloadFile(String externalId) {
         try {
-            File fileDetails = fileRepository.findByExternalId(externalId)
-                    .orElseThrow(() -> new FileNotFoundException("File not found: " + externalId));
+            File fileDetails = findFileByExternalId(externalId);
 
             String objectName = fileDetails.getPath();
             InputStream inputStream = minioService.getFile(objectName);
@@ -83,9 +92,11 @@ public class FileService {
         }
     }
 
-    public List<File> findAllFilesByIds(List<String> fileIds) {
+
+    @Transactional(readOnly = true)
+    public List<File> findFilesByIds(List<String> fileIds) {
         if (fileIds == null || fileIds.isEmpty()) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         return fileRepository.findAllById(fileIds);
     }
@@ -135,21 +146,15 @@ public class FileService {
         return objectName;
     }
 
-    private void saveFileDetails(String fileName, String objectName, String uuid) {
-        File fileDetails = File.builder()
-                .path(objectName)
-                .assigned(false)
-                .externalId(uuid)
-                .filename(fileName)
-                .build();
-        fileRepository.save(fileDetails);
+    private File findFileByExternalId(String externalId) {
+        return fileRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new FileNotFoundException("File not found: " + externalId));
     }
 
+    @Transactional
     public ResponseEntity<String> deleteFileByExternalId(String externalId) {
         try {
-            File fileDetails = fileRepository.findByExternalId(externalId)
-                    .orElseThrow(() -> new FileNotFoundException(
-                            "File not found: " + externalId));
+            File fileDetails = findFileByExternalId(externalId);
 
             // The file from minio will be automatically deleted by the FileEntityListener
             // when the file is removed from the database
@@ -166,7 +171,93 @@ public class FileService {
         }
     }
 
+    @Transactional
+    public void assignProfilePicture(User user, String profilePictureId, boolean saveUser) {
+        if (profilePictureId != null && !profilePictureId.isEmpty()) {
+            // Remove existing profile picture if any
+            List<File> media = user.getMedia();
+            if (media != null) {
+                media.removeIf(file -> file.getFileType() == FileType.PROFILE_PICTURE);
+            } else {
+                media = new ArrayList<>();
+            }
+
+            // Assign new profile picture
+            File profilePicture = this
+                    .retrieveAndAssignFileById(profilePictureId, user.getId(), null, null, true);
+            profilePicture.setFileType(FileType.PROFILE_PICTURE);
+            media.add(profilePicture);
+            user.setMedia(media);
+            if (saveUser) {
+                userService.save(user);
+            }
+        }
+    }
+
+    @Transactional
     public File save(File file) {
         return fileRepository.save(file);
     }
+
+    private File retrieveAndAssignFileById(String fileId,
+                                           String userId,
+                                           String eventId,
+                                           String parkId,
+                                           boolean throwException) {
+        if (fileId == null || fileId.isEmpty()) {
+            return null;
+        }
+
+        Optional<File> optionalFile = fileRepository.findByExternalId(fileId);
+        if (optionalFile.isEmpty() && throwException) {
+            throw new FileNotFoundException("File with id %s not found".formatted(fileId));
+        }
+
+        File file = optionalFile.orElse(null);
+        if (file != null) {
+            if (eventId != null) {
+                file.setEvent(eventService.findByEventId(eventId));
+            }
+            if (parkId != null) {
+                file.setPark(parkService.findParkByParkId(parkId));
+            }
+            if (userId != null) {
+                file.setUser(userService.findByUserId(userId));
+            }
+        }
+
+        return file;
+    }
+
+    private void saveFileDetails(String fileName,
+                                 String objectName,
+                                 String uuid,
+                                 FileType fileType) {
+        File fileDetails = File.builder()
+                .path(objectName)
+                .assigned(false)
+                .externalId(uuid)
+                .filename(fileName)
+                .fileType(fileType != null ? fileType : FileType.OTHER)
+                .build();
+        fileRepository.save(fileDetails);
+    }
+
+    public List<String> listAllFiles(String eventId, String parkId, String userId) {
+        List<File> files;
+        if (eventId != null) {
+            files = fileRepository.findByEventId(eventId);
+        } else if (parkId != null) {
+            files = fileRepository.findByParkId(parkId);
+        } else if (userId != null) {
+            files = fileRepository.findByUserId(userId);
+        } else {
+            files = minioService.listAllFiles();
+        }
+        return files.stream()
+                .map(File::getExternalId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
 }

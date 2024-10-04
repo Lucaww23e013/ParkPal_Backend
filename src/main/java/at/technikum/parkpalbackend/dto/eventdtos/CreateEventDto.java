@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -43,4 +44,8 @@ public class CreateEventDto {
     private String creatorUserId;
 
     private List<String> createMediaFileIds;
+
+    private Set<String> eventTagsIds;
+
+    private Set<String> eventTagNames;
 }

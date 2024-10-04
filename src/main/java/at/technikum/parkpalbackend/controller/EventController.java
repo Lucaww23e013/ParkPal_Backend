@@ -21,18 +21,12 @@ public class EventController {
 
     private final EventService eventService;
 
-    private final ParkService parkService;
-
-    private final UserService userService;
-
     private final EventMapper eventMapper;
 
 
     public EventController(EventService eventService, ParkService parkService,
                            UserService userService, EventMapper eventMapper) {
         this.eventService = eventService;
-        this.parkService = parkService;
-        this.userService = userService;
         this.eventMapper = eventMapper;
     }
 
@@ -45,10 +39,21 @@ public class EventController {
     }
 
     @GetMapping
-    public List<EventDto> getAllEvents() {
-        List<Event> events = eventService.findAllEvents();
+    public List<EventDto> getAllEvents(
+            @RequestParam(required = false) String userId,
+            @RequestParam(required = false) String parkId) {
+        List<Event> events;
+        if (userId != null && parkId != null) {
+            events = eventService.findAllEventsByUserIdAndParkId(userId, parkId);
+        } else if (userId != null) {
+            events = eventService.findAllEventsCreatedByUser(userId);
+        } else if (parkId != null) {
+            events = eventService.findAllEventsByParkId(parkId);
+        } else {
+            events = eventService.findAllEvents();
+        }
         return events.stream()
-                .map(getEventDto -> eventMapper.toDto(getEventDto))
+                .map(eventMapper::toDto)
                 .toList();
     }
 
@@ -56,19 +61,23 @@ public class EventController {
     public EventDto getEventByID(@PathVariable String eventId) {
         return eventMapper.toDto(eventService.findByEventId(eventId));
     }
-
+    // TODO: only creator of event and admin
+    // allowed
     @PutMapping("/{eventID}")
     public ResponseEntity<EventDto> updateEventDto(@RequestBody @Valid EventDto newEventDto,
                                                    @PathVariable String eventID) {
+
         Event mappedEntity = eventMapper.toEntity(newEventDto);
         Event updatedEvent = eventService.updateEvent(eventID, mappedEntity);
         return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
     }
 
+    // TODO: only creator of event and admin
+    // allowed
     @DeleteMapping("/{eventID}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteEventDto(@PathVariable @Valid String eventID) {
+    public ResponseEntity<Void> deleteEventDto(@PathVariable @Valid String eventID) {
         eventService.deleteEventById(eventID);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -1,16 +1,14 @@
 package at.technikum.parkpalbackend.controller;
 
-import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.dto.userdtos.UpdateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.mapper.UserMapper;
-import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,33 +45,22 @@ public class UserController {
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable String userId) {
         User user = userService.findByUserId(userId);
-
         return userMapper.toDto(user);
     }
 
-    @GetMapping("/{userId}/events")
-    @ResponseStatus(HttpStatus.OK)
-    public List<EventDto> getAllEventsByUserId(@PathVariable String userId) {
-        List<Event> events = eventService.findAllEventsCreatedByUser(userId);
-        return events.stream()
-                .map(event -> eventMapper.toDto(event))
-                .toList();
-    }
-
+    // TODO: only user itself and admin
     @PutMapping("/{userId}")
-    public UserDto updateUser(@PathVariable String userId,
+    public UpdateUserDto updateUser(@PathVariable String userId,
                               @RequestBody @Valid UpdateUserDto updateUserDto) {
         User user = userMapper.toEntity(updateUserDto);
-
         user = userService.update(userId, user);
-
-        return userMapper.toDto(user);
+        return userMapper.toUpdateDto(user);
     }
-
+    // TODO: only user itself and admin
     @DeleteMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable String userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
         userService.delete(userId);
+        return ResponseEntity.noContent().build();
     }
 
 }

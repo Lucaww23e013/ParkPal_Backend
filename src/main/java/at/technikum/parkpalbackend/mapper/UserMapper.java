@@ -1,23 +1,37 @@
 package at.technikum.parkpalbackend.mapper;
 
 import at.technikum.parkpalbackend.dto.userdtos.*;
+import at.technikum.parkpalbackend.model.Event;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.service.CountryService;
 import at.technikum.parkpalbackend.service.EventService;
+import at.technikum.parkpalbackend.service.FileService;
+import at.technikum.parkpalbackend.service.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
 public class UserMapper {
     private final CountryService countryService;
     private final EventService eventService;
+    private final FileService fileService;
+    private final UserService userService;
 
-    public UserMapper(CountryService countryService, EventService eventService) {
+    public UserMapper(CountryService countryService,
+                      EventService eventService, FileService fileService, UserService userService) {
         this.countryService = countryService;
         this.eventService = eventService;
+        this.fileService = fileService;
+        this.userService = userService;
     }
+
     public UserDto toDto(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User entity or its fields cannot be null");
@@ -34,8 +48,30 @@ public class UserMapper {
                 .countryId(user.getCountry().getId())
                 .role(user.getRole())
                 .joinedEvents(user.getJoinedEvents())
+                .mediaIds(getMediaIds(user))
                 .build();
     }
+
+    public UpdateUserDto toUpdateDto(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User entity or its fields cannot be null");
+        }
+        return UpdateUserDto.builder()
+                .id(user.getId())
+                .gender(user.getGender())
+                .salutation(user.getSalutation())
+                .userName(user.getUserName())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .countryId(user.getCountry().getId())
+                .profilePictureId(user.getMedia().isEmpty()
+                        ? null : user.getMedia().getFirst().getId())
+                .joinedEventsIds(getJoinedEventsIds(user))
+
+                .build();
+    }
+
 
     public User toEntity(UserDto userDto) {
         if (userDto == null) {
@@ -60,7 +96,9 @@ public class UserMapper {
         if (updateUserDto == null) {
             throw new IllegalArgumentException("updateUserDto  or its fields cannot be null");
         }
-        return User.builder()
+
+        User user = User.builder()
+                .id(updateUserDto.getId())
                 .gender(updateUserDto.getGender())
                 .salutation(updateUserDto.getSalutation())
                 .userName(updateUserDto.getUserName())
@@ -70,6 +108,10 @@ public class UserMapper {
                 .country(countryService.findCountryByCountryId(updateUserDto.getCountryId()))
                 .joinedEvents(eventService.findAllEventsJoinedByUser(updateUserDto.getId()))
                 .build();
+
+        fileService.assignProfilePicture(user, updateUserDto.getProfilePictureId(), false);
+
+        return user;
     }
 
     public CreateUserDto toCreateUserDto(User user) {
@@ -86,6 +128,8 @@ public class UserMapper {
                 .email(user.getEmail())
                 .countryId(user.getCountry().getId())
                 .password(user.getPassword())
+                .profilePictureId(user.getMedia().isEmpty()
+                        ? null : user.getMedia().getFirst().getId())
                 .build();
     }
     public User toEntity(CreateUserDto createUserDto) {
@@ -104,6 +148,7 @@ public class UserMapper {
                 .role(Role.USER)
                 .password(new BCryptPasswordEncoder().encode(createUserDto.getPassword()))
                 .country(countryService.findCountryByCountryId(createUserDto.getCountryId()))
+                .media(new ArrayList<>())
                 .build();
     }
 
@@ -131,5 +176,20 @@ public class UserMapper {
                 .id(user.getId())
                 .role(user.getRole())
                 .build();
+    }
+
+    @NotNull
+    private static List<String> getMediaIds(User user) {
+        return user.getMedia().isEmpty()
+                ? new ArrayList<>() : user.getMedia().stream()
+                .map(File::getId)
+                .toList();
+    }
+
+    @NotNull
+    private static List<String> getJoinedEventsIds(User user) {
+        return user.getJoinedEvents().stream()
+                .map(Event::getId)
+                .toList();
     }
 }

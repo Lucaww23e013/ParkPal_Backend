@@ -6,6 +6,7 @@ import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.CountryService;
+import at.technikum.parkpalbackend.service.FileService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThrows;
 
 //@SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -23,6 +24,9 @@ public class UserMapperTest {
 
     @Mock
     CountryService countryService;
+
+    @Mock
+    FileService fileService;
 
     @InjectMocks
     private UserMapper userMapper;

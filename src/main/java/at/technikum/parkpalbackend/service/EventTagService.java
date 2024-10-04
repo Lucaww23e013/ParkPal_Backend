@@ -96,4 +96,8 @@ public class EventTagService {
             throw new RuntimeException("Failed to update Tag: %s".formatted(e.getMessage()));
         }
     }
+
+    public Set<EventTag> findTagsByEventId(String eventId) {
+        return eventTagRepository.findTagsByEventId(eventId);
+    }
 }

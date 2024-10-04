@@ -7,6 +7,7 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
 import at.technikum.parkpalbackend.security.jwt.JwtIssuer;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
+import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -20,11 +21,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthControllerTest {
@@ -38,6 +36,9 @@ public class AuthControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private FileService fileService;
 
     @Mock
     private HttpServletResponse response;
@@ -63,11 +64,11 @@ public class AuthControllerTest {
                 .password("testPassword241!34")
                 .build();
         when(userMapper.toEntity(any(CreateUserDto.class))).thenReturn(user);
-        when(userService.create(any(User.class))).thenReturn(user);
+        when(userService.save(any(User.class))).thenReturn(user);
         // Act
         authController.register(createUserDto);
         // Assert
-        verify(userService, times(1)).create(any(User.class));
+        verify(userService, times(1)).save(any(User.class));
     }
 
     @Test
@@ -87,6 +88,7 @@ public class AuthControllerTest {
                 "1",
                 user.getUserName(),
                 loginRequest.getPassword(),
+                false,
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
         );
         when(authenticationManager.authenticate(any())).thenReturn(authentication);

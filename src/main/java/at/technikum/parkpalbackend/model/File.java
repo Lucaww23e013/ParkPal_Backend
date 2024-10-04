@@ -1,8 +1,11 @@
 package at.technikum.parkpalbackend.model;
 
 import at.technikum.parkpalbackend.listener.FileEntityListener;
+import at.technikum.parkpalbackend.model.enums.FileType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
@@ -38,8 +41,21 @@ public class File {
     private LocalDateTime uploadDate = LocalDateTime.now();
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_2_file"))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private User user;
 
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fk_event_2_file"))
+    private Event event;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "park_id", foreignKey = @ForeignKey(name = "fk_park_2_file"))
+    private Park park;
+
     private boolean assigned;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private FileType fileType = FileType.OTHER;
 }

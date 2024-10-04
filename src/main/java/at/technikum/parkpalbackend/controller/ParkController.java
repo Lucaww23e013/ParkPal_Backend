@@ -8,6 +8,7 @@ import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.ParkService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class ParkController {
         this.eventService = eventService;
         this.parkMapper = parkMapper;
     }
-
+    // TODO: only admins have access
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateParkDto createPark(@RequestBody @Valid CreateParkDto createParkDto){
@@ -40,30 +41,36 @@ public class ParkController {
     }
 
     @GetMapping
-    public List<ParkDto> getAllParks() {
+    public ResponseEntity<List<ParkDto>> getAllParks() {
         List<Park> allParks = parkService.findAllParks();
-        return allParks.stream().map(park -> parkMapper.toDto(park)).toList();
+        if (allParks.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        List<ParkDto> parkDtos = allParks.stream()
+                .map(park -> parkMapper.toDto(park))
+                .toList();
+        return ResponseEntity.ok(parkDtos);
     }
 
     @GetMapping("/{parkId}")
-    public ParkDto getParkByParkId(@PathVariable @Valid String parkId){
+    public ParkDto getParkByParkId(@PathVariable String parkId){
         Park park = parkService.findParkByParkId(parkId);
         return parkMapper.toDto(park);
     }
-
-    @PatchMapping("/update/{parkId}")
+    // TODO: only admins have access
+    @PutMapping("/{parkId}")
     public ParkDto updatePark(@PathVariable String parkId,
                               @RequestBody @Valid ParkDto updatedParkDto){
         Park updatedPark = parkMapper.toEntity(updatedParkDto);
         updatedPark = parkService.updatePark(parkId, updatedPark);
         return parkMapper.toDto(updatedPark);
     }
-
+    // TODO: only admins have access
     @DeleteMapping("/{parkId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ParkDto deleteParkByParkById(@PathVariable @Valid String parkId){
+    //@Preauthorize with Spring security later
+    public ResponseEntity<Void> deleteParkById(@PathVariable String parkId){
         parkService.deleteParkByParkId(parkId);
-        return null;
+        return ResponseEntity.noContent().build();
     }
 
 }

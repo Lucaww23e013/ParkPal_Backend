@@ -12,10 +12,11 @@ entity User {
     - lastName: String
     - email: String
     - password: String
+    - locked: boolean
     - country: Country
     - role: Role
     - joinedEvents: List<Event>
-    - profilePicture: File
+    - media: List<File>
 }
 
 enum Gender {
@@ -38,18 +39,22 @@ entity Event {
     - creator: User
     - joinedUsers: List<User>
     - tags: Set<EventTag>
-    - files: List<File>
+    - media: List<File>
 }
 
-enum EventTag {
+entity EventTag {
     name: string
-
 }
 
 entity File {
-    - user: User
+    - externalId: String
+    - path: String
+    - filename: String
     - LocalDateTime: uploadDate
-    - byte[]: file
+    - user: User
+    - event: Event
+    - park: Park
+    - assigned: boolean
 }
 
 
@@ -58,7 +63,7 @@ entity Park {
     - description: String
     - parkAddress: Address
     - parkEvents: List<Event>
-    - parkFiles: List<File>
+    - media: List<File>
 }
 
 class Address <<(V, #FF7700) value-object>> {
@@ -73,26 +78,17 @@ entity Country {
     - iso2Code: String
 }
 
-User "1..1" <-left- Event : created by
+User "n..1" <-left- Event : created by
 User -left- "n..m" Event : joined By
-'Event "1..1" --> User : created by
 Event --> "1..n" Park : has <
-'Event --- "n..m" User : joined By
-Event "n..1" --* EventTag : has >
-'EventTag "n..1" --* Event : has <
-'File "n..m" <-- Event
-Event "n..m" --> File
-'Video "n..m" <-- Event
-Event "n..m" --> File
-User -- "1..n" File  : User create File
-Park "1..n" -up-> File
-User -- "1..n" File  : User create File
-Park "1..n" -up-> File
+Event "n..m" -- EventTag
+Event "1..n" --> File : has >
+User -- "1..n" File  : has >
+Park "1..n" -up-> File : has >
 User -> Country
 Address -right-> Country
 Park -> "0..1" Address
-User -up-> Gender
-User -up-> UserRole
-
+User -right-> Gender
+User -down-> UserRole
 
 @enduml
