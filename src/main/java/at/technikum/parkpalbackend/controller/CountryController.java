@@ -6,7 +6,6 @@ import at.technikum.parkpalbackend.model.Country;
 import at.technikum.parkpalbackend.service.CountryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +24,6 @@ public class CountryController {
     }
 
     @PostMapping
-    //@Preauthorize with Spring security later
     @ResponseStatus(HttpStatus.CREATED)
     public CountryDto addCountries(@RequestBody @Valid CountryDto countryDto){
         Country country = countryMapper.toEntity(countryDto);
@@ -44,19 +42,19 @@ public class CountryController {
         Country country = countryService.findCountryByCountryId(countryId);
         return countryMapper.toDto(country);
     }
-    // TODO: only Admins are allowed
+
     @PutMapping("/{countryId}")
-    public ResponseEntity<CountryDto> updateCountry(@PathVariable String countryId,
-                                      @RequestBody @Valid CountryDto updatedCountryDto){
+    public CountryDto updateCountry(@PathVariable String countryId,
+                                    @RequestBody @Valid CountryDto updatedCountryDto){
         Country updatedCountry = countryMapper.toEntity(updatedCountryDto);
         updatedCountry = countryService.updateCountry(countryId, updatedCountry);
-        return ResponseEntity.ok(countryMapper.toDto(updatedCountry));
+        return countryMapper.toDto(updatedCountry);
     }
-    // TODO: only Admins are allowed
+
     @DeleteMapping("/{countryId}")
-    //@Preauthorize with Spring security later
-    public ResponseEntity<Void> deleteCountryByCountryId(@PathVariable String countryId) {
+    @ResponseStatus(HttpStatus.OK)
+    public CountryDto deleteCountryByCountryId(@PathVariable @Valid String countryId){
         countryService.deleteCountryByCountryId(countryId);
-        return ResponseEntity.noContent().build();
+        return null;
     }
 }

@@ -3,7 +3,9 @@ package at.technikum.parkpalbackend.security;
 import at.technikum.parkpalbackend.security.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -20,15 +23,17 @@ public class WebSecurityConfig {
 
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final CustomUserDetailService customUserDetailService;
+    private final CustomAuthorizationManager customAuthorizationManager;
 
     public WebSecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
-            CustomUserDetailService customUserDetailService
+            CustomUserDetailService customUserDetailService,
+            CustomAuthorizationManager customAuthorizationManager
     ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.customUserDetailService = customUserDetailService;
+        this.customAuthorizationManager = customAuthorizationManager;
     }
 
     /*
@@ -44,30 +49,106 @@ public class WebSecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //  Add JWT filter to the security chain
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        configureBasicSecurity(http);
+        configureSessionManagement(http);
+
+        // configure Authorization
+        configureSwaggerAndApiEndpoints(http);
+        configureUserEndpoints(http, customAuthorizationManager);
+        configureEventEndpoints(http, customAuthorizationManager);
+        configureParkEndpoints(http);
+        configureFileEndpoints(http);
+        configureAuthEndpoints(http, customAuthorizationManager);
+        configureAdminEndpoints(http);
+        configureErrorEndpoints(http);
+
+        return http.build();
+    }
+
+    private void configureBasicSecurity(HttpSecurity http) throws Exception {
         http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable);
-        http.sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.authorizeHttpRequests(registry -> registry
-                // Swagger UI access
-                .requestMatchers("/api/**").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
+    }
 
-                .requestMatchers("/admins/**").hasAuthority("ADMIN")
+    private void configureSessionManagement(HttpSecurity http) throws Exception {
+        http.sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    }
+
+    private void configureSwaggerAndApiEndpoints(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers("/swagger-ui/**", "/api/**").permitAll()
+        );
+    }
+
+    private void configureUserEndpoints(
+            HttpSecurity http,
+            AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager
+    ) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers(HttpMethod.PUT,"/users/{userId}")
+                .access(customAuthorizationManager)
+                .requestMatchers(HttpMethod.DELETE,"/users/{userId}")
+                .access(customAuthorizationManager)
                 .requestMatchers("/users/**").permitAll()
-                .requestMatchers("/countries/**").permitAll()
+        );
+    }
+
+    private void configureEventEndpoints(
+            HttpSecurity http,
+            AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager
+    ) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers(HttpMethod.DELETE, "/events/{eventId}")
+                .access(customAuthorizationManager)
+                .requestMatchers(HttpMethod.PUT, "/events/{eventId}")
+                .access(customAuthorizationManager)
+                .requestMatchers(HttpMethod.POST, "/events").authenticated()
                 .requestMatchers("/events/**").permitAll()
-                .requestMatchers("/event-tags/**").permitAll()
+        );
+    }
+
+    private void configureParkEndpoints(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers(HttpMethod.POST, "/parks").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/parks/{parkId}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/parks/{parkId}").hasAuthority("ADMIN")
                 .requestMatchers("/parks/**").permitAll()
+        );
+    }
+
+    private void configureFileEndpoints(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
                 .requestMatchers("/files/**").permitAll()
-                .requestMatchers("/auth/login", "/auth/register", "auth/logout").permitAll()
-                // allow errors so that @ResponseStatus() will show and not 401
+        );
+    }
+
+    private void configureAuthEndpoints(
+            HttpSecurity http,
+            AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager
+    ) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers("/auth/logout", "/auth/user").authenticated()
+                .requestMatchers("/auth/admin").hasAuthority("ADMIN")
+                .requestMatchers("/auth/currentUserOrAdmin/{userId}")
+                .access(customAuthorizationManager)
+                .requestMatchers("auth/**").permitAll()
+        );
+    }
+
+    private void configureAdminEndpoints(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+        );
+    }
+
+    private void configureErrorEndpoints(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
                 .requestMatchers("/error").permitAll()
-                .anyRequest().authenticated());
-        return http.build();
+                .anyRequest().authenticated()
+        );
     }
 
     /*
