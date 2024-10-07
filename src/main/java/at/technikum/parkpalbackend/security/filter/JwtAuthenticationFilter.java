@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -22,11 +20,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtDecoder jwtDecoder;
     private final JwtToPrincipalConverter jwtToPrincipalConverter;
-
-    // List of routes to exclude from JWT validation
-    private static final List<String> EXCLUDED_ROUTES = Arrays.asList(
-            "/files"
-    );
 
     public JwtAuthenticationFilter(JwtDecoder jwtDecoder,
                                    JwtToPrincipalConverter jwtToPrincipalConverter) {
@@ -38,15 +31,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        // Bypass JWT validation for example /files routes
-        if (EXCLUDED_ROUTES.stream()
-                .noneMatch(request.getRequestURI()::startsWith)) {
-            extractTokenFromRequest(request)
-                    .map(jwtDecoder::decode)
-                    .map(jwtToPrincipalConverter::convert)
-                    .map(UserPrincipalAuthenticationToken::new)
-                    .ifPresent(auth -> SecurityContextHolder.getContext().setAuthentication(auth));
-        }
+
+        extractTokenFromRequest(request)
+                .map(jwtDecoder::decode)
+                .map(jwtToPrincipalConverter::convert)
+                .map(UserPrincipalAuthenticationToken::new)
+                .ifPresent(auth -> SecurityContextHolder.getContext().setAuthentication(auth));
 
         filterChain.doFilter(request, response);
     }

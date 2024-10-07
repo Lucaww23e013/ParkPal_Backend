@@ -60,7 +60,8 @@ public class WebSecurityConfig {
         configureUserEndpoints(http, customAuthorizationManager);
         configureEventEndpoints(http, customAuthorizationManager);
         configureParkEndpoints(http);
-        configureFileEndpoints(http);
+        configureFileEndpoints(http, customAuthorizationManager);
+        configureCountryEndpoints(http);
         configureAuthEndpoints(http, customAuthorizationManager);
         configureAdminEndpoints(http);
         configureErrorEndpoints(http);
@@ -103,11 +104,11 @@ public class WebSecurityConfig {
             AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager
     ) throws Exception {
         http.authorizeHttpRequests(registry -> registry
-                .requestMatchers(HttpMethod.DELETE, "/events/{eventId}")
-                .access(customAuthorizationManager)
+                .requestMatchers(HttpMethod.POST, "/events").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/events/{eventId}")
                 .access(customAuthorizationManager)
-                .requestMatchers(HttpMethod.POST, "/events").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/events/{eventId}")
+                .access(customAuthorizationManager)
                 .requestMatchers("/events/**").permitAll()
         );
     }
@@ -115,15 +116,28 @@ public class WebSecurityConfig {
     private void configureParkEndpoints(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(registry -> registry
                 .requestMatchers(HttpMethod.POST, "/parks").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PATCH, "/parks/{parkId}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/parks/{parkId}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/parks/{parkId}").hasAuthority("ADMIN")
                 .requestMatchers("/parks/**").permitAll()
         );
     }
 
-    private void configureFileEndpoints(HttpSecurity http) throws Exception {
+    private void configureFileEndpoints(
+            HttpSecurity http,
+            AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager
+    ) throws Exception {
         http.authorizeHttpRequests(registry -> registry
+                .requestMatchers(HttpMethod.DELETE, "/files/{externalId}")
+                .access(customAuthorizationManager)
                 .requestMatchers("/files/**").permitAll()
+        );
+    }
+
+    private void configureCountryEndpoints(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers(HttpMethod.PUT, "/countries/{countryId}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/countries/{countryId}").hasAuthority("ADMIN")
+                .requestMatchers("/countries/**").permitAll()
         );
     }
 

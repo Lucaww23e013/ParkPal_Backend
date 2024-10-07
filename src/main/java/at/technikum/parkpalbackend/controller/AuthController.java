@@ -121,24 +121,6 @@ public class AuthController {
         return new TokenResponse(token);
     }
 
-    // for authorization debugging handled in WebSecurityConfig
-    @GetMapping("/userOrAdmin/{userId}")
-    public String currentUserOrAdmin(@PathVariable String userId) {
-        return "Your are logged in as Current User or Admin";
-    }
-
-    // for authorization debugging handled in WebSecurityConfig
-    @GetMapping("/user")
-    public String user() {
-        return "Your are logged in as an authenticated User";
-    }
-
-    // for authorization debugging handled in WebSecurityConfig
-    @GetMapping("/admin")
-    public String admin() {
-        return "Your are logged in as Admin";
-    }
-
     // for authentication debugging
     @GetMapping("/me")
     public ResponseEntity<?> getUserInfo(HttpServletRequest request) {

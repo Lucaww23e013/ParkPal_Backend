@@ -146,9 +146,11 @@ public class FileService {
         return objectName;
     }
 
-    private File findFileByExternalId(String externalId) {
+    public File findFileByExternalId(String externalId) {
         return fileRepository.findByExternalId(externalId)
-                .orElseThrow(() -> new FileNotFoundException("File not found: " + externalId));
+                .orElseThrow(() -> new FileNotFoundException(
+                        "File not found for externalId: " + externalId
+                ));
     }
 
     @Transactional
