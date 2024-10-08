@@ -57,7 +57,6 @@ public class UserMapper {
             throw new IllegalArgumentException("User entity or its fields cannot be null");
         }
         return UpdateUserDto.builder()
-                .id(user.getId())
                 .gender(user.getGender())
                 .salutation(user.getSalutation())
                 .userName(user.getUserName())
@@ -68,7 +67,6 @@ public class UserMapper {
                 .profilePictureId(user.getMedia().isEmpty()
                         ? null : user.getMedia().getFirst().getId())
                 .joinedEventsIds(getJoinedEventsIds(user))
-
                 .build();
     }
 
@@ -92,13 +90,12 @@ public class UserMapper {
                 .build();
     }
 
-    public User toEntity(UpdateUserDto updateUserDto) {
+    public User toEntity(UpdateUserDto updateUserDto, String userid) {
         if (updateUserDto == null) {
             throw new IllegalArgumentException("updateUserDto  or its fields cannot be null");
         }
 
         User user = User.builder()
-                .id(updateUserDto.getId())
                 .gender(updateUserDto.getGender())
                 .salutation(updateUserDto.getSalutation())
                 .userName(updateUserDto.getUserName())
@@ -106,7 +103,7 @@ public class UserMapper {
                 .lastName(updateUserDto.getLastName())
                 .email(updateUserDto.getEmail())
                 .country(countryService.findCountryByCountryId(updateUserDto.getCountryId()))
-                .joinedEvents(eventService.findAllEventsJoinedByUser(updateUserDto.getId()))
+                .joinedEvents(eventService.findAllEventsJoinedByUser(userid))
                 .build();
 
         fileService.assignProfilePicture(user, updateUserDto.getProfilePictureId(), false);

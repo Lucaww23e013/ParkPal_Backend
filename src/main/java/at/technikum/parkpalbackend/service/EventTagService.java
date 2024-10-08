@@ -26,6 +26,7 @@ public class EventTagService {
         return new HashSet<>(eventTagRepository.findAll());
     }
 
+
     public EventTag save(EventTag eventTag) {
         return eventTagRepository.save(eventTag);
     }

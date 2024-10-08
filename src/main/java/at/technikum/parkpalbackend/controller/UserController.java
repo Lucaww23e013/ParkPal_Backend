@@ -52,7 +52,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public UpdateUserDto updateUser(@PathVariable String userId,
                               @RequestBody @Valid UpdateUserDto updateUserDto) {
-        User user = userMapper.toEntity(updateUserDto);
+        User user = userMapper.toEntity(updateUserDto, userId);
         user = userService.update(userId, user);
         return userMapper.toUpdateDto(user);
     }

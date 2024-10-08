@@ -1,6 +1,8 @@
 package at.technikum.parkpalbackend.controller;
 
-import at.technikum.parkpalbackend.dto.EventTagDto;
+import at.technikum.parkpalbackend.dto.eventtagdtos.CreateEventTagDto;
+import at.technikum.parkpalbackend.dto.eventtagdtos.EventTagDto;
+import at.technikum.parkpalbackend.dto.eventtagdtos.UpdateEventTagDto;
 import at.technikum.parkpalbackend.mapper.EventTagMapper;
 import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.service.EventTagService;
@@ -31,9 +33,11 @@ public class EventTagController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventTagDto createEventTag(@RequestBody @Valid EventTagDto eventTagDto) {
-        EventTag eventTag = eventTagMapper.toEntity(eventTagDto);
+    public EventTagDto createEventTag(
+            @RequestBody @Valid CreateEventTagDto createEventTagDto) {
+        EventTag eventTag = eventTagMapper.toEntity(createEventTagDto);
         eventTag = eventTagService.save(eventTag);
+        System.out.println("events: " + eventTag.getEvents());
         return eventTagMapper.toDto(eventTag);
     }
 
@@ -58,11 +62,11 @@ public class EventTagController {
         return ResponseEntity.ok(eventTagMapper.toDto(eventTag));
     }
 
-    // TODO: Implement updateEventTag method correctly
     @PutMapping("/{eventTagId}")
-    public ResponseEntity<EventTagDto> updateEventTag(@PathVariable String eventTagId,
-                                                      @RequestBody @Valid EventTagDto eventTagDto) {
-        EventTag updatedEventTag = eventTagMapper.toEntity(eventTagDto);
+    public ResponseEntity<EventTagDto> updateEventTag(
+            @PathVariable String eventTagId,
+            @RequestBody @Valid UpdateEventTagDto updateEventTagDto) {
+        EventTag updatedEventTag = eventTagMapper.toEntity(updateEventTagDto, eventTagId);
         updatedEventTag = eventTagService.updateTag(eventTagId, updatedEventTag);
         return ResponseEntity.ok(eventTagMapper.toDto(updatedEventTag));
     }

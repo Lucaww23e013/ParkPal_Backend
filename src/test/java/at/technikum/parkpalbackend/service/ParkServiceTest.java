@@ -77,7 +77,7 @@ class ParkServiceTest {
         String parkId = UUID.randomUUID().toString();
         when(parkRepository.findById(parkId)).thenReturn(Optional.empty());
         // Act + Assert
-        assertThrows(EntityNotFoundException.class, () -> parkService.findParkByParkId(parkId));
+        assertThrows(EntityNotFoundException.class, () -> parkService.findParkById(parkId));
         verify(parkRepository).findById(parkId);
     }
 

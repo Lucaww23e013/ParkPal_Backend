@@ -8,6 +8,8 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +22,6 @@ import java.util.Set;
 
 @Component
 public class EventDto {
-    private String id;
 
     @NotBlank(message = "Event title not Valid")
     private String title;
@@ -47,11 +48,14 @@ public class EventDto {
 
     private String creatorName;
 
-    private List<String> joinedUserIds;
+    @Builder.Default
+    private List<String> joinedUserIds = new ArrayList<>();
 
-    public List<String> mediaFileIds;
+    @Builder.Default
+    private List<String> mediaFileExternalIds = new ArrayList<>();
 
-    private Set<String> eventTagsIds;
+    @Builder.Default
+    private Set<String> eventTagsIds = new HashSet<>();
 
     private Set<String> eventTagNames;
 }

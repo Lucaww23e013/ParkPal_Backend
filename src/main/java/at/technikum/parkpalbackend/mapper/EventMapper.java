@@ -9,8 +9,7 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.*;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -39,7 +38,6 @@ public class EventMapper {
         }
 
         return EventDto.builder()
-                .id(event.getId())
                 .title(event.getTitle())
                 .description(event.getDescription())
                 .startTS(event.getStartTS())
@@ -51,6 +49,7 @@ public class EventMapper {
                 .joinedUserIds(getJoinedUserIds(event.getJoinedUsers()))
                 .eventTagsIds(getEventTagIds(event.getTags()))
                 .eventTagNames(getEventTagNames(event.getTags()))
+                .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
                 .build();
     }
 
@@ -60,7 +59,6 @@ public class EventMapper {
         }
 
         return EventDto.builder()
-                .id(event.getId())
                 .title(event.getTitle())
                 .description(event.getDescription())
                 .startTS(event.getStartTS())
@@ -70,7 +68,7 @@ public class EventMapper {
                 .creatorUserId(getCreatorUserId(event))
                 .joinedUserIds(getJoinedUserIds(event.getJoinedUsers()))
                 .eventTagsIds(getEventTagIds(event.getTags()))
-                .mediaFileIds(getFileIdsFromMediaFiles(event.getMedia()))
+                .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
                 .build();
     }
 
@@ -95,36 +93,70 @@ public class EventMapper {
                 .parkId(event.getPark() != null ?
                         event.getPark().getId() : null)
                 .creatorUserId(eventService.findEventCreatorUserId(event.getId()))
-                .createMediaFileIds(getFileIdsFromMediaFiles(event.getMedia()))
+                .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
                 .eventTagsIds(getEventTagIds(event.getTags()))
                 .eventTagNames(getEventTagNames(event.getTags()))
                 .build();
     }
 
-    public Event toEntity(EventDto eventDto) {
-        return getEvent(eventDto);
+    public Event toEntity(EventDto eventDto, Optional<String> eventId) {
+        return getEvent(eventDto, eventId.orElse(null));
     }
 
-    public Event toEntityAllArgs(EventDto eventDto) {
-        return getEvent(eventDto);
-    }
-
-    private Event getEvent(EventDto eventDto) {
+    private Event getEvent(EventDto eventDto, String eventId) {
         if (eventDto == null) {
             throw new IllegalArgumentException("eventDto cannot be null");
         }
 
-        return Event.builder()
-                .title(eventDto.getTitle())
-                .description(eventDto.getDescription())
-                .startTS(eventDto.getStartTS())
-                .endTS(eventDto.getEndTS())
-                .park(parkService.findParkByParkId(eventDto.getParkId()))
-                .creator(userService.findByUserId(eventDto.getCreatorUserId()))
-                .joinedUsers(userService.findUsersByIds(eventDto.getJoinedUserIds()))
-                .tags(eventTagService.findTagsByIds(eventDto.getEventTagsIds()))
-                .media(fileService.findFilesByIds(eventDto.getMediaFileIds()))
-                .build();
+        Event event = getOrCreateEvent(eventId);
+        List<User> newJoinedUsers = userService.findUsersByIds(eventDto.getJoinedUserIds());
+        List<User> oldJoinedUsers = event.getJoinedUsers();
+
+        updateUserAssociations(oldJoinedUsers, newJoinedUsers, event);
+        updateEventDetails(event, eventDto, newJoinedUsers);
+
+        return event;
+    }
+
+    private Event getOrCreateEvent(String eventId) {
+        if (eventId != null) {
+            return eventService.findByEventId(eventId);
+        } else {
+            return Event.builder().build();
+        }
+    }
+
+    private void updateUserAssociations(List<User> oldJoinedUsers,
+                                        List<User> newJoinedUsers,
+                                        Event event) {
+        removeOldUserAssociations(oldJoinedUsers, newJoinedUsers, event);
+        addNewUserAssociations(newJoinedUsers, oldJoinedUsers, event);
+    }
+
+    private void updateEventDetails(Event event, EventDto eventDto, List<User> newJoinedUsers) {
+        event.setTitle(eventDto.getTitle());
+        event.setDescription(eventDto.getDescription());
+        event.setStartTS(eventDto.getStartTS());
+        event.setEndTS(eventDto.getEndTS());
+        event.setPark(parkService.findParkById(eventDto.getParkId()));
+        event.setCreator(userService.findByUserId(eventDto.getCreatorUserId()));
+        event.setMedia(getFileList(eventDto.getMediaFileExternalIds()));
+        event.setJoinedUsers(newJoinedUsers);
+
+        Set<EventTag> newTags = eventTagService.findTagsByIds(eventDto.getEventTagsIds());
+        Set<EventTag> currentTags = event.getTags();
+
+        // Remove associations for tags that are no longer linked
+        currentTags.stream()
+                .filter(tag -> !newTags.contains(tag))
+                .forEach(tag -> tag.getEvents().remove(event));
+
+        // Add associations for new tags
+        newTags.stream()
+                .filter(tag -> !currentTags.contains(tag))
+                .forEach(tag -> tag.getEvents().add(event));
+
+        event.setTags(newTags);
     }
 
     public Event toEntityCreateEvent(CreateEventDto createEventDto) {
@@ -138,33 +170,46 @@ public class EventMapper {
                 .startTS(createEventDto.getStartTS())
                 .endTS(createEventDto.getEndTS())
                 .creator(userService.findByUserId(createEventDto.getCreatorUserId()))
-                .park(parkService.findParkByParkId(createEventDto.getParkId()))
-                .media(fileService.findFilesByIds(createEventDto.getCreateMediaFileIds()))
+                .park(parkService.findParkById(createEventDto.getParkId()))
+                .media(getFileList(createEventDto.getMediaFileExternalIds()))
                 .build();
+    }
+
+    private List<File> getFileList(List<String> mediaFileExternalIds) {
+        if (mediaFileExternalIds == null) {
+            return new ArrayList<>();
+        }
+
+        return mediaFileExternalIds.stream()
+                .map(fileService::findFileByExternalId)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private static List<String> getJoinedUserIds(List<User> joinedUsers) {
         if (joinedUsers == null) {
-            return null;
+            return new ArrayList<>();
         }
+
         return joinedUsers.stream()
                 .map(User::getId)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    private static List<String> getFileIdsFromMediaFiles(List<File> mediaFiles) {
+    private static List<String> getFileExternalIds(List<File> mediaFiles) {
         if (mediaFiles == null) {
-            return null;
+            return new ArrayList<>();
         }
+
         return mediaFiles.stream()
                 .map(File::getExternalId)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private static Set<String> getEventTagIds(Set<EventTag> eventTags) {
         if (eventTags == null) {
-            return null;
+            return new HashSet<>();
         }
+
         return eventTags.stream()
                 .map(EventTag::getId)
                 .collect(Collectors.toSet());
@@ -172,11 +217,28 @@ public class EventMapper {
 
     private static Set<String> getEventTagNames(Set<EventTag> eventTags) {
         if (eventTags == null) {
-            return null;
+            return new HashSet<>();
         }
 
         return eventTags.stream()
                 .map(EventTag::getName)
                 .collect(Collectors.toSet());
     }
+
+    private void removeOldUserAssociations(List<User> oldJoinedUsers,
+                                           List<User> newJoinedUsers,
+                                           Event event) {
+        oldJoinedUsers.stream()
+                .filter(user -> !newJoinedUsers.contains(user))
+                .forEach(user -> user.removeJoinedEvents(event));
+    }
+
+    private void addNewUserAssociations(List<User> newJoinedUsers,
+                                        List<User> oldJoinedUsers,
+                                        Event event) {
+        newJoinedUsers.stream()
+                .filter(user -> !oldJoinedUsers.contains(user))
+                .forEach(user -> user.addJoinedEvents(event));
+    }
+
 }

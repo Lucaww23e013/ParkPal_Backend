@@ -134,7 +134,7 @@ class UserServiceTest {
     @Test
     void whenFindAllUsers_andNoUsersAreFound_thenThrowNoSuchElementException() {
         // Arrange
-        when(userRepository.findAll()).thenReturn(Collections.emptyList());
+        when(userRepository.findAll()).thenReturn(new ArrayList<>());
 
         // Act & Assert
         assertThrows(NoSuchElementException.class, () -> userService.findAll());

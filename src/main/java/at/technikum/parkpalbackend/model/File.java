@@ -47,10 +47,12 @@ public class File {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "event_id", foreignKey = @ForeignKey(name = "fk_event_2_file"))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Event event;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "park_id", foreignKey = @ForeignKey(name = "fk_park_2_file"))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Park park;
 
     private boolean assigned;

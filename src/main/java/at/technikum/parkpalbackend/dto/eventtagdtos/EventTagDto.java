@@ -1,6 +1,5 @@
-package at.technikum.parkpalbackend.dto;
+package at.technikum.parkpalbackend.dto.eventtagdtos;
 
-import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -21,7 +20,7 @@ public class EventTagDto {
     @NotBlank(message = "Event Tag cannot be empty.")
     private String name;
 
-    private Set<EventDto> eventDtoSet;
+    private Set<String> eventIds;
 
 }
 

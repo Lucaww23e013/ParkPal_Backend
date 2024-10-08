@@ -2,6 +2,7 @@ package at.technikum.parkpalbackend.model;
 
 import at.technikum.parkpalbackend.model.enums.Gender;
 import at.technikum.parkpalbackend.model.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -68,14 +69,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(name = "event_joined_user",
-            joinColumns = @JoinColumn(name = "user_id",
-                    foreignKey = @ForeignKey(name = "fk_joined_user_user")),
-            inverseJoinColumns = @JoinColumn(name = "event_id",
-                    foreignKey = @ForeignKey(name = "fk_joined_user_event")))
+    @ManyToMany(mappedBy = "joinedUsers",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
     @ToString.Exclude
+    @JsonIgnore
     private List<Event> joinedEvents = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator")

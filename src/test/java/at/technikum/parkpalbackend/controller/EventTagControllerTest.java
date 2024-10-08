@@ -1,13 +1,14 @@
 package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.TestFixtures;
-import at.technikum.parkpalbackend.dto.EventTagDto;
+import at.technikum.parkpalbackend.dto.eventtagdtos.CreateEventTagDto;
+import at.technikum.parkpalbackend.dto.eventtagdtos.EventTagDto;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.mapper.EventTagMapper;
 import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.security.filter.JwtAuthenticationFilter;
-import at.technikum.parkpalbackend.service.EventTagService;
 import at.technikum.parkpalbackend.service.EventService;
+import at.technikum.parkpalbackend.service.EventTagService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -24,11 +25,9 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EventTagController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -56,14 +55,16 @@ public class EventTagControllerTest {
     @Test
     public void testCreateEventTag() throws Exception {
         // Arrange
-        EventTagDto eventTagDto = TestFixtures.testEventTagDto;
-        eventTagDto.setId(UUID.randomUUID().toString());
-        eventTagDto.setName("Music");
+        CreateEventTagDto createEventTagDto = TestFixtures.testCreateEventTagDto;
+        createEventTagDto.setName("Music");
+        EventTagDto eventTagDto = EventTagDto.builder()
+                .name(createEventTagDto.getName())
+                .build();
 
         EventTag eventTag = TestFixtures.familyEventTag;
         eventTag.setName("Music");
 
-        Mockito.when(eventTagMapper.toEntity(any(EventTagDto.class))).thenReturn(eventTag);
+        Mockito.when(eventTagMapper.toEntity(any(CreateEventTagDto.class))).thenReturn(eventTag);
         Mockito.when(eventTagService.save(any(EventTag.class))).thenReturn(eventTag);
         Mockito.when(eventTagMapper.toDto(any(EventTag.class))).thenReturn(eventTagDto);
 

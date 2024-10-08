@@ -1,5 +1,8 @@
 package at.technikum.parkpalbackend.dto;
 
+import at.technikum.parkpalbackend.model.enums.FileType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
 import lombok.*;
 
@@ -14,13 +17,18 @@ import java.time.LocalDateTime;
 @Valid
 public class FileDto {
 
-    private String id;
+    private String externalId;
 
-    //@NotNull(message="File must belong to a User. Please add a User")
+    private String filename;
+
     private String userId;
 
     private String evenId;
 
-    @Builder.Default
-    private LocalDateTime uploadDate = LocalDateTime.now();
+    private String parkId;
+
+    @Enumerated(EnumType.STRING)
+    private FileType fileType;
+
+    private LocalDateTime uploadDate;
 }

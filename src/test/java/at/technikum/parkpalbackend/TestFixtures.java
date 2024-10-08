@@ -1,21 +1,24 @@
 package at.technikum.parkpalbackend;
 
 import at.technikum.parkpalbackend.dto.CountryDto;
-import at.technikum.parkpalbackend.dto.EventTagDto;
 import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
+import at.technikum.parkpalbackend.dto.eventtagdtos.CreateEventTagDto;
+import at.technikum.parkpalbackend.dto.eventtagdtos.EventTagDto;
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.model.*;
-import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.model.enums.Gender;
+import at.technikum.parkpalbackend.model.enums.Role;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class TestFixtures {
@@ -49,7 +52,7 @@ public class TestFixtures {
    /* public static List<Media> mediaList = createMediaList();*/
 
     /*public static List<Event> eventList = createEventList();*/
-    public static List<User> userList = createUserlist();
+    public static List<User> userList = createUserList();
     // Events
     public static Event grilling = createEvent("grilling Biggest Steak Beef");
     public static Event pingPongGame = createEvent("pingPong Game with 4 players");
@@ -62,6 +65,13 @@ public class TestFixtures {
     public static EventDto testEventDto = createEventDto();
     public static EventDto secondTestEventDto = createEventDto();
     public static EventTagDto testEventTagDto = createEventTagDto();
+    public static CreateEventTagDto testCreateEventTagDto = createEventTagDtoMusicWithNoEvents();
+
+    @NotNull
+    private static CreateEventTagDto createEventTagDtoMusicWithNoEvents() {
+        return new CreateEventTagDto("music", Collections.emptySet());
+    }
+
     public static Set<EventDto> eventDtoSet = createEventDtoSet();
 
 
@@ -98,7 +108,7 @@ public class TestFixtures {
                 .build();
     }
 
-    private static List<User> createUserlist() {
+    private static List<User> createUserList() {
         List<User> joinedUsers = new ArrayList<>();
         joinedUsers.add(normalUser);
         joinedUsers.add(adminUser);
@@ -129,7 +139,7 @@ public class TestFixtures {
                 .endTS( LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES))
                 .park(parkAwesome)
                 .creator(adminUser)
-                .joinedUsers(createUserlist())
+                .joinedUsers(createUserList())
                 .build();
         List<EventTag> eventTags = createEventTagListForAnEvent(event);
         event.addEventTags(eventTags.toArray(EventTag[]::new));
@@ -148,7 +158,7 @@ public class TestFixtures {
                 .name(parkDtoName)
                 .description("ParkDTO Test")
                 .address(parkAddress)
-                .parkEventDtos(createEventDtoList())
+                .eventDtos(createEventDtoList())
                 .build();
     }
     // TODO Check me
@@ -165,7 +175,7 @@ public class TestFixtures {
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
-                .parkEvents(createEventList())
+                .events(createEventList())
                 .build();
     }
 
@@ -239,8 +249,11 @@ public class TestFixtures {
     }
 
     private static EventTagDto createEventTagDto() {
+
+
         return EventTagDto.builder()
-                .eventDtoSet(eventDtoSet)
+                .eventIds(createEventDtoSet().stream()
+                        .map(EventDto::getTitle).collect(Collectors.toSet()))
                 .name("Test")
                 .build();
     }
@@ -248,7 +261,6 @@ public class TestFixtures {
     // TODO Check me
     private static EventDto createEventDto() {
         return EventDto.builder()
-                .id(UUID.randomUUID().toString())
                 .description("Test")
                 .creatorName(TestFixtures.adminUser.getUserName())
                 .creatorUserId(TestFixtures.adminUser.getId())

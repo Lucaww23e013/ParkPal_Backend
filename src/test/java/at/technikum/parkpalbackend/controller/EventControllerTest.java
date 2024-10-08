@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -89,7 +90,6 @@ public class EventControllerTest {
         when(eventMapper.toDto(any(Event.class))).thenAnswer(invocation -> {
             Event event = invocation.getArgument(0);
             EventDto eventDto = EventDto.builder().build();
-            eventDto.setId(event.getId());
             eventDto.setTitle(event.getTitle());
             return eventDto;
         });
@@ -111,7 +111,6 @@ public class EventControllerTest {
         event.setTitle("Sample Event");
 
         EventDto eventDto = TestFixtures.testEventDto;
-        eventDto.setId(eventId);
         eventDto.setTitle("Sample Event");
 
         when(eventService.findByEventId(anyString())).thenReturn(event);
@@ -121,7 +120,7 @@ public class EventControllerTest {
         mockMvc.perform(get("/events/" + eventId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":\"1\",\"title\":\"Sample Event\"}"));
+                .andExpect(content().json("{\"title\":\"Sample Event\"}"));
     }
 
     @Test
@@ -140,7 +139,6 @@ public class EventControllerTest {
         // Mock data
         String eventId = "1";
         EventDto updatedEventDto = EventDto.builder().build();
-        updatedEventDto.setId(eventId);
         updatedEventDto.setTitle("Updated Event");
         // Set other required fields with valid values
 
@@ -150,7 +148,7 @@ public class EventControllerTest {
         // Set other fields accordingly
 
         // Mock the behavior of eventMapper
-        when(eventMapper.toEntity(updatedEventDto)).thenReturn(updatedEvent);
+        when(eventMapper.toEntity(updatedEventDto, Optional.of(eventId))).thenReturn(updatedEvent);
 
         // Mock the behavior of eventService
         when(eventService.updateEvent(eq(eventId), any(Event.class))).thenReturn(updatedEvent);
