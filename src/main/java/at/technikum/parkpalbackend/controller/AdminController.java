@@ -15,7 +15,6 @@ public class AdminController {
         this.userService = userService;
     }
 
-    // TODO: missing Authorization checks
     @PostMapping("/{userId}/status")
     public ResponseEntity<String> updateUserStatus(@PathVariable String userId,
                                                    @RequestParam(required = false) Boolean locked,
@@ -28,7 +27,6 @@ public class AdminController {
         return ResponseEntity.ok("User status updated successfully.");
     }
 
-    // TODO: missing Authorization checks
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
         userService.delete(userId);

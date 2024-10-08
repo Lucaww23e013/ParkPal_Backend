@@ -37,11 +37,10 @@ public class Event {
 
     private LocalDateTime endTS;
 
-
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "event_park_id", foreignKey = @ForeignKey(name = "fk_event_2_park"))
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Park park;
-
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "event_2_user_id", foreignKey = @ForeignKey(name = "fk_event_2_user"))
@@ -67,8 +66,8 @@ public class Event {
     private Set<EventTag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "event", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @ToString.Exclude
     @Builder.Default
+    @ToString.Exclude
     private List<File> media = new ArrayList<>();
 
 
@@ -92,13 +91,13 @@ public class Event {
         return this;
     }
 
-    public Event addEventMedia(File... media) {
+    public Event addMedia(File... media) {
         this.media.addAll(Arrays.asList(media));
         return this;
     }
 
-    public Event removeEventMedia(File... media) {
-        Arrays.stream(media).forEach(m -> this.media.remove(m));
+    public Event removeMedia(File... media) {
+        Arrays.stream(media).forEach(med -> this.media.remove(med));
         return this;
     }
 

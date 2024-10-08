@@ -5,6 +5,7 @@ import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.EventRepository;
+import at.technikum.parkpalbackend.persistence.FileRepository;
 import at.technikum.parkpalbackend.persistence.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,9 @@ class EventServiceTest {
     private EventRepository eventRepository;
 
     private UserRepository userRepository;
+
+    @Mock
+    private FileRepository fileRepository;
 
     @Mock
     private UserService userService;
@@ -121,7 +125,7 @@ class EventServiceTest {
         String userId = UUID.randomUUID().toString();
         userRepository = mock(UserRepository.class);
         userService = new UserService(userRepository);
-        eventService = new EventService(eventRepository, userService);
+        eventService = new EventService(eventRepository, fileRepository, userService);
         // Act + Assert
         assertThrows(EntityNotFoundException.class, () -> eventService.findAllEventsCreatedByUser(userId));
     }
@@ -133,7 +137,7 @@ class EventServiceTest {
         User user = TestFixtures.normalUser;
         userRepository = mock(UserRepository.class);
         userService = new UserService(userRepository);
-        eventService = new EventService(eventRepository, userService);
+        eventService = new EventService(eventRepository, fileRepository, userService);
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(eventRepository.findAllByCreatorId(userId)).thenThrow(new RuntimeException());
         // Act + Assert

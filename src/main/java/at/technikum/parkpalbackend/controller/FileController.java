@@ -43,7 +43,7 @@ public class FileController {
             @PathVariable("externalId") String externalId) {
         return fileService.downloadFile(externalId);
     }
-    // TODO: only owner and admins are allowed
+
     @DeleteMapping("/{externalId}")
     public ResponseEntity<String> deletePictureOrVideo(
             @PathVariable("externalId") String externalId) {

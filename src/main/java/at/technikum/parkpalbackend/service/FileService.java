@@ -93,15 +93,6 @@ public class FileService {
     }
 
 
-    @Transactional(readOnly = true)
-    public List<File> findFilesByIds(List<String> fileIds) {
-        if (fileIds == null || fileIds.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return fileRepository.findAllById(fileIds);
-    }
-
-
     @Nullable
     private ResponseEntity<String> checkMaxFileSizeAndSendResponse(MultipartFile file) {
         long maxFileSize = maxFileSizeMb * 1024 * 1024; // Convert MB to bytes
@@ -146,7 +137,7 @@ public class FileService {
         return objectName;
     }
 
-    private File findFileByExternalId(String externalId) {
+    public File findFileByExternalId(String externalId) {
         return fileRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new FileNotFoundException("File not found: " + externalId));
     }
@@ -199,6 +190,23 @@ public class FileService {
         return fileRepository.save(file);
     }
 
+    public List<String> listAllFiles(String eventId, String parkId, String userId) {
+        List<File> files;
+        if (eventId != null) {
+            files = fileRepository.findByEventId(eventId);
+        } else if (parkId != null) {
+            files = fileRepository.findByParkId(parkId);
+        } else if (userId != null) {
+            files = fileRepository.findByUserId(userId);
+        } else {
+            files = minioService.listAllFiles();
+        }
+        return files.stream()
+                .map(File::getExternalId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
     private File retrieveAndAssignFileById(String fileId,
                                            String userId,
                                            String eventId,
@@ -219,7 +227,7 @@ public class FileService {
                 file.setEvent(eventService.findByEventId(eventId));
             }
             if (parkId != null) {
-                file.setPark(parkService.findParkByParkId(parkId));
+                file.setPark(parkService.findParkById(parkId));
             }
             if (userId != null) {
                 file.setUser(userService.findByUserId(userId));
@@ -241,23 +249,6 @@ public class FileService {
                 .fileType(fileType != null ? fileType : FileType.OTHER)
                 .build();
         fileRepository.save(fileDetails);
-    }
-
-    public List<String> listAllFiles(String eventId, String parkId, String userId) {
-        List<File> files;
-        if (eventId != null) {
-            files = fileRepository.findByEventId(eventId);
-        } else if (parkId != null) {
-            files = fileRepository.findByParkId(parkId);
-        } else if (userId != null) {
-            files = fileRepository.findByUserId(userId);
-        } else {
-            files = minioService.listAllFiles();
-        }
-        return files.stream()
-                .map(File::getExternalId)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
     }
 
 }

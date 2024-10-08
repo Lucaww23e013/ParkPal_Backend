@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/events")
@@ -61,19 +62,16 @@ public class EventController {
     public EventDto getEventByID(@PathVariable String eventId) {
         return eventMapper.toDto(eventService.findByEventId(eventId));
     }
-    // TODO: only creator of event and admin
-    // allowed
+
     @PutMapping("/{eventID}")
     public ResponseEntity<EventDto> updateEventDto(@RequestBody @Valid EventDto newEventDto,
                                                    @PathVariable String eventID) {
 
-        Event mappedEntity = eventMapper.toEntity(newEventDto);
+        Event mappedEntity = eventMapper.toEntity(newEventDto, Optional.of(eventID));
         Event updatedEvent = eventService.updateEvent(eventID, mappedEntity);
         return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
     }
 
-    // TODO: only creator of event and admin
-    // allowed
     @DeleteMapping("/{eventID}")
     public ResponseEntity<Void> deleteEventDto(@PathVariable @Valid String eventID) {
         eventService.deleteEventById(eventID);

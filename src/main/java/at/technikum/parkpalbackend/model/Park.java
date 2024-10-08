@@ -35,7 +35,7 @@ public class Park {
     @OneToMany(mappedBy = "park", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
     @ToString.Exclude
-    private List<Event> parkEvents = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
 
     @OneToMany(mappedBy = "park", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
@@ -43,12 +43,12 @@ public class Park {
     private List<File> media = new ArrayList<>();
 
     public Park addParkEvents(Event... events) {
-        this.parkEvents.addAll(Arrays.asList(events));
+        this.events.addAll(Arrays.asList(events));
         return this;
     }
 
     public Park removeParkEvents(Event... events) {
-        Arrays.stream(events).forEach(event -> this.parkEvents.remove(event));
+        Arrays.stream(events).forEach(event -> this.events.remove(event));
         return this;
     }
 

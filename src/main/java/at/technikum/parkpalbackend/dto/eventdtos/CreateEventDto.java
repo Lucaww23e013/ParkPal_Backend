@@ -43,7 +43,7 @@ public class CreateEventDto {
     //@NotBlank(message = "Creator not found. All Events need to have been created by an User")
     private String creatorUserId;
 
-    private List<String> createMediaFileIds;
+    private List<String> mediaFileExternalIds;
 
     private Set<String> eventTagsIds;
 

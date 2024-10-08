@@ -29,8 +29,18 @@ public class EventTag {
     @NotBlank(message = "Event Tag cannot be empty.")
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
     @JsonIgnore
     private Set<Event> events = new HashSet<>();
+
+    public void addEvent(Event event) {
+        this.events.add(event);
+        event.getTags().add(this);
+    }
+
+    public void removeEvent(Event event) {
+        this.events.remove(event);
+        event.getTags().remove(this);
+    }
 }

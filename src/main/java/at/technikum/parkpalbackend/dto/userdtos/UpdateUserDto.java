@@ -19,8 +19,6 @@ import java.util.List;
 @Valid
 public class UpdateUserDto {
 
-    private String id;
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

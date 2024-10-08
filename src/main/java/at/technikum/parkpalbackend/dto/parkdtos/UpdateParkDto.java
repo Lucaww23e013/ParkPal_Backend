@@ -1,6 +1,5 @@
 package at.technikum.parkpalbackend.dto.parkdtos;
 
-import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Address;
 import jakarta.persistence.Embedded;
 import jakarta.validation.Valid;
@@ -18,21 +17,22 @@ import java.util.List;
 
 @Builder
 @Valid
-public class ParkDto {
-
-    private String id;
+public class UpdateParkDto {
 
     @NotBlank(message = "Park name not found. All parks need a name")
     private String name;
 
+    @NotBlank(message = "Park description not found. All parks need a description")
     private String description;
 
     @Embedded
     private Address address;
 
     @ToString.Exclude
-    private List<EventDto> eventDtos = new ArrayList<>();
+    @Builder.Default
+    private List<String> eventIds = new ArrayList<>();
 
     @ToString.Exclude
+    @Builder.Default
     private List<String> filesExternalIds = new ArrayList<>();
 }
