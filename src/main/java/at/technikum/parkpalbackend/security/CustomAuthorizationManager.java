@@ -67,8 +67,7 @@ public class CustomAuthorizationManager
             if (file == null) {
                 throw new NoSuchElementException(
                         "No file found with externalId: " + externalId);
-            }
-            if (file.getUser() == null) {
+            } else if (file.getUser() == null) {
                 return null;
             }
             return file.getUser().getId();
