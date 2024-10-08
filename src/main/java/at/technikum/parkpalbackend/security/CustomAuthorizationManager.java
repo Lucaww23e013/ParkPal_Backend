@@ -1,6 +1,6 @@
 package at.technikum.parkpalbackend.security;
 
-import at.technikum.parkpalbackend.exception.AuthorizationException;
+import at.technikum.parkpalbackend.exception.BadRequestException;
 import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.FileService;
@@ -42,12 +42,6 @@ public class CustomAuthorizationManager
 
         boolean isAuthorized = isCurrentUserOrAdmin(authentication, userId);
 
-        if (!isAuthorized) {
-            throw new AuthorizationException(
-                    "You need to be the owner or an admin to perform this action."
-            );
-        }
-
         return new AuthorizationDecision(isAuthorized);
     }
 
@@ -58,7 +52,6 @@ public class CustomAuthorizationManager
         String userId = context.getVariables().get("userId");
         String eventId = context.getVariables().get("eventId");
         String externalId = context.getVariables().get("externalId");
-        System.out.println("body: " + externalId);
         if (userId != null) {
             return userId;
         }
@@ -71,13 +64,14 @@ public class CustomAuthorizationManager
         }
         if (externalId != null) {
             File file = fileService.findFileByExternalId(externalId);
-            String fileCreatorId = file.getUser().getId();
-            //TODO files should have userid -> add exception
-            if (fileCreatorId != null) {
-                return fileCreatorId;
+            if (file == null || file.getUser() == null) {
+                throw new NoSuchElementException(
+                        "No user found for file with externalId: " + externalId);
             }
+            return file.getUser().getId();
         }
-        throw new NoSuchElementException("No valid userId could be resolved from context.");
+        throw new BadRequestException(
+                "No valid user-related identifier found in request: " + context);
     }
 
     public boolean isCurrentUserOrAdmin(Authentication authentication, String userId) {

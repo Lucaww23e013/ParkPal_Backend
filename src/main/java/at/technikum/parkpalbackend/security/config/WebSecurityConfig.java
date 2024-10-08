@@ -55,6 +55,7 @@ public class WebSecurityConfig {
         configureBasicSecurity(http);
         configureSessionManagement(http);
 
+
         // configure Authorization
         configureSwaggerAndApiEndpoints(http);
         configureUserEndpoints(http, customAuthorizationManager);
@@ -62,7 +63,7 @@ public class WebSecurityConfig {
         configureParkEndpoints(http);
         configureFileEndpoints(http, customAuthorizationManager);
         configureCountryEndpoints(http);
-        configureAuthEndpoints(http, customAuthorizationManager);
+        configureAuthEndpoints(http);
         configureAdminEndpoints(http);
         configureErrorEndpoints(http);
 
@@ -141,15 +142,9 @@ public class WebSecurityConfig {
         );
     }
 
-    private void configureAuthEndpoints(
-            HttpSecurity http,
-            AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager
-    ) throws Exception {
+    private void configureAuthEndpoints(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(registry -> registry
-                .requestMatchers("/auth/logout", "/auth/user").authenticated()
-                .requestMatchers("/auth/admin").hasAuthority("ADMIN")
-                .requestMatchers("/auth/currentUserOrAdmin/{userId}")
-                .access(customAuthorizationManager)
+                .requestMatchers("/auth/logout").authenticated()
                 .requestMatchers("auth/**").permitAll()
         );
     }
