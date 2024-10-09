@@ -38,6 +38,7 @@ public class EventMapper {
         }
 
         return EventDto.builder()
+                .id(event.getId())
                 .title(event.getTitle())
                 .description(event.getDescription())
                 .startTS(event.getStartTS())
@@ -59,6 +60,7 @@ public class EventMapper {
         }
 
         return EventDto.builder()
+                .id(event.getId())
                 .title(event.getTitle())
                 .description(event.getDescription())
                 .startTS(event.getStartTS())

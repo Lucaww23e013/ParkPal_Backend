@@ -63,7 +63,7 @@ public class EventController {
         return eventMapper.toDto(eventService.findByEventId(eventId));
     }
 
-    @PutMapping("/{eventID}")
+    @PutMapping("/{eventId}")
     public ResponseEntity<EventDto> updateEventDto(@RequestBody @Valid EventDto newEventDto,
                                                    @PathVariable String eventID) {
 
@@ -72,9 +72,9 @@ public class EventController {
         return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
     }
 
-    @DeleteMapping("/{eventID}")
-    public ResponseEntity<Void> deleteEventDto(@PathVariable @Valid String eventID) {
-        eventService.deleteEventById(eventID);
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<Void> deleteEventDto(@PathVariable @Valid String eventId) {
+        eventService.deleteEventById(eventId);
         return ResponseEntity.noContent().build();
     }
 

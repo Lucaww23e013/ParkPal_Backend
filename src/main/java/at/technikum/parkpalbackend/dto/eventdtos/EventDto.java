@@ -23,6 +23,8 @@ import java.util.Set;
 @Component
 public class EventDto {
 
+    private String id;
+
     @NotBlank(message = "Event title not Valid")
     private String title;
 
