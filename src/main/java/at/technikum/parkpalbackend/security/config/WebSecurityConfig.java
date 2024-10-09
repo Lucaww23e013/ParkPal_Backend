@@ -145,7 +145,7 @@ public class WebSecurityConfig {
     private void configureAuthEndpoints(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(registry -> registry
                 .requestMatchers("/auth/logout").authenticated()
-                .requestMatchers("auth/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
         );
     }
 
