@@ -63,4 +63,5 @@ public class UserDto {
     @Builder.Default
     private List<String> mediaIds = new ArrayList<>();
 
+    private String profilePictureId;
 }

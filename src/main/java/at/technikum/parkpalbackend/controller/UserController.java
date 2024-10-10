@@ -48,7 +48,6 @@ public class UserController {
         return userMapper.toDto(user);
     }
 
-    // TODO: only user itself and admin
     @PutMapping("/{userId}")
     public UpdateUserDto updateUser(@PathVariable String userId,
                               @RequestBody @Valid UpdateUserDto updateUserDto) {
