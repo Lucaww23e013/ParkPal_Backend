@@ -4,6 +4,7 @@ import at.technikum.parkpalbackend.dto.userdtos.*;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.service.CountryService;
 import at.technikum.parkpalbackend.service.EventService;
@@ -49,6 +50,7 @@ public class UserMapper {
                 .role(user.getRole())
                 .joinedEvents(user.getJoinedEvents())
                 .mediaIds(getMediaIds(user))
+                .profilePictureId(getProfilePictureId(user))
                 .build();
     }
 
@@ -65,7 +67,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .countryId(user.getCountry().getId())
                 .profilePictureId(user.getMedia().isEmpty()
-                        ? null : user.getMedia().getFirst().getId())
+                        ? null : user.getMedia().getFirst().getExternalId())
                 .joinedEventsIds(getJoinedEventsIds(user))
                 .build();
     }
@@ -126,7 +128,7 @@ public class UserMapper {
                 .countryId(user.getCountry().getId())
                 .password(user.getPassword())
                 .profilePictureId(user.getMedia().isEmpty()
-                        ? null : user.getMedia().getFirst().getId())
+                        ? null : user.getMedia().getFirst().getExternalId())
                 .build();
     }
     public User toEntity(CreateUserDto createUserDto) {
@@ -179,8 +181,17 @@ public class UserMapper {
     private static List<String> getMediaIds(User user) {
         return user.getMedia().isEmpty()
                 ? new ArrayList<>() : user.getMedia().stream()
-                .map(File::getId)
+                .filter(f -> f.getFileType() != FileType.PROFILE_PICTURE)
+                .map(File::getExternalId)
                 .toList();
+    }
+
+    private String getProfilePictureId(User user) {
+        return user.getMedia().stream()
+                .filter(f -> f.getFileType() == FileType.PROFILE_PICTURE)
+                .map(File::getExternalId)
+                .findFirst()
+                .orElse(null);
     }
 
     @NotNull
