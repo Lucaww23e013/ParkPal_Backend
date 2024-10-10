@@ -67,7 +67,12 @@ public class UserMapper {
                 .email(user.getEmail())
                 .countryId(user.getCountry().getId())
                 .profilePictureId(user.getMedia().isEmpty()
-                        ? null : user.getMedia().getFirst().getExternalId())
+                        ? null : user.getMedia()
+                        .stream()
+                        .filter(f -> f.getFileType() == FileType.PROFILE_PICTURE)
+                        .findFirst()
+                        .map(File::getExternalId)
+                        .orElse(null))
                 .joinedEventsIds(getJoinedEventsIds(user))
                 .build();
     }
@@ -94,10 +99,18 @@ public class UserMapper {
 
     public User toEntity(UpdateUserDto updateUserDto, String userid) {
         if (updateUserDto == null) {
-            throw new IllegalArgumentException("updateUserDto  or its fields cannot be null");
+            throw new IllegalArgumentException("updateUserDto or its fields cannot be null");
+        }
+        List<File> existingMedia = new ArrayList<>();
+
+        User existingUser = userService.findByUserId(userid);
+
+        if (existingUser != null && existingUser.getMedia() != null) {
+            existingMedia.addAll(existingUser.getMedia());
         }
 
         User user = User.builder()
+                .id(userid)
                 .gender(updateUserDto.getGender())
                 .salutation(updateUserDto.getSalutation())
                 .userName(updateUserDto.getUserName())
@@ -106,12 +119,13 @@ public class UserMapper {
                 .email(updateUserDto.getEmail())
                 .country(countryService.findCountryByCountryId(updateUserDto.getCountryId()))
                 .joinedEvents(eventService.findAllEventsJoinedByUser(userid))
+                .media(existingMedia)
                 .build();
 
         fileService.assignProfilePicture(user, updateUserDto.getProfilePictureId(), false);
-
         return user;
     }
+
 
     public CreateUserDto toCreateUserDto(User user) {
         if (user == null) {

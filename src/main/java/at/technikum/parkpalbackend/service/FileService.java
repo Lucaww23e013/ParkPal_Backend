@@ -234,8 +234,8 @@ public class FileService {
             if (userId != null) {
                 file.setUser(userService.findByUserId(userId));
             }
+            fileRepository.save(file);
         }
-
         return file;
     }
 
