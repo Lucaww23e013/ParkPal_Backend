@@ -21,6 +21,8 @@ import java.util.Set;
 @Component
 public class CreateEventDto {
 
+    private String id;
+
     @NotBlank(message = "Event title is not valid")
     private String title;
 
@@ -37,10 +39,10 @@ public class CreateEventDto {
     @NotNull(message = "Event End Time not found. All Events need to have a Start and End Time")
     private LocalDateTime endTS;
 
-    //@NotBlank(message = "Park not found. All Events need to take place in a Park")
+    @NotBlank(message = "Park not found. All Events need to take place in a Park")
     private String parkId;
 
-    //@NotBlank(message = "Creator not found. All Events need to have been created by an User")
+    @NotBlank(message = "Creator not found. All Events need to have been created by an User")
     private String creatorUserId;
 
     private List<String> mediaFileExternalIds;
