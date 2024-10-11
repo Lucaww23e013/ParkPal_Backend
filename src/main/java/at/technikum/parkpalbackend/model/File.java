@@ -2,11 +2,11 @@ package at.technikum.parkpalbackend.model;
 
 import at.technikum.parkpalbackend.listener.FileEntityListener;
 import at.technikum.parkpalbackend.model.enums.FileType;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.*;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +28,12 @@ public class File {
     @UuidGenerator
     @Column(name = "file_id")
     private String id;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     private String externalId;
 

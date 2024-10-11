@@ -88,6 +88,7 @@ public class EventMapper {
         }
 
         return CreateEventDto.builder()
+                .id(event.getId())
                 .title(event.getTitle())
                 .description(event.getDescription())
                 .startTS(event.getStartTS())

@@ -1,8 +1,14 @@
 package at.technikum.parkpalbackend.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,6 +24,12 @@ public class Country {
     @UuidGenerator
     @Column(name = "country_id")
     private String id;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     private String name;
 
