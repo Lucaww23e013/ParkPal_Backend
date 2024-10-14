@@ -1,13 +1,16 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
+import at.technikum.parkpalbackend.exception.InvalidEventTimeException;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.File;
+import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.EventRepository;
 import at.technikum.parkpalbackend.persistence.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +37,7 @@ public class EventService {
             log.error("Invalid Event in save(). Event is null.");
             throw new IllegalArgumentException("The event Cannot be null.");
         }
+        validateEventTimes(event.getStartTS(), event.getEndTS());
         return eventRepository.save(event);
     }
 
@@ -108,8 +112,7 @@ public class EventService {
         existingEvent.setJoinedUsers(updatedEvent.getJoinedUsers());
         existingEvent.setTags(updatedEvent.getTags());
         updateEventFiles(existingEvent, updatedEvent);
-        return eventRepository.save(existingEvent);
-
+        return save(existingEvent);
     }
 
     public List<Event> findAllEventsByUserIdAndParkId(String userId, String parkId) {
@@ -147,5 +150,41 @@ public class EventService {
         }
 
         event.setMedia(eventMedia);
+    }
+
+    public List<String> findEventJoinedUserNames(String eventId) {
+        Event event = findByEventId(eventId);
+        if (event != null) {
+            return event.getJoinedUsers().stream()
+                    .map(User::getUserName)
+                    .toList();
+        }
+        return new ArrayList<>();
+    }
+
+    public void manageUserParticipation(String eventId, String userId, boolean isJoining) {
+        Event event = findByEventId(eventId);
+        User user = userService.findByUserId(userId);
+        if (isJoining) {
+            event.addJoinedUsers(user);
+        } else {
+            event.removeJoinedUsers(user);
+        }
+        save(event);
+    }
+
+    public List<String> getJoinedUsernames(String eventId) {
+        Event event = findByEventId(eventId);
+        return event.getJoinedUsers().stream()
+                .map(User::getUserName)
+                .toList();
+    }
+
+    public void validateEventTimes(LocalDateTime startTS, LocalDateTime endTS) {
+        if (startTS.isAfter(endTS) || startTS.isEqual(endTS) ||
+                java.time.Duration.between(startTS, endTS).toMinutes() < 30) {
+            throw new InvalidEventTimeException("Event start time must be before end time " +
+                    "and the duration must be at least 30 minutes.");
+        }
     }
 }

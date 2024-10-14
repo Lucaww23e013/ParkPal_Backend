@@ -48,6 +48,7 @@ public class EventMapper {
                 .creatorUserId(eventService.findEventCreatorUserId(event.getId()))
                 .creatorName(eventService.findEventCreatorName(event.getId()))
                 .joinedUserIds(getJoinedUserIds(event.getJoinedUsers()))
+                .joinedUserNames(eventService.findEventJoinedUserNames(event.getId()))
                 .eventTagsIds(getEventTagIds(event.getTags()))
                 .eventTagNames(getEventTagNames(event.getTags()))
                 .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
@@ -69,6 +70,7 @@ public class EventMapper {
                         event.getPark().getId() : null)
                 .creatorUserId(getCreatorUserId(event))
                 .joinedUserIds(getJoinedUserIds(event.getJoinedUsers()))
+                .joinedUserNames(eventService.findEventJoinedUserNames(event.getId()))
                 .eventTagsIds(getEventTagIds(event.getTags()))
                 .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
                 .build();
@@ -96,6 +98,7 @@ public class EventMapper {
                 .parkId(event.getPark() != null ?
                         event.getPark().getId() : null)
                 .creatorUserId(eventService.findEventCreatorUserId(event.getId()))
+                .joinedUserIds(getJoinedUserIds(event.getJoinedUsers()))
                 .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
                 .eventTagsIds(getEventTagIds(event.getTags()))
                 .eventTagNames(getEventTagNames(event.getTags()))
@@ -173,6 +176,7 @@ public class EventMapper {
                 .startTS(createEventDto.getStartTS())
                 .endTS(createEventDto.getEndTS())
                 .creator(userService.findByUserId(createEventDto.getCreatorUserId()))
+                .joinedUsers(userService.findUsersByIds(createEventDto.getJoinedUserIds()))
                 .park(parkService.findParkById(createEventDto.getParkId()))
                 .media(getFileList(createEventDto.getMediaFileExternalIds()))
                 .build();

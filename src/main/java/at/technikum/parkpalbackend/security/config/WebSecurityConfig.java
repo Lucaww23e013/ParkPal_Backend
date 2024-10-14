@@ -60,6 +60,7 @@ public class WebSecurityConfig {
         configureSwaggerAndApiEndpoints(http);
         configureUserEndpoints(http, customAuthorizationManager);
         configureEventEndpoints(http, customAuthorizationManager);
+        configureEventTagEndpoints(http);
         configureParkEndpoints(http);
         configureFileEndpoints(http, customAuthorizationManager);
         configureCountryEndpoints(http);
@@ -110,7 +111,21 @@ public class WebSecurityConfig {
                 .access(customAuthorizationManager)
                 .requestMatchers(HttpMethod.DELETE, "/events/{eventId}")
                 .access(customAuthorizationManager)
+                .requestMatchers(HttpMethod.POST, "/events/{eventId}/join").authenticated()
                 .requestMatchers("/events/**").permitAll()
+        );
+    }
+
+    private void configureEventTagEndpoints(
+            HttpSecurity http
+    ) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers(HttpMethod.GET, "/event-tags").permitAll()
+                .requestMatchers(HttpMethod.GET, "/event-tags/{eventTagId}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/event-tags").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/event-tags/{eventTagId}").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/event-tags/{eventTagId}").authenticated()
+                .requestMatchers("/event-tags/**").permitAll()
         );
     }
 
