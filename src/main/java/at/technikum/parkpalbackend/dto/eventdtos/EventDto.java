@@ -54,10 +54,14 @@ public class EventDto {
     private List<String> joinedUserIds = new ArrayList<>();
 
     @Builder.Default
+    private List<String> joinedUserNames = new ArrayList<>();
+
+    @Builder.Default
     private List<String> mediaFileExternalIds = new ArrayList<>();
 
     @Builder.Default
     private Set<String> eventTagsIds = new HashSet<>();
 
-    private Set<String> eventTagNames;
+    @Builder.Default
+    private Set<String> eventTagNames = new HashSet<>();
 }
