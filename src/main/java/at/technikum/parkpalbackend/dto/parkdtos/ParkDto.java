@@ -1,6 +1,5 @@
 package at.technikum.parkpalbackend.dto.parkdtos;
 
-import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Address;
 import jakarta.persistence.Embedded;
 import jakarta.validation.Valid;
@@ -15,7 +14,6 @@ import java.util.List;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-
 @Builder
 @Valid
 public class ParkDto {
@@ -31,7 +29,7 @@ public class ParkDto {
     private Address address;
 
     @ToString.Exclude
-    private List<EventDto> eventDtos = new ArrayList<>();
+    private List<String> eventIds = new ArrayList<>();
 
     @ToString.Exclude
     private List<String> filesExternalIds = new ArrayList<>();

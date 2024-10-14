@@ -2,6 +2,7 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
 import at.technikum.parkpalbackend.model.File;
+import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.persistence.FileRepository;
@@ -142,6 +143,25 @@ public class FileService {
                 .orElseThrow(() -> new FileNotFoundException(
                         "File not found for externalId: " + externalId
                 ));
+    }
+
+    public List<File> getFileList(List<String> mediaFileExternalIds) {
+        if (mediaFileExternalIds == null) {
+            return new ArrayList<>();
+        }
+
+        return mediaFileExternalIds.stream()
+                .map(this::findFileByExternalId)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public void setParkMedia(Park park, List<File> mediaFiles) {
+        mediaFiles.stream()
+                .filter(Objects::nonNull)
+                .forEach(file -> {
+                    file.setPark(park);
+                    this.save(file);
+                });
     }
 
     @Transactional

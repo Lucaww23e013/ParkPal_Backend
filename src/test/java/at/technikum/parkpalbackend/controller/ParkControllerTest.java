@@ -56,33 +56,6 @@ public class ParkControllerTest {
     @MockBean
     private Park park;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Disabled
-    @Test
-    public void testCreatePark() throws Exception {
-        // Arrange
-        CreateParkDto createParkDto = TestFixtures.testCreateParkDto;
-        createParkDto.setParkId("1");
-        createParkDto.setName("Test Park");
-
-        Park park = TestFixtures.parkWithEvents;
-        park.setId("1");
-        park.setName("Test Park");
-
-        when(parkMapper.createParkDtoToEntity(any(CreateParkDto.class))).thenReturn(park);
-        when(parkService.save(any(Park.class))).thenReturn(park);
-        when(parkMapper.toCreateParkDto(any(Park.class))).thenReturn(createParkDto);
-
-        // Act & Assert
-        mockMvc.perform(MockMvcRequestBuilders.post("/parks")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createParkDto)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("Test Park"));
-    }
-
     @Test
     public void testGetAllParks() throws Exception {
         // Arrange
