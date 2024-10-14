@@ -5,6 +5,7 @@ import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.service.*;
+import at.technikum.parkpalbackend.util.MediaUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,10 +34,14 @@ class EventMapperTest {
     @Mock
     private FileService fileService;
 
+    @Mock
+    private MediaUtils mediaUtils;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        eventMapper = new EventMapper(parkService, userService, eventService, eventTagService, fileService);
+        eventMapper = new EventMapper(
+                parkService, userService, eventService, eventTagService, fileService, mediaUtils);
     }
 
     @Test

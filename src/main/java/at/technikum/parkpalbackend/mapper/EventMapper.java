@@ -7,6 +7,7 @@ import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.*;
+import at.technikum.parkpalbackend.util.MediaUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -21,14 +22,17 @@ public class EventMapper {
     private final EventService eventService;
     private final EventTagService eventTagService;
     private final FileService fileService;
+    private final MediaUtils mediaUtils;
 
-    public EventMapper(ParkService parkService, UserService userService, EventService eventService,
-                       EventTagService eventTagService, FileService fileService) {
+    public EventMapper(ParkService parkService, UserService userService,
+                       EventService eventService, EventTagService eventTagService,
+                       FileService fileService, MediaUtils mediaUtils) {
         this.parkService = parkService;
         this.userService = userService;
         this.eventService = eventService;
         this.eventTagService = eventTagService;
         this.fileService = fileService;
+        this.mediaUtils = mediaUtils;
     }
 
     // TODO add eventFiles
@@ -81,7 +85,6 @@ public class EventMapper {
         return event.getCreator().getId();
     }
 
-    // TODO add eventFiles
     public CreateEventDto toDtoCreateEvent(Event event) {
         if (event == null) {
             throw new IllegalArgumentException("event cannot be null");
@@ -93,8 +96,7 @@ public class EventMapper {
                 .description(event.getDescription())
                 .startTS(event.getStartTS())
                 .endTS(event.getEndTS())
-                .parkId(event.getPark() != null ?
-                        event.getPark().getId() : null)
+                .parkId(event.getPark() != null ? event.getPark().getId() : null)
                 .creatorUserId(eventService.findEventCreatorUserId(event.getId()))
                 .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
                 .eventTagsIds(getEventTagIds(event.getTags()))
@@ -143,7 +145,6 @@ public class EventMapper {
         event.setEndTS(eventDto.getEndTS());
         event.setPark(parkService.findParkById(eventDto.getParkId()));
         event.setCreator(userService.findByUserId(eventDto.getCreatorUserId()));
-        event.setMedia(getFileList(eventDto.getMediaFileExternalIds()));
         event.setJoinedUsers(newJoinedUsers);
 
         Set<EventTag> newTags = eventTagService.findTagsByIds(eventDto.getEventTagsIds());
@@ -160,32 +161,34 @@ public class EventMapper {
                 .forEach(tag -> tag.getEvents().add(event));
 
         event.setTags(newTags);
+        List<File> newMediaFiles = mediaUtils.getFileList(eventDto.getMediaFileExternalIds());
+        //Ensures bidirectional mapping
+        mediaUtils.updateEventMedia(event, newMediaFiles);
+
+        event.setMedia(newMediaFiles);
     }
 
     public Event toEntityCreateEvent(CreateEventDto createEventDto) {
         if (createEventDto == null) {
             throw new IllegalArgumentException("createEventDto cannot be null");
         }
+        List<File> mediaFiles = mediaUtils.getFileList(createEventDto.getMediaFileExternalIds());
 
-        return Event.builder()
+        Event event = Event.builder()
                 .title(createEventDto.getTitle())
                 .description(createEventDto.getDescription())
                 .startTS(createEventDto.getStartTS())
                 .endTS(createEventDto.getEndTS())
                 .creator(userService.findByUserId(createEventDto.getCreatorUserId()))
                 .park(parkService.findParkById(createEventDto.getParkId()))
-                .media(getFileList(createEventDto.getMediaFileExternalIds()))
                 .build();
-    }
 
-    private List<File> getFileList(List<String> mediaFileExternalIds) {
-        if (mediaFileExternalIds == null) {
-            return new ArrayList<>();
-        }
+        //Ensures bidirectional mapping
+        mediaUtils.setEventMedia(event, mediaFiles);
 
-        return mediaFileExternalIds.stream()
-                .map(fileService::findFileByExternalId)
-                .collect(Collectors.toCollection(ArrayList::new));
+        event.setMedia(mediaFiles);
+
+        return event;
     }
 
     private static List<String> getJoinedUserIds(List<User> joinedUsers) {

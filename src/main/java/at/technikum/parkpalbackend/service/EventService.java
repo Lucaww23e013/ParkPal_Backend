@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -71,6 +72,16 @@ public class EventService {
             return event.getCreator().getId();
         }
         return null;
+    }
+
+    public List<Event> getEventList(List<String> eventIds) {
+        if (eventIds == null) {
+            return new ArrayList<>();
+        }
+
+        return eventIds.stream()
+                .map(this::findByEventId)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public String findEventCreatorName(String eventId) {

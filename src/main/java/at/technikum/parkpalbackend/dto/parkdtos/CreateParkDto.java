@@ -6,6 +6,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -15,13 +18,18 @@ import lombok.*;
 @Valid
 public class CreateParkDto {
 
-    private String parkId;
+    private String id;
 
     @NotBlank(message = "Park name not found. All parks need a name")
     private String name;
 
+    @NotBlank(message = "Park description not found. All parks need a description")
     private String description;
 
     @Embedded
     private Address address;
+
+    private List<String> eventIds = new ArrayList<>();
+
+    private List<String> filesExternalIds = new ArrayList<>();
 }
