@@ -66,4 +66,7 @@ public class File {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private FileType fileType = FileType.OTHER;
+
+    public File(String string, String image, String contentType, Park park) {
+    }
 }
