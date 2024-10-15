@@ -1,10 +1,15 @@
 package at.technikum.parkpalbackend.service;
 
+import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
+import at.technikum.parkpalbackend.model.Event;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.Park;
+import at.technikum.parkpalbackend.persistence.FileRepository;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,6 +28,12 @@ class ParkServiceTest {
 
     @Mock
     private ParkRepository parkRepository;
+
+    @Mock
+    private FileRepository fileRepository;
+
+    @Mock
+    private EventService eventService;
 
     @InjectMocks
     private ParkService parkService;
@@ -174,5 +185,89 @@ class ParkServiceTest {
         // Act + Assert
         assertThrows(RuntimeException.class, () -> parkService.updatePark(parkId, updatedPark));
         verify(parkRepository, times(1)).save(updatedPark);
+    }
+
+    @Test
+    void findByParkId_whenParkExists_thenReturnPark() {
+        // Arrange
+        String parkId = UUID.randomUUID().toString();
+        Park expectedPark = parkWithEvents;
+        when(parkRepository.findById(parkId)).thenReturn(Optional.of(expectedPark));
+        // Act
+        Park foundPark = parkService.findParkById(parkId);
+        // Assert
+        assertNotNull(foundPark);
+        assertEquals(expectedPark, foundPark);
+        verify(parkRepository).findById(parkId);
+    }
+
+    @Test
+    void updateParkById_whenParkFilesExist_thenUpdateFiles() {
+        // Arrange
+        String parkId = UUID.randomUUID().toString();
+        Park oldPark = TestFixtures.parkWithFiles();  // Park with some existing files
+        Park updatedPark = TestFixtures.parkWithUpdatedFiles();  // Park with updated files
+
+        when(parkRepository.findById(parkId)).thenReturn(Optional.of(oldPark));
+        when(parkRepository.save(any(Park.class))).thenReturn(updatedPark);
+
+        // Act
+        Park result = parkService.updatePark(parkId, updatedPark);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(updatedPark.getMedia(), result.getMedia());  // Files should be updated
+
+        // Capture the argument passed to parkRepository.save()
+        ArgumentCaptor<Park> parkCaptor = ArgumentCaptor.forClass(Park.class);
+        verify(parkRepository).save(parkCaptor.capture());
+
+        // Verify that the captured Park object has the updated media files
+        Park capturedPark = parkCaptor.getValue();
+        assertEquals(updatedPark.getMedia(), capturedPark.getMedia());  // Ensure media files are updated
+        assertEquals(updatedPark.getName(), capturedPark.getName());    // You can add more fields to verify
+    }
+
+    @Test
+    void updatePark_whenEventsExist_thenUpdateEvents() {
+        // Arrange
+        String parkId = UUID.randomUUID().toString();
+        Park existingPark = TestFixtures.parkWithEvents;
+        Park updatedPark = TestFixtures.parkWithEvents;
+
+        when(parkRepository.findById(parkId)).thenReturn(Optional.of(existingPark));
+        when(parkRepository.save(any(Park.class))).thenReturn(updatedPark);
+
+        when(eventService.save(any(Event.class))).thenReturn(null); // or return a specific mock Event if needed
+
+        // Act
+        Park result = parkService.updatePark(parkId, updatedPark);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(updatedPark.getEvents(), result.getEvents());
+        verify(eventService, times(4)).save(any(Event.class));
+        verify(parkRepository).save(existingPark);
+    }
+
+    @Test
+    void updatePark_whenFilesExist_thenUpdateFiles() {
+        // Arrange
+        String parkId = UUID.randomUUID().toString();
+        Park existingPark = TestFixtures.parkWithFiles();
+        Park updatedPark = TestFixtures.parkWithUpdatedFiles();
+        when(parkRepository.findById(parkId)).thenReturn(Optional.of(existingPark));
+        when(parkRepository.save(any(Park.class))).thenReturn(updatedPark);
+
+        when(fileRepository.save(any(File.class))).thenReturn(null);
+
+        // Act
+        Park result = parkService.updatePark(parkId, updatedPark);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(updatedPark.getMedia(), result.getMedia());
+        verify(fileRepository, times(4)).save(any(File.class));
+        verify(parkRepository).save(existingPark);
     }
 }

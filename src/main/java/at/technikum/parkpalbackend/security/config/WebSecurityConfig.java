@@ -111,7 +111,7 @@ public class WebSecurityConfig {
                 .access(customAuthorizationManager)
                 .requestMatchers(HttpMethod.DELETE, "/events/{eventId}")
                 .access(customAuthorizationManager)
-                .requestMatchers(HttpMethod.POST, "/events/{eventId}/join").authenticated()
+                .requestMatchers(HttpMethod.POST, "/events/{eventId}/participation").authenticated()
                 .requestMatchers("/events/**").permitAll()
         );
     }

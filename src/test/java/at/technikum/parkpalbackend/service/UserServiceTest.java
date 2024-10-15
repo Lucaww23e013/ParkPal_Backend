@@ -2,7 +2,9 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
+import at.technikum.parkpalbackend.exception.UserWithUserNameOrEmailAlreadyExists;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.persistence.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.*;
 
@@ -245,4 +248,148 @@ class UserServiceTest {
         verify(userRepository, never()).delete(any(User.class));
     }
 
+    @Test
+    void whenFindByUserNameOrEmail_withEmail_thenReturnUser() {
+        // Arrange
+        User user = TestFixtures.adminUser;
+        user.setId(UUID.randomUUID().toString());
+        String email = user.getEmail();
+        when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(user));
+
+        // Act
+        User foundUser = userService.findByUserNameOrEmail(email);
+
+        // Assert
+        Assertions.assertNotNull(foundUser);
+        Assertions.assertEquals(email, foundUser.getEmail());
+        verify(userRepository).findUserByEmail(email);
+    }
+
+    @Test
+    void whenFindByUserNameOrEmail_withUsername_thenReturnUser() {
+        // Arrange
+        User user = TestFixtures.adminUser;
+        user.setId(UUID.randomUUID().toString());
+        String username = user.getUserName();
+        when(userRepository.findUserByUserName(username)).thenReturn(Optional.of(user));
+
+        // Act
+        User foundUser = userService.findByUserNameOrEmail(username);
+
+        // Assert
+        Assertions.assertNotNull(foundUser);
+        Assertions.assertEquals(username, foundUser.getUserName());
+        verify(userRepository).findUserByUserName(username);
+    }
+
+    @Test
+    void whenFindByUserNameOrEmail_withInvalidInput_thenThrowIllegalArgumentException() {
+        // Arrange
+        String input = "";
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> userService.findByUserNameOrEmail(input));
+    }
+
+    // Test for findUsersByIds
+    @Test
+    void whenFindUsersByIds_thenReturnUsers() {
+        // Arrange
+        User user1 = TestFixtures.adminUser;
+        user1.setId(UUID.randomUUID().toString());
+        User user2 = TestFixtures.normalUser;
+        user2.setId(UUID.randomUUID().toString());
+        List<String> userIds = Arrays.asList(user1.getId(), user2.getId());
+        List<User> expectedUsers = Arrays.asList(user1, user2);
+
+        when(userRepository.findAllById(userIds)).thenReturn(expectedUsers);
+
+        // Act
+        List<User> foundUsers = userService.findUsersByIds(userIds);
+
+        // Assert
+        Assertions.assertNotNull(foundUsers);
+        Assertions.assertEquals(expectedUsers, foundUsers);
+        verify(userRepository).findAllById(userIds);
+    }
+
+    // Test for save method exception handling
+    @Test
+    void whenSaveUserWithDuplicateUsername_thenThrowUserWithUserNameOrEmailAlreadyExists() {
+        // Arrange
+        User user = TestFixtures.adminUser;
+        user.setId(UUID.randomUUID().toString());
+        DataIntegrityViolationException exception = new DataIntegrityViolationException(
+                "duplicate key value violates unique constraint 'unique_username'");
+        when(userRepository.save(user)).thenThrow(exception);
+
+        // Act & Assert
+        assertThrows(UserWithUserNameOrEmailAlreadyExists.class, () -> userService.save(user));
+    }
+
+    @Test
+    void whenSaveUserWithDuplicateEmail_thenThrowUserWithUserNameOrEmailAlreadyExists() {
+        // Arrange
+        User user = TestFixtures.adminUser;
+        user.setId(UUID.randomUUID().toString());
+        DataIntegrityViolationException exception = new DataIntegrityViolationException(
+                "duplicate key value violates unique constraint 'unique_email'");
+        when(userRepository.save(user)).thenThrow(exception);
+
+        // Act & Assert
+        assertThrows(UserWithUserNameOrEmailAlreadyExists.class, () -> userService.save(user));
+    }
+
+    @Test
+    void whenSaveUserWithUnknownConstraint_thenThrowDataIntegrityViolationException() {
+        // Arrange
+        User user = TestFixtures.adminUser;
+        user.setId(UUID.randomUUID().toString());
+        DataIntegrityViolationException exception = new DataIntegrityViolationException(
+                "duplicate key value violates unknown constraint");
+        when(userRepository.save(user)).thenThrow(exception);
+
+        // Act & Assert
+        assertThrows(DataIntegrityViolationException.class, () -> userService.save(user));
+    }
+
+    // Test for extractConstraintName
+    @Test
+    void whenExtractConstraintName_thenReturnConstraintName() {
+        // Arrange
+        User user = TestFixtures.adminUser;
+        user.setId(UUID.randomUUID().toString());
+        DataIntegrityViolationException exception = new DataIntegrityViolationException(
+                "duplicate key value violates unique constraint 'unique_username'");
+
+        // Mock the repository to throw the exception when saving
+        when(userRepository.save(user)).thenThrow(exception);
+
+        // Act & Assert
+        UserWithUserNameOrEmailAlreadyExists thrownException = assertThrows(UserWithUserNameOrEmailAlreadyExists.class,
+                () -> userService.save(user));
+
+        // Verify the correct exception message that would result from the 'extractConstraintName' logic
+        Assertions.assertEquals("Username " + user.getUserName() + " already exists.", thrownException.getMessage());
+        verify(userRepository).save(user);
+    }
+
+    // Test for updateUserStatus
+    @Test
+    void whenUpdateUserStatus_thenUserStatusUpdated() {
+        // Arrange
+        User user = TestFixtures.adminUser;
+        user.setId(UUID.randomUUID().toString());
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+
+        // Act
+        userService.updateUserStatus(user.getId(), true, Role.ADMIN);
+
+        // Assert
+        Assertions.assertTrue(user.isLocked());
+        Assertions.assertEquals(Role.ADMIN, user.getRole());
+        verify(userRepository).findById(user.getId());
+        verify(userRepository).save(user);
+    }
 }

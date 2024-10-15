@@ -1,6 +1,7 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
+import at.technikum.parkpalbackend.exception.ResourceAccessException;
 import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.persistence.EventTagRepository;
 import org.junit.jupiter.api.Test;
@@ -188,5 +189,69 @@ class EventTagServiceTest {
         verify(eventTagRepository, times(2)).findById(eventTagId);
         verify(eventTagRepository, times(1)).save(eventTagToUpdate);
     }
-    
+
+    @Test
+    void findTagsByIds_successfullyReturned_thenReturnEventTags() {
+        // Arrange
+        // Set up the EventTags with IDs
+        familyEventTag.setId(UUID.randomUUID().toString());  // Manually set the ID for familyEventTag
+        gamesEventTag.setId(UUID.randomUUID().toString());   // Manually set the ID for gamesEventTag
+
+        Set<String> eventTagIds = Set.of(familyEventTag.getId(), gamesEventTag.getId());
+        Set<EventTag> eventTags = Set.of(familyEventTag, gamesEventTag);
+
+        // Mock the repository behavior
+        when(eventTagRepository.findAllById(eventTagIds)).thenReturn(new ArrayList<>(eventTags));
+
+        // Act
+        Set<EventTag> result = eventTagService.findTagsByIds(eventTagIds);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(eventTags, result);
+        verify(eventTagRepository).findAllById(eventTagIds);
+    }
+
+    @Test
+    void findTagsByIds_whenSomeTagsAreMissing_thenThrowEntityNotFoundException() {
+        // Arrange
+        Set<String> eventTagIds = Set.of(familyEventTag.getId(), UUID.randomUUID().toString());
+        when(eventTagRepository.findAllById(eventTagIds)).thenReturn(Collections.singletonList(familyEventTag));
+
+        // Act + Assert
+        assertThrows(EntityNotFoundException.class, () -> eventTagService.findTagsByIds(eventTagIds));
+        verify(eventTagRepository).findAllById(eventTagIds);
+    }
+
+    @Test
+    void deleteTagById_whenDataAccessException_thenThrowResourceAccessException() {
+        // Arrange
+        String eventTagId = UUID.randomUUID().toString();
+        EventTag eventTag = familyEventTag;
+        eventTag.setId(eventTagId);
+
+        when(eventTagRepository.findById(eventTagId)).thenReturn(Optional.of(eventTag));
+        doThrow(DataAccessResourceFailureException.class).when(eventTagRepository).delete(eventTag);
+
+        // Act + Assert
+        assertThrows(ResourceAccessException.class, () -> eventTagService.deleteTagById(eventTagId));
+        verify(eventTagRepository, times(1)).findById(eventTagId);
+        verify(eventTagRepository, times(1)).delete(eventTag);
+    }
+
+    @Test
+    void findTagsByEventId_successfullyReturned_thenReturnEventTags() {
+        // Arrange
+        String eventId = UUID.randomUUID().toString();
+        Set<EventTag> eventTags = Set.of(familyEventTag, gamesEventTag);
+        when(eventTagRepository.findTagsByEventId(eventId)).thenReturn(eventTags);
+
+        // Act
+        Set<EventTag> result = eventTagService.findTagsByEventId(eventId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(eventTags, result);
+        verify(eventTagRepository).findTagsByEventId(eventId);
+    }
 }
