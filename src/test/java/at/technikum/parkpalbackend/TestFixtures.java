@@ -197,7 +197,8 @@ public class TestFixtures {
                 .password("eyJhbGciOiJIUzI1NiIsInR5cCI32!")
                 .countryId(austria.getId())
                 .role(Role.ADMIN)
-                .joinedEvents(createEventList())
+                .joinedEventsIds(createEventList().stream()
+                        .map(Event::getId).collect(Collectors.toList()))
                 .build();
     }
 
