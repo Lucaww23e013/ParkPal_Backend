@@ -295,4 +295,37 @@ public class TestFixtures {
     public static Set<EventTag> testEventTagSet = createEventTagSet();
 
     public static Set<Event> testEventSet = createEventSet();
+
+
+    public static Park parkWithFiles() {
+        Park park = Park.builder().build();
+        park.setId(UUID.randomUUID().toString());
+        park.setName("Test Park with Files");
+        park.setDescription("This is a park with files.");
+        park.setAddress(parkAddress);
+
+        // Create associated files for the park
+        List<File> files = new ArrayList<>();
+        files.add(new File(UUID.randomUUID().toString(), "file1.jpg", "image/jpeg", park));
+        files.add(new File(UUID.randomUUID().toString(), "file2.jpg", "image/jpeg", park));
+        park.setMedia(files);  // Assuming media refers to the list of files
+
+        return park;
+    }
+
+    public static Park parkWithUpdatedFiles() {
+        Park park = Park.builder().build();
+        park.setId(UUID.randomUUID().toString());
+        park.setName("Updated Park with Files");
+        park.setDescription("This is an updated park with new files.");
+        park.setAddress(parkAddress);
+
+        // Create new associated files for the updated park
+        List<File> files = new ArrayList<>();
+        files.add(new File(UUID.randomUUID().toString(), "file3.jpg", "image/jpeg", park));
+        files.add(new File(UUID.randomUUID().toString(), "file4.jpg", "image/jpeg", park));
+        park.setMedia(files);
+
+        return park;
+    }
 }
