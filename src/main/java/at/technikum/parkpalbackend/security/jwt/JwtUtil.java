@@ -1,9 +1,10 @@
 package at.technikum.parkpalbackend.security.jwt;
 
 import at.technikum.parkpalbackend.exception.InvalidJwtTokenException;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,6 @@ public class JwtUtil {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
-    }
-
-    public String extractUsername2(String token) {
-        DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaims().get("username").asString();
     }
 
     public Date extractExpiration(String token) {

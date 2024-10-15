@@ -4,12 +4,14 @@ import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.Event;
+import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.ParkService;
 import at.technikum.parkpalbackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,10 +35,10 @@ public class EventController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateEventDto createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
+    public ResponseEntity<?> createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
         Event event = eventMapper.toEntityCreateEvent(createEventDto);
         event = eventService.save(event);
-        return eventMapper.toDtoCreateEvent(event);
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventMapper.toDtoCreateEvent(event));
     }
 
     @GetMapping
@@ -64,12 +66,22 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<EventDto> updateEventDto(@RequestBody @Valid EventDto newEventDto,
-                                                   @PathVariable String eventId) {
-
-        Event mappedEntity = eventMapper.toEntity(newEventDto, Optional.of(eventId));
+    public ResponseEntity<?> updateEventDto(@RequestBody @Valid EventDto eventDto,
+                                            @PathVariable String eventId) {
+        Event mappedEntity = eventMapper.toEntity(eventDto, Optional.of(eventId));
         Event updatedEvent = eventService.updateEvent(eventId, mappedEntity);
         return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
+    }
+
+    @PostMapping("/{eventId}/participation")
+    public ResponseEntity<List<String>> manageEventParticipation(
+            @PathVariable String eventId,
+            @RequestParam boolean isJoining,
+            Authentication authentication) {
+        String userId = ((UserPrincipal) authentication.getPrincipal()).getId();
+        eventService.manageUserParticipation(eventId, userId, isJoining);
+        List<String> joinedUsernames = eventService.getJoinedUsernames(eventId);
+        return ResponseEntity.ok(joinedUsernames);
     }
 
     @DeleteMapping("/{eventId}")
