@@ -1,6 +1,5 @@
 package at.technikum.parkpalbackend.dto.userdtos;
 
-import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.enums.Gender;
 import at.technikum.parkpalbackend.model.enums.Role;
 import jakarta.persistence.EnumType;
@@ -57,7 +56,7 @@ public class UserDto {
     @ToString.Exclude
     @Builder.Default
     // TODO: need to be with ids
-    private List<Event> joinedEvents = new ArrayList<>();
+    private List<String> joinedEventsIds = new ArrayList<>();
 
     @ToString.Exclude
     @Builder.Default
