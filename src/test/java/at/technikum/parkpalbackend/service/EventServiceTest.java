@@ -3,6 +3,7 @@ package at.technikum.parkpalbackend.service;
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Event;
+import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.EventRepository;
 import at.technikum.parkpalbackend.persistence.FileRepository;
@@ -13,10 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static at.technikum.parkpalbackend.TestFixtures.grilling;
 import static at.technikum.parkpalbackend.TestFixtures.pingPongGame;
@@ -232,5 +230,295 @@ class EventServiceTest {
         // Act + Assert
         assertThrows(RuntimeException.class, () -> eventService.updateEvent(eventId, eventToUpdate));
         verify(eventRepository, times(1)).save(eventToUpdate);
+    }
+
+    @Test
+    void findAllEventsJoinedByUser_whenUserExistsAndJoinedEvents_thenReturnAllJoinedEvents() {
+        // Arrange
+        String userId = UUID.randomUUID().toString();
+        User user = TestFixtures.normalUser;
+        user.setId(userId);
+        Event event1 = grilling;
+        Event event2 = pingPongGame;
+        List<Event> joinedEvents = List.of(event1, event2);
+
+        when(userService.findByUserId(userId)).thenReturn(user);
+        when(eventRepository.findAllByJoinedUsersId(userId)).thenReturn(joinedEvents);
+
+        // Act
+        List<Event> result = eventService.findAllEventsJoinedByUser(userId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(joinedEvents, result);
+        verify(eventRepository).findAllByJoinedUsersId(userId);
+    }
+
+    @Test
+    void findEventCreatorUserId_whenEventExists_thenReturnCreatorUserId() {
+        // Arrange
+        String eventId = UUID.randomUUID().toString();
+        Event event = grilling;
+        User creator = TestFixtures.normalUser;
+        creator.setId("user123");
+        event.setCreator(creator);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+
+        // Act
+        String result = eventService.findEventCreatorUserId(eventId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("user123", result);
+        verify(eventRepository).findById(eventId);
+    }
+
+    @Test
+    void findEventCreatorName_whenEventExists_thenReturnCreatorName() {
+        // Arrange
+        String eventId = UUID.randomUUID().toString();
+        Event event = grilling;
+        User creator = TestFixtures.normalUser;
+        creator.setUserName("John Doe");
+        event.setCreator(creator);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+
+        // Act
+        String result = eventService.findEventCreatorName(eventId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("John Doe", result);
+        verify(eventRepository).findById(eventId);
+    }
+
+    @Test
+    void findAllEventsByUserIdAndParkId_whenEventsExist_thenReturnEvents() {
+        // Arrange
+        String userId = UUID.randomUUID().toString();
+        String parkId = UUID.randomUUID().toString();
+        List<Event> events = List.of(grilling, pingPongGame);
+
+        when(eventRepository.findAllByCreatorIdAndParkId(userId, parkId)).thenReturn(events);
+
+        // Act
+        List<Event> result = eventService.findAllEventsByUserIdAndParkId(userId, parkId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(events, result);
+        verify(eventRepository).findAllByCreatorIdAndParkId(userId, parkId);
+    }
+
+    @Test
+    void findEventsByIds_whenEventsExist_thenReturnEvents() {
+        // Arrange
+        Set<String> eventIds = Set.of(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        List<Event> events = List.of(grilling, pingPongGame);
+
+        when(eventRepository.findAllById(eventIds)).thenReturn(events);
+
+        // Act
+        Set<Event> result = eventService.findEventsByIds(eventIds);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertTrue(result.containsAll(events));
+        verify(eventRepository).findAllById(eventIds);
+    }
+
+    @Test
+    void saveEvent_whenEventIsNull_thenThrowIllegalArgumentException() {
+        // Act + Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.save(null));
+        assertEquals("The event Cannot be null.", exception.getMessage());
+        verify(eventRepository, never()).save(any(Event.class));
+    }
+
+    @Test
+    void findByEventId_whenEventIdIsNull_thenThrowEntityNotFoundException() {
+        // Act + Assert
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> eventService.findByEventId(null));
+        assertEquals("The event ID Cannot be null.", exception.getMessage());
+        verify(eventRepository, never()).findById(anyString());
+    }
+
+    @Test
+    void updateEvent_whenEventIdIsNull_thenThrowIllegalArgumentException() {
+        // Arrange
+        Event eventToUpdate = grilling;
+
+        // Act + Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.updateEvent(null, eventToUpdate));
+        assertEquals("The event ID Cannot be null", exception.getMessage());
+        verify(eventRepository, never()).save(any(Event.class));
+    }
+
+    @Test
+    void updateEvent_whenUpdatedEventIsNull_thenThrowIllegalArgumentException() {
+        // Arrange
+        String eventId = UUID.randomUUID().toString();
+
+        // Act + Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.updateEvent(eventId, null));
+        assertEquals("The updated event Cannot be null.", exception.getMessage());
+        verify(eventRepository, never()).save(any(Event.class));
+    }
+
+    @Test
+    void updateEvent_whenEventFilesAreUpdated_thenUpdateFileAssociations() {
+        // Arrange
+        String eventId = UUID.randomUUID().toString();
+
+        Event oldEvent = grilling;
+        File oldFile = File.builder().build();
+        oldFile.setId(UUID.randomUUID().toString());
+        oldEvent.setMedia(List.of(oldFile));
+
+        Event updatedEvent = grilling;
+        File newFile = File.builder().build();
+        newFile.setId(UUID.randomUUID().toString());
+        updatedEvent.setMedia(List.of(newFile));
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEvent));
+        when(eventRepository.save(any(Event.class))).thenReturn(updatedEvent);
+
+        // Act
+        Event result = eventService.updateEvent(eventId, updatedEvent);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.getMedia().size());
+        assertEquals(newFile, result.getMedia().get(0));
+        assertNull(oldFile.getEvent());
+        verify(fileRepository, times(2)).save(any(File.class));
+        verify(eventRepository).save(any(Event.class));
+    }
+
+    @Test
+    void updateEvent_whenNoMedia_thenNoFileOperations() {
+        // Arrange
+        String eventId = UUID.randomUUID().toString();
+
+        Event oldEvent = grilling;
+        oldEvent.setMedia(Collections.emptyList());
+
+        Event updatedEvent = grilling;
+        updatedEvent.setMedia(Collections.emptyList());
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEvent));
+        when(eventRepository.save(any(Event.class))).thenReturn(updatedEvent);
+
+        // Act
+        Event result = eventService.updateEvent(eventId, updatedEvent);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(0, result.getMedia().size());
+        verify(fileRepository, never()).save(any(File.class));
+        verify(eventRepository).save(any(Event.class));
+    }
+
+    @Test
+    void updateEvent_whenFilesAreDisassociated_thenHandleCorrectly() {
+        // Arrange
+        String eventId = UUID.randomUUID().toString();
+
+        Event oldEvent = grilling;
+        File oldFile1 = File.builder().build();
+        oldFile1.setId(UUID.randomUUID().toString());
+        File oldFile2 = File.builder().build();
+        oldFile2.setId(UUID.randomUUID().toString());
+        oldEvent.setMedia(List.of(oldFile1, oldFile2));
+
+        Event updatedEvent = grilling;
+        File newFile = File.builder().build();
+        newFile.setId(UUID.randomUUID().toString());
+        updatedEvent.setMedia(List.of(newFile));
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEvent));
+        when(eventRepository.save(any(Event.class))).thenReturn(updatedEvent);
+
+        // Act
+        Event result = eventService.updateEvent(eventId, updatedEvent);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.getMedia().size());
+        assertEquals(newFile, result.getMedia().get(0));
+        assertNull(oldFile1.getEvent());
+        assertNull(oldFile2.getEvent());
+        verify(fileRepository, times(2)).save(any(File.class)); // Two disassociates, one associate
+        verify(eventRepository).save(any(Event.class));
+    }
+
+    @Test
+    void findAllEventsJoinedByUser_whenUserDoesNotExist_thenReturnEmptyList() {
+        // Arrange
+        String userId = UUID.randomUUID().toString();
+
+        when(userService.findByUserId(userId)).thenReturn(null);
+
+        // Act
+        List<Event> result = eventService.findAllEventsJoinedByUser(userId);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(userService).findByUserId(userId);
+        verify(eventRepository, never()).findAllByJoinedUsersId(anyString());
+    }
+
+    @Test
+    void findAllEventsByUserIdAndParkId_whenNoEventsExist_thenReturnEmptyList() {
+        // Arrange
+        String userId = UUID.randomUUID().toString();
+        String parkId = UUID.randomUUID().toString();
+
+        when(eventRepository.findAllByCreatorIdAndParkId(userId, parkId)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Event> result = eventService.findAllEventsByUserIdAndParkId(userId, parkId);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(eventRepository).findAllByCreatorIdAndParkId(userId, parkId);
+    }
+
+    @Test
+    void findAllEventsByParkId_whenNoEventsExist_thenReturnEmptyList() {
+        // Arrange
+        String parkId = UUID.randomUUID().toString();
+
+        when(eventRepository.findAllByParkId(parkId)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Event> result = eventService.findAllEventsByParkId(parkId);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(eventRepository).findAllByParkId(parkId);
+    }
+
+    @Test
+    void findEventsByIds_whenGivenEmptySet_thenReturnEmptySet() {
+        // Arrange
+        Set<String> eventIds = new HashSet<>();
+
+        when(eventRepository.findAllById(eventIds)).thenReturn(Collections.emptyList());
+
+        // Act
+        Set<Event> result = eventService.findEventsByIds(eventIds);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(eventRepository).findAllById(eventIds);
     }
 }
