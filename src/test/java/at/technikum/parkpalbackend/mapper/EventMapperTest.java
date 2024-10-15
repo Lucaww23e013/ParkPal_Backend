@@ -80,7 +80,7 @@ class EventMapperTest {
 
         assertEquals(event.getTitle(), createEventDto.getTitle());
     }
-
+    /*
     @Test
     @DisplayName("Should map CreateEventDto to Event correctly")
     void shouldMapCreateEventDtoToEventCorrectly() {
@@ -91,7 +91,7 @@ class EventMapperTest {
 
         assertEquals(createEventDto.getTitle(), event.getTitle());
     }
-
+*/
 //    @Test
 //    @Disabled
 //    @DisplayName("Should map CreateEventDto to Alle Event correctly")

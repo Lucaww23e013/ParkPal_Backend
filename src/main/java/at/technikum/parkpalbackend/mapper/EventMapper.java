@@ -83,7 +83,6 @@ public class EventMapper {
         return event.getCreator().getId();
     }
 
-    // TODO add eventFiles
     public CreateEventDto toDtoCreateEvent(Event event) {
         if (event == null) {
             throw new IllegalArgumentException("event cannot be null");
@@ -95,13 +94,14 @@ public class EventMapper {
                 .description(event.getDescription())
                 .startTS(event.getStartTS())
                 .endTS(event.getEndTS())
-                .parkId(event.getPark() != null ?
-                        event.getPark().getId() : null)
-                .creatorUserId(eventService.findEventCreatorUserId(event.getId()))
-                .joinedUserIds(getJoinedUserIds(event.getJoinedUsers()))
-                .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
-                .eventTagsIds(getEventTagIds(event.getTags()))
-                .eventTagNames(getEventTagNames(event.getTags()))
+                .parkId(event.getPark() != null ? event.getPark().getId() : null)
+                .creatorUserId(event.getCreator() != null ? event.getCreator().getId() : null)
+                .mediaFileExternalIds(event.getMedia() != null ?
+                        getFileExternalIds(event.getMedia()) : new ArrayList<>())
+                .eventTagsIds(event.getTags() != null ?
+                        getEventTagIds(event.getTags()) : new HashSet<>())
+                .eventTagNames(event.getTags() != null ?
+                        getEventTagNames(event.getTags()) : new HashSet<>())
                 .build();
     }
 
@@ -165,7 +165,7 @@ public class EventMapper {
         event.setTags(newTags);
     }
 
-    public Event toEntityCreateEvent(CreateEventDto createEventDto) {
+    public Event toEntityCreateEvent(CreateEventDto createEventDto, List<File> mediaFiles) {
         if (createEventDto == null) {
             throw new IllegalArgumentException("createEventDto cannot be null");
         }
@@ -176,11 +176,16 @@ public class EventMapper {
                 .startTS(createEventDto.getStartTS())
                 .endTS(createEventDto.getEndTS())
                 .creator(userService.findByUserId(createEventDto.getCreatorUserId()))
-                .joinedUsers(userService.findUsersByIds(createEventDto.getJoinedUserIds()))
-                .park(parkService.findParkById(createEventDto.getParkId()))
-                .media(getFileList(createEventDto.getMediaFileExternalIds()))
+                .park(createEventDto.getParkId() != null ?
+                        parkService.findParkById(createEventDto.getParkId()) : null)
+                .media(mediaFiles != null ? new ArrayList<>(mediaFiles) : new ArrayList<>())
+                .tags(createEventDto.getEventTagsIds() != null
+                        && !createEventDto.getEventTagsIds().isEmpty() ?
+                        eventTagService.findTagsByIds(createEventDto.getEventTagsIds())
+                        : new HashSet<>())
                 .build();
     }
+
 
     private List<File> getFileList(List<String> mediaFileExternalIds) {
         if (mediaFileExternalIds == null) {
