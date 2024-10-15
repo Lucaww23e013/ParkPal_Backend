@@ -43,9 +43,10 @@ public class TestFixtures {
     public static Park alternateParkWithEvents = createParkWithEvents("alternateParkWithEvents");
 
     public static Park parkLuca = createParkWithOutEvents("Park only For Lucas");
-
+    // TODO Check me
+    /*
     public static ParkDto testParkDto = createTestParkDto("testParkDto");
-
+    */
     public static CreateParkDto testCreateParkDto = createCreateParkDto("testCreateParkDto");
 
    /* public static Media testMedia = createMedia();*/
@@ -152,7 +153,8 @@ public class TestFixtures {
                 .address(parkAddress)
                 .build();
     }
-
+    // TODO Check me
+    /*
     private static ParkDto createTestParkDto(String parkDtoName) {
         return ParkDto.builder()
                 .name(parkDtoName)
@@ -161,6 +163,8 @@ public class TestFixtures {
                 .eventDtos(createEventDtoList())
                 .build();
     }
+    /*
+     */
     // TODO Check me
     private static CreateParkDto createCreateParkDto (String createParkDto) {
         return CreateParkDto.builder()

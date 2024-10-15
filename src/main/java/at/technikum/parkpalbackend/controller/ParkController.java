@@ -2,10 +2,10 @@ package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
-import at.technikum.parkpalbackend.dto.parkdtos.UpdateParkDto;
 import at.technikum.parkpalbackend.mapper.ParkMapper;
 import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.service.ParkService;
+import at.technikum.parkpalbackend.util.ParkUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +22,19 @@ public class ParkController {
     private final ParkService parkService;
 
     private final ParkMapper parkMapper;
+    private final ParkUtil parkUtil;
 
     public ParkController(ParkService parkService,
-                          ParkMapper parkMapper){
+                          ParkMapper parkMapper, ParkUtil parkUtil){
         this.parkService = parkService;
         this.parkMapper = parkMapper;
+        this.parkUtil = parkUtil;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateParkDto createPark(@RequestBody @Valid CreateParkDto createParkDto){
-        Park park = parkMapper.createParkDtoToEntity(createParkDto);
-        park = parkService.save(park);
-        return parkMapper.toCreateParkDto(park);
+        return parkUtil.saveCreatePark(createParkDto);
     }
 
     @GetMapping
@@ -56,11 +56,10 @@ public class ParkController {
     }
 
     @PutMapping("/{parkId}")
-    public ParkDto updatePark(@PathVariable String parkId,
-                              @RequestBody @Valid UpdateParkDto updatedParkDto){
-        Park updatedPark = parkMapper.updateParkDtoToEntity(updatedParkDto);
-        updatedPark = parkService.updatePark(parkId, updatedPark);
-        return parkMapper.toDto(updatedPark);
+    public ResponseEntity<?> updateParkDto(
+            @RequestBody @Valid ParkDto parkDto, @PathVariable String parkId) {
+        Park updatedPark = parkUtil.updatePark(parkId, parkDto);
+        return ResponseEntity.ok(parkMapper.toDto(updatedPark));
     }
 
     @DeleteMapping("/{parkId}")
