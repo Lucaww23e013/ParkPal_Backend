@@ -13,9 +13,6 @@ import java.util.List;
 @Component
 public class ParkMapper {
 
-    public ParkMapper() {
-    }
-
     public ParkDto toDto(Park park){
         if (park == null) {
             throw new IllegalArgumentException("Park entity or its fields cannot be null");

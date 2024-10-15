@@ -42,10 +42,13 @@ public class EventUtil {
 
     public CreateEventDto saveCreateEvent(CreateEventDto createEventDto) {
 
+        User creator = userService.findByUserId(createEventDto.getCreatorUserId());
+        Park park = parkService.findParkById(createEventDto.getParkId());
         List<File> mediaFiles = fileService.getFileList(createEventDto.getMediaFileExternalIds());
         Set<EventTag> eventTags = eventTagService.findTagsByIds(createEventDto.getEventTagsIds());
 
-        Event event = eventMapper.toEntityCreateEvent(createEventDto, mediaFiles);
+        Event event = eventMapper.toEntityCreateEvent(
+                createEventDto, creator, park, mediaFiles, eventTags);
 
         event = eventRepository.save(event);
 

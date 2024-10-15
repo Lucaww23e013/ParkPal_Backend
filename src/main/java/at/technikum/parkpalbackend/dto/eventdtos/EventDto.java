@@ -61,7 +61,4 @@ public class EventDto {
 
     @Builder.Default
     private Set<String> eventTagsIds = new HashSet<>();
-
-    @Builder.Default
-    private Set<String> eventTagNames = new HashSet<>();
 }

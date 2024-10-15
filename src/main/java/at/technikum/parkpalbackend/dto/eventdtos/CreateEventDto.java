@@ -51,6 +51,4 @@ public class CreateEventDto {
     private List<String> mediaFileExternalIds;
 
     private Set<String> eventTagsIds;
-
-    private Set<String> eventTagNames;
 }
