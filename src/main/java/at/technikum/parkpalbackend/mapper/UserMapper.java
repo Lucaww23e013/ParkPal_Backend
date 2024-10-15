@@ -10,7 +10,6 @@ import at.technikum.parkpalbackend.service.CountryService;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.UserService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -45,10 +44,9 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
-                .password(user.getPassword())
                 .countryId(user.getCountry().getId())
                 .role(user.getRole())
-                .joinedEvents(user.getJoinedEvents())
+                .joinedEventsIds(getJoinedEventsIds(user))
                 .mediaIds(getMediaIds(user))
                 .profilePictureId(getProfilePictureId(user))
                 .build();
@@ -93,7 +91,7 @@ public class UserMapper {
                 .password(userDto.getPassword())
                 .country(countryService.findCountryByCountryId(userDto.getCountryId()))
                 .role(userDto.getRole())
-                .joinedEvents(userDto.getJoinedEvents())
+                .joinedEvents(eventService.findAllEventsJoinedByUser(userDto.getId()))
                 .build();
     }
 
@@ -184,6 +182,7 @@ public class UserMapper {
                 .build();
     }
 
+    // TODO: check for a null User ??
     public UserResponseDto toUserResponseDto(User user) {
         return UserResponseDto.builder()
                 .id(user.getId())
@@ -191,8 +190,10 @@ public class UserMapper {
                 .build();
     }
 
-    @NotNull
     private static List<String> getMediaIds(User user) {
+        if (user.getMedia() == null) {
+            return new ArrayList<>();
+        }
         return user.getMedia().isEmpty()
                 ? new ArrayList<>() : user.getMedia().stream()
                 .filter(f -> f.getFileType() != FileType.PROFILE_PICTURE)
@@ -208,8 +209,10 @@ public class UserMapper {
                 .orElse(null);
     }
 
-    @NotNull
     private static List<String> getJoinedEventsIds(User user) {
+        if (user.getJoinedEvents() == null) {
+            return new ArrayList<>();
+        }
         return user.getJoinedEvents().stream()
                 .map(Event::getId)
                 .toList();

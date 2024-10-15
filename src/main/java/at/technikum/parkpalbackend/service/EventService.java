@@ -170,7 +170,7 @@ public class EventService {
         } else {
             event.removeJoinedUsers(user);
         }
-        save(event);
+        eventRepository.save(event);
     }
 
     public List<String> getJoinedUsernames(String eventId) {
