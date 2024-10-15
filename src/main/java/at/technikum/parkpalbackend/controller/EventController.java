@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/events")
@@ -71,11 +70,13 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<?> updateEventDto(@RequestBody @Valid EventDto eventDto,
-                                            @PathVariable String eventId) {
-        Event mappedEntity = eventMapper.toEntity(eventDto, Optional.of(eventId));
-        Event updatedEvent = eventService.updateEvent(eventId, mappedEntity);
-        return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
+    public ResponseEntity<EventDto> updateEvent(@RequestBody @Valid EventDto eventDto,
+                                                @PathVariable String eventId) {
+        Event updatedEvent = eventUtil.updateEvent(eventId, eventDto);
+
+        EventDto updatedEventDto = eventMapper.toDto(updatedEvent);
+
+        return ResponseEntity.ok(updatedEventDto);
     }
 
     @PostMapping("/{eventId}/participation")

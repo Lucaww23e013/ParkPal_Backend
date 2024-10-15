@@ -54,7 +54,7 @@ class EventMapperTest {
     void shouldMapEventToDtoAllArgsCorrectly() {
         Event event = TestFixtures.grilling;
 
-        EventDto eventDto = eventMapper.toDtoAllArgs(event);
+        EventDto eventDto = eventMapper.toDto(event);
 
         assertEquals(event.getTitle(), eventDto.getTitle());
     }

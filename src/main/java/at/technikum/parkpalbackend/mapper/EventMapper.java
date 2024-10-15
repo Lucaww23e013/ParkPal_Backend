@@ -31,7 +31,6 @@ public class EventMapper {
         this.fileService = fileService;
     }
 
-    // TODO add eventFiles
     public EventDto toDto(Event event) {
         if (event == null) {
             throw new IllegalArgumentException("event cannot be null");
@@ -51,27 +50,6 @@ public class EventMapper {
                 .joinedUserNames(eventService.findEventJoinedUserNames(event.getId()))
                 .eventTagsIds(getEventTagIds(event.getTags()))
                 .eventTagNames(getEventTagNames(event.getTags()))
-                .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
-                .build();
-    }
-
-    public EventDto toDtoAllArgs(Event event) {
-        if (event == null) {
-            throw new IllegalArgumentException("event cannot be null");
-        }
-
-        return EventDto.builder()
-                .id(event.getId())
-                .title(event.getTitle())
-                .description(event.getDescription())
-                .startTS(event.getStartTS())
-                .endTS(event.getEndTS())
-                .parkId(event.getPark() != null ?
-                        event.getPark().getId() : null)
-                .creatorUserId(getCreatorUserId(event))
-                .joinedUserIds(getJoinedUserIds(event.getJoinedUsers()))
-                .joinedUserNames(eventService.findEventJoinedUserNames(event.getId()))
-                .eventTagsIds(getEventTagIds(event.getTags()))
                 .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
                 .build();
     }
