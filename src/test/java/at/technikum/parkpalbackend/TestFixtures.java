@@ -40,6 +40,9 @@ public class TestFixtures {
 
     public static Park parkWithEvents = createParkWithEvents("parkWithEvents");
 
+    public static Park parkWithEventsAndMedia = createParkWithEventsAndMedia("parkWithEventsAndMedia");
+    public static ParkDto parkDtoWithEventsAndMedia = createParkDtoWithEventsAndMedia("parkDtoWithEventsAndMedia");
+
     public static Park alternateParkWithEvents = createParkWithEvents("alternateParkWithEvents");
 
     public static Park parkLuca = createParkWithOutEvents("Park only For Lucas");
@@ -124,12 +127,31 @@ public class TestFixtures {
         return eventList;
     }
 
+    private static List<String> createEventIdList() {
+        List<String> eventIdList = new ArrayList<>();
+        eventIdList.add(UUID.randomUUID().toString());  // Simulate event IDs as UUID strings
+        eventIdList.add(UUID.randomUUID().toString());
+        return eventIdList;
+    }
 
-    private static List<EventDto> createEventDtoList() {
-        List<EventDto> eventDtoList = new ArrayList<>();
-        eventDtoList.add(createEventDto());
-        eventDtoList.add(createEventDto());
-        return eventDtoList;
+    private static List<String> createMediaFileIdList() {
+        List<String> mediaFileIdList = new ArrayList<>();
+        mediaFileIdList.add(UUID.randomUUID().toString());  // Simulate media file IDs as UUID strings
+        mediaFileIdList.add(UUID.randomUUID().toString());
+        return mediaFileIdList;
+    }
+
+    private static List<File> createMediaList() {
+        List<File> mediaList = new ArrayList<>();
+        mediaList.add(createTestFile());  // You should implement this method to create test File objects
+        mediaList.add(createTestFile());
+        return mediaList;
+    }
+
+    private static File createTestFile() {
+        return File.builder()
+                .externalId(UUID.randomUUID().toString())  // Assign a unique external ID
+                .build();
     }
 
     private static Event createEvent(String title) {
@@ -146,6 +168,7 @@ public class TestFixtures {
         event.addEventTags(eventTags.toArray(EventTag[]::new));
         return event;
     }
+
     private static Park createParkWithOutEvents(String parkName) {
         return Park.builder()
                 .name(parkName)
@@ -153,19 +176,16 @@ public class TestFixtures {
                 .address(parkAddress)
                 .build();
     }
-    // TODO Check me
-    /*
-    private static ParkDto createTestParkDto(String parkDtoName) {
+
+    private static ParkDto createParkDtoWithEvents(String parkDtoName) {
         return ParkDto.builder()
                 .name(parkDtoName)
                 .description("ParkDTO Test")
                 .address(parkAddress)
-                .eventDtos(createEventDtoList())
+                .eventIds(createEventIdList())
                 .build();
     }
-    /*
-     */
-    // TODO Check me
+
     private static CreateParkDto createCreateParkDto (String createParkDto) {
         return CreateParkDto.builder()
                 .name(createParkDto)
@@ -173,7 +193,7 @@ public class TestFixtures {
                 .address(parkAddress)
                 .build();
     }
-    // TODO Check me
+
     private static Park createParkWithEvents(String parkName) {
         return Park.builder()
                 .name(parkName)
@@ -183,11 +203,25 @@ public class TestFixtures {
                 .build();
     }
 
-  /* private static Media createMedia() {
-        return Media.builder()
-                .user(normalUser)
+    private static Park createParkWithEventsAndMedia(String parkName) {
+        return Park.builder()
+                .name(parkName)
+                .description("Park for Everybody")
+                .address(parkAddress)
+                .events(createEventList())  // Assuming this method returns List<Event>
+                .media(createMediaList())  // New method to create media list
                 .build();
-    }*/
+    }
+
+    private static ParkDto createParkDtoWithEventsAndMedia(String parkDtoName) {
+        return ParkDto.builder()
+                .name(parkDtoName)
+                .description("ParkDTO Test")
+                .address(parkAddress)
+                .eventIds(createEventIdList())
+                .filesExternalIds(createMediaFileIdList())
+                .build();
+    }
 
     private static UserDto createUserDto(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return UserDto.builder()
