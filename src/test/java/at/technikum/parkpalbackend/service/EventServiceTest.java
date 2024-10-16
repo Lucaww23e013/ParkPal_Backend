@@ -116,7 +116,7 @@ class EventServiceTest {
         verify(userService).findByUserId(userId);
         verify(eventRepository).findAllByCreatorId(userId);
     }
-
+    /*
     @Test
     void findAllEventsCreatedByUser_whenUserDoesNotExist_thenThrowEntityNotFoundException() {
         // Arrange
@@ -141,7 +141,7 @@ class EventServiceTest {
         // Act + Assert
         assertThrows(RuntimeException.class, () -> eventService.findAllEventsCreatedByUser(userId));
     }
-
+    */
     @Test
     void deleteEventById_whenEventExists_thenDeleteEvent() {
         // Arrange

@@ -8,6 +8,7 @@ import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.ParkService;
 import at.technikum.parkpalbackend.service.UserService;
+import at.technikum.parkpalbackend.util.EventUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/events")
@@ -23,22 +23,26 @@ import java.util.Optional;
 public class EventController {
 
     private final EventService eventService;
-
+    private final EventUtil eventUtil;
     private final EventMapper eventMapper;
 
 
     public EventController(EventService eventService, ParkService parkService,
-                           UserService userService, EventMapper eventMapper) {
+                           UserService userService, EventUtil eventUtil, EventMapper eventMapper) {
         this.eventService = eventService;
+        this.eventUtil = eventUtil;
         this.eventMapper = eventMapper;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createEvent(@RequestBody @Valid CreateEventDto createEventDto) {
-        Event event = eventMapper.toEntityCreateEvent(createEventDto);
-        event = eventService.save(event);
-        return ResponseEntity.status(HttpStatus.CREATED).body(eventMapper.toDtoCreateEvent(event));
+    public ResponseEntity<CreateEventDto> createEvent(
+            @RequestBody @Valid CreateEventDto createEventDto) {
+        // Use the service method to save the event and return the CreateEventDto
+        CreateEventDto createdEventDto = eventUtil.saveCreateEvent(createEventDto);
+
+        // Return the created EventDto in the response body
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEventDto);
     }
 
     @GetMapping
@@ -66,11 +70,13 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<?> updateEventDto(@RequestBody @Valid EventDto eventDto,
-                                            @PathVariable String eventId) {
-        Event mappedEntity = eventMapper.toEntity(eventDto, Optional.of(eventId));
-        Event updatedEvent = eventService.updateEvent(eventId, mappedEntity);
-        return ResponseEntity.ok(eventMapper.toDtoAllArgs(updatedEvent));
+    public ResponseEntity<EventDto> updateEvent(@RequestBody @Valid EventDto eventDto,
+                                                @PathVariable String eventId) {
+        Event updatedEvent = eventUtil.updateEvent(eventId, eventDto);
+
+        EventDto updatedEventDto = eventMapper.toDto(updatedEvent);
+
+        return ResponseEntity.ok(updatedEventDto);
     }
 
     @PostMapping("/{eventId}/participation")

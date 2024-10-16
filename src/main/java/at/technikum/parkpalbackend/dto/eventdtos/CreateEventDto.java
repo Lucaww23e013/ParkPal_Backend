@@ -9,7 +9,6 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -49,12 +48,7 @@ public class CreateEventDto {
     @NotBlank(message = "Creator not found. All Events need to have been created by an User")
     private String creatorUserId;
 
-    @Builder.Default
-    private List<String> joinedUserIds = new ArrayList<>();
-
     private List<String> mediaFileExternalIds;
 
     private Set<String> eventTagsIds;
-
-    private Set<String> eventTagNames;
 }

@@ -1,7 +1,9 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
+import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.File;
+import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.persistence.FileRepository;
@@ -127,6 +129,34 @@ public class FileService {
     private String getFileName(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         return fileName != null ? sanitizeFileName(fileName) : null;
+    }
+
+    public void setEventMedia(Event event, List<File> mediaFiles) {
+        mediaFiles.stream()
+                .filter(Objects::nonNull)
+                .forEach(file -> {
+                    file.setEvent(event);
+                    this.save(file);
+                });
+    }
+
+    public void setParkMedia(Park park, List<File> mediaFiles) {
+        mediaFiles.stream()
+                .filter(Objects::nonNull)
+                .forEach(file -> {
+                    file.setPark(park);
+                    this.save(file);
+                });
+    }
+
+    public List<File> getFileList(List<String> mediaFileExternalIds) {
+        if (mediaFileExternalIds == null) {
+            return new ArrayList<>();
+        }
+
+        return mediaFileExternalIds.stream()
+                .map(this::findFileByExternalId)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private String uploadToMinio(MultipartFile file, String folderName, String uuid)

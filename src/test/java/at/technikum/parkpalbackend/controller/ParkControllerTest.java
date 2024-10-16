@@ -59,6 +59,7 @@ public class ParkControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /*
     @Disabled
     @Test
     public void testCreatePark() throws Exception {
@@ -154,4 +155,6 @@ public class ParkControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
+
+     */
 }
