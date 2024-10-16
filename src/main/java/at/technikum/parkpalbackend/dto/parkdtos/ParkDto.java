@@ -35,5 +35,5 @@ public class ParkDto {
 
     @ToString.Exclude
     @Builder.Default
-    private List<String> filesExternalIds = new ArrayList<>();
+    private List<String> mediaFileExternalIds = new ArrayList<>();
 }

@@ -35,7 +35,7 @@ public class ParkUtil {
 
     public CreateParkDto saveCreatePark(CreateParkDto createParkDto) {
 
-        List<File> mediaFiles = fileService.getFileList(createParkDto.getFilesExternalIds());
+        List<File> mediaFiles = fileService.getFileList(createParkDto.getMediaFileExternalIds());
 
         Park park = parkMapper.createParkDtoToEntity(createParkDto, mediaFiles);
 
@@ -87,13 +87,13 @@ public class ParkUtil {
     }
 
     private void updateParkMedia(Park park, ParkDto parkDto) {
-        if (parkDto.getFilesExternalIds() != null) {
+        if (parkDto.getMediaFileExternalIds() != null) {
             for (File oldFile : park.getMedia()) {
                 oldFile.setPark(null);
             }
             park.getMedia().clear();
 
-            List<File> mediaFiles = parkDto.getFilesExternalIds().stream()
+            List<File> mediaFiles = parkDto.getMediaFileExternalIds().stream()
                     .map(fileService::findFileByExternalId)
                     .collect(Collectors.toList());
 

@@ -29,5 +29,5 @@ public class CreateParkDto {
     private Address address;
 
     @Builder.Default
-    private List<String> filesExternalIds = new ArrayList<>();
+    private List<String> mediaFileExternalIds = new ArrayList<>();
 }

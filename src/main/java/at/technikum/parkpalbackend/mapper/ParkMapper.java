@@ -23,7 +23,7 @@ public class ParkMapper {
                 .description(park.getDescription())
                 .address(park.getAddress())
                 .eventIds(getEventIds(park.getEvents()))
-                .filesExternalIds(getFileExternalIds(park.getMedia()))
+                .mediaFileExternalIds(getFileExternalIds(park.getMedia()))
                 .build();
     }
 
@@ -36,7 +36,7 @@ public class ParkMapper {
                 .name(park.getName())
                 .description(park.getDescription())
                 .address(park.getAddress())
-                .filesExternalIds(park.getMedia() != null ?
+                .mediaFileExternalIds(park.getMedia() != null ?
                         getFileExternalIds(park.getMedia()) : new ArrayList<>())
                 .build();
     }
