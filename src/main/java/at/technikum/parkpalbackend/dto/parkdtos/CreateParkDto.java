@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,5 +28,6 @@ public class CreateParkDto {
     @Embedded
     private Address address;
 
-    private List<String> mediaFileExternalIds;
+    @Builder.Default
+    private List<String> filesExternalIds = new ArrayList<>();
 }

@@ -37,7 +37,7 @@ public class EventTagController {
             @RequestBody @Valid CreateEventTagDto createEventTagDto) {
         EventTag eventTag = eventTagMapper.toEntity(createEventTagDto);
         eventTag = eventTagService.save(eventTag);
-        System.out.println("events: " + eventTag.getEvents());
+
         return eventTagMapper.toDto(eventTag);
     }
 

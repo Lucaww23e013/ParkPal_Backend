@@ -35,7 +35,7 @@ public class ParkUtil {
 
     public CreateParkDto saveCreatePark(CreateParkDto createParkDto) {
 
-        List<File> mediaFiles = fileService.getFileList(createParkDto.getMediaFileExternalIds());
+        List<File> mediaFiles = fileService.getFileList(createParkDto.getFilesExternalIds());
 
         Park park = parkMapper.createParkDtoToEntity(createParkDto, mediaFiles);
 
@@ -50,7 +50,7 @@ public class ParkUtil {
         Park existingPark = parkRepository.findById(parkId)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Park not found with id: " + parkId));
-        System.out.println("park: " + existingPark);
+
         updateBasicParkDetails(existingPark, parkDto);
         updateParkEvents(existingPark, parkDto);
         updateParkMedia(existingPark, parkDto);
@@ -69,7 +69,7 @@ public class ParkUtil {
             List<Event> newEvents = parkDto.getEventIds().stream()
                     .map(eventService::findByEventId)
                     .collect(Collectors.toList());
-            System.out.println("Events: " + newEvents);
+
             // Remove the park from old events
             for (Event oldEvent : park.getEvents()) {
                 oldEvent.setPark(null);
