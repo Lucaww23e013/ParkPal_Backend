@@ -2,10 +2,8 @@ package at.technikum.parkpalbackend.controller;
 
 import at.technikum.parkpalbackend.dto.userdtos.UpdateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
-import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.User;
-import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -23,16 +21,11 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
-    private final EventService eventService;
-    private final EventMapper eventMapper;
 
-
-    public UserController(UserService userService, EventService eventService,
-                          UserMapper userMapper, EventMapper eventMapper) {
+    public UserController(UserService userService,
+                          UserMapper userMapper) {
         this.userService = userService;
-        this.eventService = eventService;
         this.userMapper = userMapper;
-        this.eventMapper = eventMapper;
     }
 
     @GetMapping

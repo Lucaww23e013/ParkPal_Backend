@@ -30,8 +30,10 @@ public class ParkDto {
     private Address address;
 
     @ToString.Exclude
+    @Builder.Default
     private List<String> eventIds = new ArrayList<>();
 
     @ToString.Exclude
-    private List<String> filesExternalIds = new ArrayList<>();
+    @Builder.Default
+    private List<String> mediaFileExternalIds = new ArrayList<>();
 }

@@ -23,7 +23,7 @@ public class ParkMapper {
                 .description(park.getDescription())
                 .address(park.getAddress())
                 .eventIds(getEventIds(park.getEvents()))
-                .filesExternalIds(getFileExternalIds(park.getMedia()))
+                .mediaFileExternalIds(getFileExternalIds(park.getMedia()))
                 .build();
     }
 

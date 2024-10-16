@@ -32,6 +32,7 @@ public class Park {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    // TODO: create a named unique constraint and return a good error to the user
     @Column(unique = true, length = 65535)
     private String name;
 
