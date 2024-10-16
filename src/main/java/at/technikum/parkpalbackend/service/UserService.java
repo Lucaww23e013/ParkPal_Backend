@@ -1,18 +1,14 @@
 package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
-import at.technikum.parkpalbackend.exception.UserWithUserNameOrEmailAlreadyExists;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.persistence.UserRepository;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -76,30 +72,7 @@ public class UserService {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }
-        try {
-            return userRepository.save(user);
-        } catch (DataIntegrityViolationException e) {
-            String constraintName = extractConstraintName(e);
-            if ("unique_username".equals(constraintName)) {
-                throw new UserWithUserNameOrEmailAlreadyExists("Username %s already exists."
-                        .formatted(user.getUserName()));
-            } else if ("unique_email".equals(constraintName)) {
-                throw new UserWithUserNameOrEmailAlreadyExists("Email %s already exists."
-                        .formatted(user.getEmail()));
-            } else {
-                throw e; // Rethrow if we cannot handle it here
-            }
-        }
-    }
-
-    private String extractConstraintName(DataIntegrityViolationException e) {
-        String message = e.getMostSpecificCause().getMessage();
-        Pattern pattern = Pattern.compile("'(unique_username|unique_email)'");
-        Matcher matcher = pattern.matcher(message);
-        if (matcher.find()) {
-            return matcher.group(1); // Returns 'unique_username' or 'unique_email'
-        }
-        return "unknown"; // Default return value if no match is found
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -135,5 +108,25 @@ public class UserService {
             user.setRole(role);
         }
         userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean userNameExists(String userName) {
+        try {
+            findByUserName(userName);
+            return true;
+        } catch (EntityNotFoundException e) {
+            return false;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public boolean userEmailExists(String email) {
+        try {
+            findByUserEmail(email);
+            return true;
+        } catch (EntityNotFoundException e) {
+            return false;
+        }
     }
 }

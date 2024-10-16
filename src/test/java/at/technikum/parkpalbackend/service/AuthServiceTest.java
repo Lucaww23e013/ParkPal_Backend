@@ -6,6 +6,7 @@ import at.technikum.parkpalbackend.dto.userdtos.LoginRequest;
 import at.technikum.parkpalbackend.dto.userdtos.TokenResponse;
 import at.technikum.parkpalbackend.dto.userdtos.UserResponseDto;
 import at.technikum.parkpalbackend.exception.InvalidJwtTokenException;
+import at.technikum.parkpalbackend.exception.UserWithUserNameOrEmailAlreadyExists;
 import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
@@ -56,9 +57,29 @@ class AuthServiceTest {
     private AuthService authService;
 
     @Test
+    void register_throwsExceptionWhenUsernameExists() {
+        CreateUserDto createUserDto = CreateUserDto.builder().userName("existingUser").build();
+        when(userService.userNameExists(createUserDto.getUserName())).thenReturn(true);
+
+        assertThrows(UserWithUserNameOrEmailAlreadyExists.class, () -> authService.register(createUserDto));
+        verify(userService, never()).save(any(User.class));
+    }
+
+    @Test
+    void register_throwsExceptionWhenEmailExists() {
+        CreateUserDto createUserDto = CreateUserDto.builder().email("existingEmail@test.com").build();
+        when(userService.userEmailExists(createUserDto.getEmail())).thenReturn(true);
+
+        assertThrows(UserWithUserNameOrEmailAlreadyExists.class, () -> authService.register(createUserDto));
+        verify(userService, never()).save(any(User.class));
+    }
+
+    @Test
     void register_createsUserSuccessfully() {
-        CreateUserDto createUserDto = CreateUserDto.builder().build();
+        CreateUserDto createUserDto = CreateUserDto.builder().userName("newUser").email("newEmail@test.com").build();
         User user = User.builder().build();
+        when(userService.userNameExists(createUserDto.getUserName())).thenReturn(false);
+        when(userService.userEmailExists(createUserDto.getEmail())).thenReturn(false);
         when(userMapper.toEntity(createUserDto)).thenReturn(user);
         when(userService.save(user)).thenReturn(user);
         when(userMapper.toCreateUserDto(user)).thenReturn(createUserDto);

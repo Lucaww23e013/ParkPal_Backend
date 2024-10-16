@@ -5,6 +5,7 @@ import at.technikum.parkpalbackend.dto.userdtos.LoginRequest;
 import at.technikum.parkpalbackend.dto.userdtos.TokenResponse;
 import at.technikum.parkpalbackend.dto.userdtos.UserResponseDto;
 import at.technikum.parkpalbackend.exception.InvalidJwtTokenException;
+import at.technikum.parkpalbackend.exception.UserWithUserNameOrEmailAlreadyExists;
 import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
@@ -47,6 +48,17 @@ public class AuthService {
     }
 
     public CreateUserDto register(CreateUserDto createUserDto) {
+
+        if (userService.userNameExists(createUserDto.getUserName())) {
+            throw new UserWithUserNameOrEmailAlreadyExists(("A user with this username %s" +
+                    " already exists.").formatted(createUserDto.getUserName()));
+        }
+
+        if (userService.userEmailExists(createUserDto.getEmail())) {
+            throw new UserWithUserNameOrEmailAlreadyExists(("A user with this email %s" +
+                    " already exists.").formatted(createUserDto.getEmail()));
+        }
+
         User user = userMapper.toEntity(createUserDto);
         user = userService.save(user);
         String profilePictureId = createUserDto.getProfilePictureId();
