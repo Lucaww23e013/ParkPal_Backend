@@ -2,6 +2,7 @@ package at.technikum.parkpalbackend.util;
 
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
+import at.technikum.parkpalbackend.exception.EntityAlreadyExistsException;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.mapper.ParkMapper;
 import at.technikum.parkpalbackend.model.Event;
@@ -13,7 +14,6 @@ import at.technikum.parkpalbackend.service.FileService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class ParkUtil {
@@ -35,22 +35,32 @@ public class ParkUtil {
 
     public CreateParkDto saveCreatePark(CreateParkDto createParkDto) {
 
+        if (parkRepository.existsByName(createParkDto.getName())) {
+            throw new EntityAlreadyExistsException("A park with the name " +
+                    createParkDto.getName() + " already exists.");
+        }
+
         List<File> mediaFiles = fileService.getFileList(createParkDto.getMediaFileExternalIds());
-
         Park park = parkMapper.createParkDtoToEntity(createParkDto, mediaFiles);
-
         park = parkRepository.save(park);
-
         fileService.setParkMedia(park, mediaFiles);
-
         return parkMapper.toCreateParkDto(park);
     }
 
     public Park updatePark(String parkId, ParkDto parkDto) {
-        Park existingPark = parkRepository.findById(parkId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Park not found with id: " + parkId));
-        System.out.println("park: " + existingPark);
+        // Check if the park exists
+        Park existingPark = parkRepository.findById(parkId).orElse(null);
+        if (existingPark == null) {
+            throw new EntityNotFoundException("Park not found with id " + parkId);
+        }
+
+        // Check for unique park name
+        Park parkWithSameName = parkRepository.findByName(parkDto.getName()).orElse(null);
+        if (parkWithSameName != null && !parkWithSameName.getId().equals(parkId)) {
+            throw new EntityAlreadyExistsException("A park with the name " +
+                    parkDto.getName() + " already exists.");
+        }
+
         updateBasicParkDetails(existingPark, parkDto);
         updateParkEvents(existingPark, parkDto);
         updateParkMedia(existingPark, parkDto);
@@ -68,7 +78,7 @@ public class ParkUtil {
         if (parkDto.getEventIds() != null) {
             List<Event> newEvents = parkDto.getEventIds().stream()
                     .map(eventService::findByEventId)
-                    .collect(Collectors.toList());
+                    .toList();
             System.out.println("Events: " + newEvents);
             // Remove the park from old events
             for (Event oldEvent : park.getEvents()) {
@@ -95,7 +105,7 @@ public class ParkUtil {
 
             List<File> mediaFiles = parkDto.getFilesExternalIds().stream()
                     .map(fileService::findFileByExternalId)
-                    .collect(Collectors.toList());
+                    .toList();
 
             for (File mediaFile : mediaFiles) {
                 mediaFile.setPark(park);

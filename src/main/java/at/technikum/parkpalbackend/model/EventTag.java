@@ -29,6 +29,9 @@ public class EventTag {
     @Column(name = "event_tag_id")
     private String id;
 
+    @Version
+    private Long version;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -41,15 +44,7 @@ public class EventTag {
     @ManyToMany(mappedBy = "tags", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
     @JsonIgnore
+    @Builder.Default
     private Set<Event> events = new HashSet<>();
 
-    public void addEvent(Event event) {
-        this.events.add(event);
-        event.getTags().add(this);
-    }
-
-    public void removeEvent(Event event) {
-        this.events.remove(event);
-        event.getTags().remove(this);
-    }
 }

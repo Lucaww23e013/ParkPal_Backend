@@ -252,35 +252,35 @@ VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8e', 'Aruba', 'AW'),
        ('9e02a546-ec64-4892-84aa-991af13d7743', 'Zimbabwe', 'ZW');
 
 INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
-                        gender)
+                        gender, version)
 VALUES ('ADMIN', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'ww23e016@technikum-wien.at', 'Osama', 'Madani',
         '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
-        'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'Mr.', 'MALE');
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'Mr.', 'MALE', 0);
 
 -- create another 2 normal users
 INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
-                        gender)
+                        gender, version)
 VALUES ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'os235.ma22@gmail.com', 'Osama', 'Madani',
         '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
-        'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'oneandtheonly', 'Master of Disasters', 'MALE');
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'oneandtheonly', 'Master of Disasters', 'MALE', 0);
 
 INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
-                        gender)
+                        gender, version)
 VALUES ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'forkg71@gmail.com', 'Osama', 'Madani',
         '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
-        'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'osamaallmighty', 'Master of Disasters', 'MALE');
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'osamaallmighty', 'Master of Disasters', 'MALE', 0);
 
 -- create a park
-INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id)
+INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id, version)
 VALUES ('c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater',
         'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.',
-        '1020', 'Vienna', '1020', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+        '1020', 'Vienna', '1020', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 0);
 
 -- create a park
-INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id)
+INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id, version)
 VALUES ('c07cd7cb-ce44-4709-32af-9d8d2d568264', 'Schönbrunn',
         'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.',
-        '1130', 'Vienna', '1130', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+        '1130', 'Vienna', '1130', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 0);
 
 -- user oneandtheonly create an event
 INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
@@ -320,11 +320,11 @@ VALUES
     (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'aaetetet-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Schönbrunn Classical Concert', 'Attend a classical music concert at Schönbrunn Palace.', '2030-07-12 17:00:00', '2030-07-12 17:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
     (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '3535a53b-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Schönbrunn Art Workshop', 'Participate in an art workshop at Schönbrunn Palace.', '2030-07-13 18:00:00', '2030-07-13 18:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264');
 
-INSERT INTO spring.event_tag(event_tag_id, name)
-VALUES ('d5d58630-03b4-4089-8da9-fed915a11a7c', 'Festival'),
-       ('6f581306-3d69-4481-a769-f692920ea14d', 'Music'),
-       ('9de57aae-9658-405e-966d-01a56aaf9e13', 'Tour'),
-       ('2a08a88d-1c1c-4e11-b52c-6d9c0f11f05b', 'Walk');
+INSERT INTO spring.event_tag(event_tag_id, name, version)
+VALUES ('d5d58630-03b4-4089-8da9-fed915a11a7c', 'Festival', 0),
+       ('6f581306-3d69-4481-a769-f692920ea14d', 'Music', 0),
+       ('9de57aae-9658-405e-966d-01a56aaf9e13', 'Tour', 0),
+       ('2a08a88d-1c1c-4e11-b52c-6d9c0f11f05b', 'Walk', 0);
 
 INSERT INTO spring.event_event_tag(event_tag_id, event_id)
 VALUES ('9de57aae-9658-405e-966d-01a56aaf9e13', '33333333-3333-3333-3333-333333333333'),

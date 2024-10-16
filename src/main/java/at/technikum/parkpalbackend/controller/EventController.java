@@ -73,9 +73,7 @@ public class EventController {
     public ResponseEntity<EventDto> updateEvent(@RequestBody @Valid EventDto eventDto,
                                                 @PathVariable String eventId) {
         Event updatedEvent = eventUtil.updateEvent(eventId, eventDto);
-
         EventDto updatedEventDto = eventMapper.toDto(updatedEvent);
-
         return ResponseEntity.ok(updatedEventDto);
     }
 

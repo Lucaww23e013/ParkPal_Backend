@@ -92,7 +92,7 @@ public class EventUtil {
 
             List<User> newJoinedUsers = eventDto.getJoinedUserIds().stream()
                     .map(userService::findByUserId)
-                    .collect(Collectors.toList());
+                    .toList();
 
             // Remove the event from old users' joined events list
             for (User oldUser : event.getJoinedUsers()) {
@@ -137,7 +137,7 @@ public class EventUtil {
                 && !eventDto.getMediaFileExternalIds().isEmpty()) {
             List<File> mediaFiles = eventDto.getMediaFileExternalIds().stream()
                     .map(fileService::findFileByExternalId)
-                    .collect(Collectors.toList());
+                    .toList();
 
             for (File mediaFile : mediaFiles) {
                 mediaFile.setEvent(event);

@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class File {
 
     @Version
-    private long version;
+    private Long version;
 
     @Id
     @UuidGenerator
@@ -67,6 +67,4 @@ public class File {
     @Builder.Default
     private FileType fileType = FileType.OTHER;
 
-    public File(String string, String image, String contentType, Park park) {
-    }
 }
