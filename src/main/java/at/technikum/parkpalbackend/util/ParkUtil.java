@@ -79,7 +79,7 @@ public class ParkUtil {
             List<Event> newEvents = parkDto.getEventIds().stream()
                     .map(eventService::findByEventId)
                     .toList();
-            System.out.println("Events: " + newEvents);
+
             // Remove the park from old events
             for (Event oldEvent : park.getEvents()) {
                 oldEvent.setPark(null);
