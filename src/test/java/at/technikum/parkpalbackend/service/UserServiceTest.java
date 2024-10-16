@@ -2,7 +2,6 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
-import at.technikum.parkpalbackend.exception.UserWithUserNameOrEmailAlreadyExists;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
 import at.technikum.parkpalbackend.persistence.UserRepository;
@@ -313,33 +312,6 @@ class UserServiceTest {
         verify(userRepository).findAllById(userIds);
     }
 
-    // Test for save method exception handling
-    @Test
-    void whenSaveUserWithDuplicateUsername_thenThrowUserWithUserNameOrEmailAlreadyExists() {
-        // Arrange
-        User user = TestFixtures.adminUser;
-        user.setId(UUID.randomUUID().toString());
-        DataIntegrityViolationException exception = new DataIntegrityViolationException(
-                "duplicate key value violates unique constraint 'unique_username'");
-        when(userRepository.save(user)).thenThrow(exception);
-
-        // Act & Assert
-        assertThrows(UserWithUserNameOrEmailAlreadyExists.class, () -> userService.save(user));
-    }
-
-    @Test
-    void whenSaveUserWithDuplicateEmail_thenThrowUserWithUserNameOrEmailAlreadyExists() {
-        // Arrange
-        User user = TestFixtures.adminUser;
-        user.setId(UUID.randomUUID().toString());
-        DataIntegrityViolationException exception = new DataIntegrityViolationException(
-                "duplicate key value violates unique constraint 'unique_email'");
-        when(userRepository.save(user)).thenThrow(exception);
-
-        // Act & Assert
-        assertThrows(UserWithUserNameOrEmailAlreadyExists.class, () -> userService.save(user));
-    }
-
     @Test
     void whenSaveUserWithUnknownConstraint_thenThrowDataIntegrityViolationException() {
         // Arrange
@@ -351,27 +323,6 @@ class UserServiceTest {
 
         // Act & Assert
         assertThrows(DataIntegrityViolationException.class, () -> userService.save(user));
-    }
-
-    // Test for extractConstraintName
-    @Test
-    void whenExtractConstraintName_thenReturnConstraintName() {
-        // Arrange
-        User user = TestFixtures.adminUser;
-        user.setId(UUID.randomUUID().toString());
-        DataIntegrityViolationException exception = new DataIntegrityViolationException(
-                "duplicate key value violates unique constraint 'unique_username'");
-
-        // Mock the repository to throw the exception when saving
-        when(userRepository.save(user)).thenThrow(exception);
-
-        // Act & Assert
-        UserWithUserNameOrEmailAlreadyExists thrownException = assertThrows(UserWithUserNameOrEmailAlreadyExists.class,
-                () -> userService.save(user));
-
-        // Verify the correct exception message that would result from the 'extractConstraintName' logic
-        Assertions.assertEquals("Username " + user.getUserName() + " already exists.", thrownException.getMessage());
-        verify(userRepository).save(user);
     }
 
     // Test for updateUserStatus
@@ -391,5 +342,51 @@ class UserServiceTest {
         Assertions.assertEquals(Role.ADMIN, user.getRole());
         verify(userRepository).findById(user.getId());
         verify(userRepository).save(user);
+    }
+
+    @Test
+    void userNameExists_returnsTrueWhenUserNameExists() {
+        String userName = "existingUser";
+        when(userRepository.findUserByUserName(userName)).thenReturn(
+                Optional.of(User.builder().build()));
+
+        boolean result = userService.userNameExists(userName);
+
+        Assertions.assertTrue(result);
+        verify(userRepository).findUserByUserName(userName);
+    }
+
+    @Test
+    void userNameExists_returnsFalseWhenUserNameDoesNotExist() {
+        String userName = "nonExistentUser";
+        when(userRepository.findUserByUserName(userName)).thenReturn(Optional.empty());
+
+        boolean result = userService.userNameExists(userName);
+
+        Assertions.assertFalse(result);
+        verify(userRepository).findUserByUserName(userName);
+    }
+
+    @Test
+    void userEmailExists_returnsTrueWhenEmailExists() {
+        String email = "existingEmail@test.com";
+        when(userRepository.findUserByEmail(email)).thenReturn(
+                Optional.of(User.builder().build()));
+
+        boolean result = userService.userEmailExists(email);
+
+        Assertions.assertTrue(result);
+        verify(userRepository).findUserByEmail(email);
+    }
+
+    @Test
+    void userEmailExists_returnsFalseWhenEmailDoesNotExist() {
+        String email = "nonExistentEmail@test.com";
+        when(userRepository.findUserByEmail(email)).thenReturn(Optional.empty());
+
+        boolean result = userService.userEmailExists(email);
+
+        Assertions.assertFalse(result);
+        verify(userRepository).findUserByEmail(email);
     }
 }
