@@ -79,7 +79,7 @@ public class ParkUtil {
             List<Event> newEvents = parkDto.getEventIds().stream()
                     .map(eventService::findByEventId)
                     .toList();
-            System.out.println("Events: " + newEvents);
+
             // Remove the park from old events
             for (Event oldEvent : park.getEvents()) {
                 oldEvent.setPark(null);
@@ -97,13 +97,13 @@ public class ParkUtil {
     }
 
     private void updateParkMedia(Park park, ParkDto parkDto) {
-        if (parkDto.getFilesExternalIds() != null) {
+        if (parkDto.getMediaFileExternalIds() != null) {
             for (File oldFile : park.getMedia()) {
                 oldFile.setPark(null);
             }
             park.getMedia().clear();
 
-            List<File> mediaFiles = parkDto.getFilesExternalIds().stream()
+            List<File> mediaFiles = parkDto.getMediaFileExternalIds().stream()
                     .map(fileService::findFileByExternalId)
                     .toList();
 
