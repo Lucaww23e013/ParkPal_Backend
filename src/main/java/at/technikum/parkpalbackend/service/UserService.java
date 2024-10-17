@@ -1,5 +1,6 @@
 package at.technikum.parkpalbackend.service;
 
+import at.technikum.parkpalbackend.exception.EntityAlreadyExistsException;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
@@ -78,6 +79,18 @@ public class UserService {
     @Transactional
     public User update(String userId, User newUser) {
         User existingUser = findByUserId(userId);
+        // Check for unique username
+        if (!existingUser.getUserName().equals(newUser.getUserName()) &&
+                userNameExists(newUser.getUserName())) {
+            throw new EntityAlreadyExistsException("A user with the username " +
+                    newUser.getUserName() + " already exists.");
+        }
+        // Check for unique email
+        if (!existingUser.getEmail().equals(newUser.getEmail()) &&
+                userEmailExists(newUser.getEmail())) {
+            throw new EntityAlreadyExistsException("A user with the email " +
+                    newUser.getEmail() + " already exists.");
+        }
         // Update fields of the existing user
         existingUser.setGender(newUser.getGender());
         existingUser.setSalutation(newUser.getSalutation());
@@ -88,13 +101,13 @@ public class UserService {
         existingUser.setCountry(newUser.getCountry());
         existingUser.setJoinedEvents(newUser.getJoinedEvents());
         existingUser.setMedia(newUser.getMedia());
-
         return userRepository.save(existingUser);
     }
 
     @Transactional
     public void delete(String userId) {
         User user = findByUserId(userId);
+        user.getJoinedEvents().forEach(event -> event.getJoinedUsers().remove(user));
         userRepository.delete(user);
     }
 

@@ -5,9 +5,7 @@ import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.persistence.EventRepository;
-import at.technikum.parkpalbackend.persistence.FileRepository;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
-import at.technikum.parkpalbackend.persistence.UserRepository;
 import at.technikum.parkpalbackend.service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.*;
 
 import static at.technikum.parkpalbackend.TestFixtures.*;
@@ -26,6 +25,9 @@ class EventUtilTest {
 
     @Mock
     private EventRepository eventRepository;
+
+    @Mock
+    private EventService eventService;
 
     @Mock
     private UserService userService;
@@ -59,7 +61,8 @@ class EventUtilTest {
         Park park = parkAwesome;
         park.setId(UUID.randomUUID().toString());
 
-        List<File> mediaFiles = Arrays.asList(file, file2); ;
+        List<File> mediaFiles = Arrays.asList(file, file2);
+
         EventTag tag1 = familyEventTag;
         tag1.setId(UUID.randomUUID().toString());
         EventTag tag2 = gamesEventTag;
@@ -79,7 +82,7 @@ class EventUtilTest {
         when(fileService.getFileList(createEventDto.getMediaFileExternalIds())).thenReturn(mediaFiles);
         when(eventTagService.findTagsByIds(createEventDto.getEventTagsIds())).thenReturn(eventTags);
         when(eventMapper.toEntityCreateEvent(createEventDto, creator, park, mediaFiles, eventTags)).thenReturn(event);
-        when(eventRepository.save(event)).thenReturn(event);
+        when(eventService.save(event)).thenReturn(event);
         when(eventMapper.toDtoCreateEvent(event)).thenReturn(expectedEventDto);
 
         // Act
@@ -94,7 +97,7 @@ class EventUtilTest {
         Mockito.verify(fileService, times(1)).getFileList(createEventDto.getMediaFileExternalIds());
         Mockito.verify(eventTagService, times(1)).findTagsByIds(createEventDto.getEventTagsIds());
         Mockito.verify(eventMapper, times(1)).toEntityCreateEvent(createEventDto, creator, park, mediaFiles, eventTags);
-        Mockito.verify(eventRepository, times(1)).save(event);
+        Mockito.verify(eventService, times(1)).save(event);
         Mockito.verify(eventMapper, times(1)).toDtoCreateEvent(event);
         Mockito.verify(fileService, times(1)).setEventMedia(event, mediaFiles);
         verifyNoMoreInteractions(userService, parkService, fileService, eventTagService, eventMapper, eventRepository);
@@ -137,7 +140,7 @@ class EventUtilTest {
         // Mock eventRepository to return the existing event when findById is called
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(existingEvent));
         // Mock save to return the updated event
-        when(eventRepository.save(existingEvent)).thenReturn(existingEvent);
+        when(eventService.save(existingEvent)).thenReturn(existingEvent);
 
         // Mock new tags to be added
         EventTag familyTag = familyEventTag;
@@ -192,7 +195,7 @@ class EventUtilTest {
         assertTrue(gamesTag.getEvents().contains(updatedEvent));
 
         // Ensure the repository save method was called with the updated event
-        Mockito.verify(eventRepository).save(existingEvent);
+        Mockito.verify(eventService).save(existingEvent);
 
         // Verify that the findById method was called to retrieve the existing event and the new park
         Mockito.verify(eventRepository).findById(eventId);

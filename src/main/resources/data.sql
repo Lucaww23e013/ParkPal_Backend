@@ -252,79 +252,79 @@ VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8e', 'Aruba', 'AW'),
        ('9e02a546-ec64-4892-84aa-991af13d7743', 'Zimbabwe', 'ZW');
 
 INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
-                        gender)
+                        gender, version)
 VALUES ('ADMIN', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'ww23e016@technikum-wien.at', 'Osama', 'Madani',
         '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
-        'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'Mr.', 'MALE');
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'osamathebest', 'Mr.', 'MALE', 0);
 
 -- create another 2 normal users
 INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
-                        gender)
+                        gender, version)
 VALUES ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'os235.ma22@gmail.com', 'Osama', 'Madani',
         '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
-        'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'oneandtheonly', 'Master of Disasters', 'MALE');
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'oneandtheonly', 'Master of Disasters', 'MALE', 0);
 
 INSERT INTO spring.user(role, country_id, email, first_name, last_name, password, user_id, user_name, salutation,
-                        gender)
+                        gender, version)
 VALUES ('USER', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'forkg71@gmail.com', 'Osama', 'Madani',
         '$2a$10$9jRHv9Ka2VoLITSGW5bKEOnPH4OYGDuu6R7V1Ufc.LJSAa/XnQdUu',
-        'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'osamaallmighty', 'Master of Disasters', 'MALE');
+        'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'osamaallmighty', 'Master of Disasters', 'MALE', 0);
 
 -- create a park
-INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id)
+INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id, version)
 VALUES ('c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater',
         'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.',
-        '1020', 'Vienna', '1020', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+        '1020', 'Vienna', '1020', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 0);
 
 -- create a park
-INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id)
+INSERT INTO spring.park(park_id, name, description, street_number, city, zip_code, country_id, version)
 VALUES ('c07cd7cb-ce44-4709-32af-9d8d2d568264', 'Schönbrunn',
         'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.',
-        '1130', 'Vienna', '1130', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+        '1130', 'Vienna', '1130', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 0);
 
 -- user oneandtheonly create an event
 INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
 VALUES (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'Prater Event',
         'The Prater is a large public park in Vienna''s 2nd district (Leopoldstadt). The Wurstelprater amusement park, often simply called "Prater", stands in one corner of the Wiener Prater and includes the Wiener Riesenrad Ferris wheel.',
-        '2030-06-01 10:00:00', '2030-06-01 10:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+        NOW() + INTERVAL 1 DAY, NOW() + INTERVAL 1 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
 
 -- user OsamaAllMighty create an event
 INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
 VALUES (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'c07cd7cb-ca44-4709-a9b6-9d8d2d568266', 'Schönbrunn Event',
         'Schönbrunn Palace is a former imperial summer residence located in Vienna, Austria. The 1,441-room Baroque palace is one of the most important architectural, cultural, and historical monuments in the country.',
-        '2030-06-01 11:00:00', '2030-06-01 11:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264');
+        NOW() + INTERVAL 2 DAY, NOW() + INTERVAL 2 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264');
 
 -- Additional events for Prater park
 INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
 VALUES
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Prater Summer Festival', 'Join us for a fun-filled summer festival at Prater with games, food, and music.', '2030-07-01 10:00:00', '2030-07-01 10:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Prater Music Concert', 'Experience an amazing live music concert at Prater featuring local bands.', '2030-07-03 11:00:00', '2030-07-03 11:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'Prater Food Fair', 'Taste a variety of delicious foods from different cuisines at the Prater Food Fair.', '2030-07-05 12:00:00', '2030-07-05 12:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'Prater Art Exhibition', 'Explore beautiful artworks by local artists at the Prater Art Exhibition.', '2030-07-07 13:00:00', '2030-07-07 13:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'Prater Movie Night', 'Enjoy a movie night under the stars at Prater.', '2030-07-09 14:00:00', '2030-07-09 14:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'ffffffff-ffff-ffff-ffff-ffffffffffff', 'Prater Sports Day', 'Participate in various sports activities at Prater.', '2030-07-10 15:00:00', '2030-07-10 15:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '00000000-0000-0000-0000-000000000000', 'Prater Book Fair', 'Explore a wide range of books at the Prater Book Fair.', '2030-07-11 16:00:00', '2030-07-11 16:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '11111111-1111-1111-1111-111111111111', 'Prater Science Expo', 'Discover scientific wonders at the Prater Science Expo.', '2030-07-12 17:00:00', '2030-07-12 17:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '22222222-2222-2222-2222-222222222222', 'Prater Dance Festival', 'Join us for a vibrant dance festival at Prater.', '2030-07-13 18:00:00', '2030-07-13 18:30:00', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Prater Summer Festival', 'Join us for a fun-filled summer festival at Prater with games, food, and music.', NOW() + INTERVAL 3 DAY, NOW() + INTERVAL 3 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Prater Music Concert', 'Experience an amazing live music concert at Prater featuring local bands.', NOW() + INTERVAL 4 DAY, NOW() + INTERVAL 4 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 'Prater Food Fair', 'Taste a variety of delicious foods from different cuisines at the Prater Food Fair.', NOW() + INTERVAL 5 DAY, NOW() + INTERVAL 5 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'dddddddd-dddd-dddd-dddd-dddddddddddd', 'Prater Art Exhibition', 'Explore beautiful artworks by local artists at the Prater Art Exhibition.', NOW() + INTERVAL 6 DAY, NOW() + INTERVAL 6 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'Prater Movie Night', 'Enjoy a movie night under the stars at Prater.', NOW() + INTERVAL 7 DAY, NOW() + INTERVAL 7 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', 'ffffffff-ffff-ffff-ffff-ffffffffffff', 'Prater Sports Day', 'Participate in various sports activities at Prater.', NOW() + INTERVAL 8 DAY, NOW() + INTERVAL 8 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '00000000-0000-0000-0000-000000000000', 'Prater Book Fair', 'Explore a wide range of books at the Prater Book Fair.', NOW() + INTERVAL 9 DAY, NOW() + INTERVAL 9 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '11111111-1111-1111-1111-111111111111', 'Prater Science Expo', 'Discover scientific wonders at the Prater Science Expo.', NOW() + INTERVAL 10 DAY, NOW() + INTERVAL 10 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264', '22222222-2222-2222-2222-222222222222', 'Prater Dance Festival', 'Join us for a vibrant dance festival at Prater.', NOW() + INTERVAL 11 DAY, NOW() + INTERVAL 11 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263');
 
 -- Additional events for Schönbrunn park
 INSERT INTO spring.event(event.version, event_2_user_id, event_id, title, description, startts, endts, event_park_id)
 VALUES
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '33333333-3333-3333-3333-333333333333', 'Schönbrunn Garden Tour', 'Take a guided tour of the beautiful gardens at Schönbrunn Palace.', '2030-07-01 10:00:00', '2030-07-01 10:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '44444444-4444-4444-4444-444444444444', 'Schönbrunn Historical Walk', 'Learn about the rich history of Schönbrunn Palace on this historical walk.', '2030-07-03 11:00:00', '2030-07-03 11:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '55555555-5555-5555-5555-555555555555', 'Schönbrunn Family Picnic', 'Enjoy a relaxing family picnic in the scenic grounds of Schönbrunn Palace.', '2030-07-05 12:00:00', '2030-07-05 12:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '66666666-6666-6666-6666-666666666666', 'Schönbrunn Evening Gala', 'Attend an elegant evening gala at Schönbrunn Palace with live music and fine dining.', '2030-07-07 13:00:00', '2030-07-07 13:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '77777777-7777-7777-7777-777777777777', 'Schönbrunn Photography Workshop', 'Learn photography skills at Schönbrunn Palace.', '2030-07-09 14:00:00', '2030-07-09 14:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '88888888-8888-8888-8888-888888888888', 'Schönbrunn Yoga Session', 'Relax with a yoga session in the gardens of Schönbrunn.', '2030-07-10 15:00:00', '2030-07-10 15:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '99999999-9999-9999-9999-999999999999', 'Schönbrunn Wine Tasting', 'Enjoy a wine tasting event at Schönbrunn Palace.', '2030-07-11 16:00:00', '2030-07-11 16:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'aaetetet-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Schönbrunn Classical Concert', 'Attend a classical music concert at Schönbrunn Palace.', '2030-07-12 17:00:00', '2030-07-12 17:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
-    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '3535a53b-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Schönbrunn Art Workshop', 'Participate in an art workshop at Schönbrunn Palace.', '2030-07-13 18:00:00', '2030-07-13 18:30:00', 'c07cd7cb-ce44-4709-32af-9d8d2d568264');
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '33333333-3333-3333-3333-333333333333', 'Schönbrunn Garden Tour', 'Take a guided tour of the beautiful gardens at Schönbrunn Palace.', NOW() + INTERVAL 12 DAY, NOW() + INTERVAL 12 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '44444444-4444-4444-4444-444444444444', 'Schönbrunn Historical Walk', 'Learn about the rich history of Schönbrunn Palace on this historical walk.', NOW() + INTERVAL 13 DAY, NOW() + INTERVAL 13 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '55555555-5555-5555-5555-555555555555', 'Schönbrunn Family Picnic', 'Enjoy a relaxing family picnic in the scenic grounds of Schönbrunn Palace.', NOW() + INTERVAL 14 DAY, NOW() + INTERVAL 14 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '66666666-6666-6666-6666-666666666666', 'Schönbrunn Evening Gala', 'Attend an elegant evening gala at Schönbrunn Palace with live music and fine dining.', NOW() + INTERVAL 15 DAY, NOW() + INTERVAL 15 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '77777777-7777-7777-7777-777777777777', 'Schönbrunn Photography Workshop', 'Learn photography skills at Schönbrunn Palace.', NOW() + INTERVAL 16 DAY, NOW() + INTERVAL 16 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '88888888-8888-8888-8888-888888888888', 'Schönbrunn Yoga Session', 'Relax with a yoga session in the gardens of Schönbrunn.', NOW() + INTERVAL 17 DAY, NOW() + INTERVAL 17 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '99999999-9999-9999-9999-999999999999', 'Schönbrunn Wine Tasting', 'Enjoy a wine tasting event at Schönbrunn Palace.', NOW() + INTERVAL 18 DAY, NOW() + INTERVAL 18 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', 'aaetetet-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Schönbrunn Classical Concert', 'Attend a classical music concert at Schönbrunn Palace.', NOW() + INTERVAL 19 DAY, NOW() + INTERVAL 19 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264'),
+    (0, 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265', '3535a53b-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Schönbrunn Art Workshop', 'Participate in an art workshop at Schönbrunn Palace.', NOW() + INTERVAL 20 DAY, NOW() + INTERVAL 20 DAY + INTERVAL 30 MINUTE, 'c07cd7cb-ce44-4709-32af-9d8d2d568264');
 
-INSERT INTO spring.event_tag(event_tag_id, name)
-VALUES ('d5d58630-03b4-4089-8da9-fed915a11a7c', 'Festival'),
-       ('6f581306-3d69-4481-a769-f692920ea14d', 'Music'),
-       ('9de57aae-9658-405e-966d-01a56aaf9e13', 'Tour'),
-       ('2a08a88d-1c1c-4e11-b52c-6d9c0f11f05b', 'Walk');
+INSERT INTO spring.event_tag(event_tag_id, name, version)
+VALUES ('d5d58630-03b4-4089-8da9-fed915a11a7c', 'Festival', 0),
+       ('6f581306-3d69-4481-a769-f692920ea14d', 'Music', 0),
+       ('9de57aae-9658-405e-966d-01a56aaf9e13', 'Tour', 0),
+       ('2a08a88d-1c1c-4e11-b52c-6d9c0f11f05b', 'Walk', 0);
 
 INSERT INTO spring.event_event_tag(event_tag_id, event_id)
 VALUES ('9de57aae-9658-405e-966d-01a56aaf9e13', '33333333-3333-3333-3333-333333333333'),

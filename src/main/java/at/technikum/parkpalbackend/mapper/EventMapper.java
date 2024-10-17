@@ -3,10 +3,12 @@ package at.technikum.parkpalbackend.mapper;
 import at.technikum.parkpalbackend.dto.eventdtos.CreateEventDto;
 import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.model.*;
-import at.technikum.parkpalbackend.service.*;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -26,10 +28,19 @@ public class EventMapper {
                 .endTS(event.getEndTS())
                 .parkId(event.getPark() != null ? event.getPark().getId() : null)
                 .creatorUserId(event.getCreator() != null ? event.getCreator().getId() : null)
+                .creatorName(event.getCreator() != null ? event.getCreator().getUserName() : null)
                 .joinedUserIds(getJoinedUserIds(event.getJoinedUsers()))
+                .joinedUserNames(getJoinedUserNames(event))
                 .eventTagsIds(getEventTagIds(event.getTags()))
                 .mediaFileExternalIds(getFileExternalIds(event.getMedia()))
                 .build();
+    }
+
+    private static List<String> getJoinedUserNames(Event event) {
+        if (event.getJoinedUsers() == null) {
+            return new ArrayList<>();
+        }
+        return event.getJoinedUsers().stream().map(User::getUserName).toList();
     }
 
     public CreateEventDto toDtoCreateEvent(Event event) {

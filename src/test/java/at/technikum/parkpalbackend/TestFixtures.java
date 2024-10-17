@@ -11,6 +11,7 @@ import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.model.*;
+import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.model.enums.Gender;
 import at.technikum.parkpalbackend.model.enums.Role;
 import org.jetbrains.annotations.NotNull;
@@ -59,8 +60,8 @@ public class TestFixtures {
     public static ParkDto testParkDto = createTestParkDto("testParkDto");
     */
 
-   /* public static Media testMedia = createMedia();*/
-   /* public static List<Media> mediaList = createMediaList();*/
+    /* public static Media testMedia = createMedia();*/
+    /* public static List<Media> mediaList = createMediaList();*/
 
     /*public static List<Event> eventList = createEventList();*/
     public static List<User> userList = createUserList();
@@ -94,7 +95,7 @@ public class TestFixtures {
     public static CreateEventDto testCreateEventDto = createCreateEventDto(normalUser, "title1", "a description", parkWithEvents);
     public static Event testEvent = createEvent(normalUser, "title1", "a description", parkWithEvents);
 
-    public static Event createEvent (User creator, String title, String description, Park park) {
+    public static Event createEvent(User creator, String title, String description, Park park) {
         Event event = Event.builder()
                 .creator(creator)
                 .title(title)
@@ -108,8 +109,8 @@ public class TestFixtures {
         return event;
     }
 
-    public static CreateEventDto createCreateEventDto (User creator, String title, String description, Park park) {
-        CreateEventDto createEventDto = CreateEventDto.builder()
+    public static CreateEventDto createCreateEventDto(User creator, String title, String description, Park park) {
+        return CreateEventDto.builder()
                 .creatorUserId(creator.getId())
                 .title(title)
                 .description(description)
@@ -119,7 +120,6 @@ public class TestFixtures {
                 .eventTagsIds(new HashSet<>(Arrays.asList(familyEventTag.getId(), gamesEventTag.getId())))
                 .mediaFileExternalIds(new ArrayList<>(Arrays.asList(familyEventTag.getId(), gamesEventTag.getId())))
                 .build();
-        return createEventDto;
     }
 
     private static List<EventTag> createEventTagListForAnEvent(Event event) {
@@ -130,11 +130,8 @@ public class TestFixtures {
     }
 
 
-    private static EventTag createEventTag(String eventTagName, Event ...events) {
-        Set<Event> eventSet = new HashSet<>();
-        for (Event event : events) {
-            eventSet.add(event);
-        }
+    private static EventTag createEventTag(String eventTagName, Event... events) {
+        Set<Event> eventSet = new HashSet<>(Arrays.asList(events));
         return EventTag.builder()
                 .name(eventTagName)
                 .events(eventSet)
@@ -195,7 +192,7 @@ public class TestFixtures {
                 .title(title)
                 .description("Runaway Park")
                 .startTS(LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.MINUTES))
-                .endTS( LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES))
+                .endTS(LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES))
                 .park(parkAwesome)
                 .creator(adminUser)
                 .joinedUsers(createUserList())
@@ -275,7 +272,7 @@ public class TestFixtures {
                 .build();
     }
 
-    private static CreateParkDto createCreateParkDto (String createParkDto) {
+    private static CreateParkDto createCreateParkDto(String createParkDto) {
         return CreateParkDto.builder()
                 .name(createParkDto)
                 .description("CreateParkDTO Test")
@@ -326,7 +323,6 @@ public class TestFixtures {
                 .mediaFileExternalIds(new ArrayList<>())
                 .build();
     }
-
 
 
     private static UserDto createUserDto(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
@@ -490,12 +486,30 @@ public class TestFixtures {
         park.setAddress(parkAddress);
 
         // Create associated files for the park
-        List<File> files = new ArrayList<>();
-        files.add(new File(UUID.randomUUID().toString(), "file1.jpg", "image/jpeg", park));
-        files.add(new File(UUID.randomUUID().toString(), "file2.jpg", "image/jpeg", park));
-        park.setMedia(files);  // Assuming media refers to the list of files
+        filesWithPark(park);
 
         return park;
+    }
+
+    private static void filesWithPark(Park park) {
+        List<File> files = new ArrayList<>();
+        File file1 = File.builder()
+                .externalId(UUID.randomUUID().toString())
+                .filename("file1.jpg")
+                .fileType(FileType.PHOTO)
+                .park(park)
+                .assigned(true)
+                .build();
+        File file2 = File.builder()
+                .externalId(UUID.randomUUID().toString())
+                .filename("file2.jpg")
+                .fileType(FileType.PHOTO)
+                .park(park)
+                .assigned(true)
+                .build();
+        files.add(file1);
+        files.add(file2);
+        park.setMedia(files);  // Assuming media refers to the list of files
     }
 
     public static Park parkWithUpdatedFiles() {
@@ -506,10 +520,7 @@ public class TestFixtures {
         park.setAddress(parkAddress);
 
         // Create new associated files for the updated park
-        List<File> files = new ArrayList<>();
-        files.add(new File(UUID.randomUUID().toString(), "file3.jpg", "image/jpeg", park));
-        files.add(new File(UUID.randomUUID().toString(), "file4.jpg", "image/jpeg", park));
-        park.setMedia(files);
+        filesWithPark(park);
 
         return park;
     }

@@ -64,6 +64,11 @@ public class EventTagService {
     public EventTag deleteTagById(String eventTagId) {
         try {
             EventTag eventTag  = findTagById(eventTagId);
+            // Remove tag from all events using removeIf
+            eventTag.getEvents().removeIf(event -> {
+                event.removeEventTags(eventTag);
+                return true;
+            });
             eventTagRepository.delete(eventTag);
             return eventTag;
         } catch (EntityNotFoundException e) {

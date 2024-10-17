@@ -10,6 +10,7 @@ import at.technikum.parkpalbackend.persistence.ParkRepository;
 import at.technikum.parkpalbackend.service.EventTagService;
 import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.ParkService;
+import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.UserService;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,7 @@ public class EventUtil {
     private final EventTagService eventTagService;
     private final ParkService parkService;
     private final UserService userService;
+    private final EventService eventService;
     private final ParkRepository parkRepository;
 
     public EventUtil(EventRepository eventRepository,
@@ -34,13 +36,16 @@ public class EventUtil {
                      EventMapper eventMapper,
                      EventTagService eventTagService,
                      ParkService parkService,
-                     UserService userService, ParkRepository parkRepository) {
+                     UserService userService,
+                     EventService eventService,
+                     ParkRepository parkRepository) {
         this.eventRepository = eventRepository;
         this.fileService = fileService;
         this.eventMapper = eventMapper;
         this.eventTagService = eventTagService;
         this.parkService = parkService;
         this.userService = userService;
+        this.eventService = eventService;
         this.parkRepository = parkRepository;
     }
 
@@ -54,7 +59,7 @@ public class EventUtil {
         Event event = eventMapper.toEntityCreateEvent(
                 createEventDto, creator, park, mediaFiles, eventTags);
 
-        event = eventRepository.save(event);
+        event = eventService.save(event);
 
         addEventToTags(eventTags, event);
         fileService.setEventMedia(event, mediaFiles);
@@ -74,7 +79,8 @@ public class EventUtil {
         updateEventTags(existingEvent, eventDto);
         updateEventMedia(existingEvent, eventDto);
 
-        return eventRepository.save(existingEvent);
+        eventService.validateEventTimes(existingEvent.getStartTS(), existingEvent.getEndTS());
+        return eventService.save(existingEvent);
     }
 
     private void updateBasicEventDetails(Event event, EventDto eventDto) {
@@ -87,7 +93,7 @@ public class EventUtil {
     private void updateEventPark(Event event, EventDto eventDto) {
         if (eventDto.getParkId() != null) {
             Optional<Park> optionalPark = parkRepository.findById(eventDto.getParkId());
-            if(optionalPark.isPresent()) {
+            if (optionalPark.isPresent()) {
                 Park associatedPark = optionalPark.get();
                 event.setPark(associatedPark);
             }
@@ -99,7 +105,7 @@ public class EventUtil {
 
             List<User> newJoinedUsers = eventDto.getJoinedUserIds().stream()
                     .map(userService::findByUserId)
-                    .collect(Collectors.toList());
+                    .toList();
 
             // Remove the event from old users' joined events list
             for (User oldUser : event.getJoinedUsers()) {
@@ -144,7 +150,7 @@ public class EventUtil {
                 && !eventDto.getMediaFileExternalIds().isEmpty()) {
             List<File> mediaFiles = eventDto.getMediaFileExternalIds().stream()
                     .map(fileService::findFileByExternalId)
-                    .collect(Collectors.toList());
+                    .toList();
 
             for (File mediaFile : mediaFiles) {
                 mediaFile.setEvent(event);

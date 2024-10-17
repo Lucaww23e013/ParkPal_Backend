@@ -1,9 +1,5 @@
 package at.technikum.parkpalbackend.util;
 
-import static at.technikum.parkpalbackend.TestFixtures.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
@@ -14,7 +10,6 @@ import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.FileService;
-import at.technikum.parkpalbackend.service.ParkService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,13 +18,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
+import static at.technikum.parkpalbackend.TestFixtures.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class ParkUtilTest {
 
     @Mock
     private ParkRepository parkRepository;
-    @Mock
-    private ParkService parkService;
+
     @Mock
     private EventService eventService;
     @Mock
@@ -250,6 +248,7 @@ class ParkUtilTest {
         verify(fileService).findFileByExternalId("file-ext-1");
         verify(fileService).findFileByExternalId("file-ext-2");
     }
+
     /*
     @Test
     void testUpdateParkEvents_WithNonNullEventIds() {

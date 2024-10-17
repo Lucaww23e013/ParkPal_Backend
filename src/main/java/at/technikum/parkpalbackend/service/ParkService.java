@@ -4,6 +4,7 @@ import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -19,7 +20,7 @@ public class ParkService {
     }
 
     public Park findParkById(String parkId) {
-        System.out.println("ParkID: " + parkId);
+
         return parkRepository.findById(parkId)
                 .orElseThrow(() -> new EntityNotFoundException("Park with id %s not found "
                         .formatted(parkId)));

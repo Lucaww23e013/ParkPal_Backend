@@ -14,7 +14,6 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -41,6 +40,9 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Version
+    private Long version;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -93,25 +95,5 @@ public class User {
     @Builder.Default
     @ToString.Exclude
     private List<File> media = new ArrayList<>();
-
-    public User addJoinedEvents(Event... events) {
-        this.joinedEvents.addAll(Arrays.asList(events));
-        return this;
-    }
-
-    public User removeJoinedEvents(Event... events) {
-        Arrays.stream(events).forEach(event -> this.joinedEvents.remove(event));
-        return this;
-    }
-
-    public User addMedia(File... media) {
-        this.media.addAll(Arrays.asList(media));
-        return this;
-    }
-
-    public User removeMedia(File... media) {
-        Arrays.stream(media).forEach(med -> this.media.remove(med));
-        return this;
-    }
 
 }
