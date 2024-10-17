@@ -6,10 +6,7 @@ import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.persistence.EventRepository;
-import at.technikum.parkpalbackend.service.EventTagService;
-import at.technikum.parkpalbackend.service.FileService;
-import at.technikum.parkpalbackend.service.ParkService;
-import at.technikum.parkpalbackend.service.UserService;
+import at.technikum.parkpalbackend.service.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,19 +22,21 @@ public class EventUtil {
     private final EventTagService eventTagService;
     private final ParkService parkService;
     private final UserService userService;
+    private final EventService eventService;
 
     public EventUtil(EventRepository eventRepository,
                      FileService fileService,
                      EventMapper eventMapper,
                      EventTagService eventTagService,
                      ParkService parkService,
-                     UserService userService) {
+                     UserService userService, EventService eventService) {
         this.eventRepository = eventRepository;
         this.fileService = fileService;
         this.eventMapper = eventMapper;
         this.eventTagService = eventTagService;
         this.parkService = parkService;
         this.userService = userService;
+        this.eventService = eventService;
     }
 
     public CreateEventDto saveCreateEvent(CreateEventDto createEventDto) {
@@ -50,7 +49,7 @@ public class EventUtil {
         Event event = eventMapper.toEntityCreateEvent(
                 createEventDto, creator, park, mediaFiles, eventTags);
 
-        event = eventRepository.save(event);
+        event = eventService.save(event);
 
         addEventToTags(eventTags, event);
         fileService.setEventMedia(event, mediaFiles);
@@ -70,7 +69,8 @@ public class EventUtil {
         updateEventTags(existingEvent, eventDto);
         updateEventMedia(existingEvent, eventDto);
 
-        return eventRepository.save(existingEvent);
+        eventService.validateEventTimes(existingEvent.getStartTS(), existingEvent.getEndTS());
+        return eventService.save(existingEvent);
     }
 
     private void updateBasicEventDetails(Event event, EventDto eventDto) {
