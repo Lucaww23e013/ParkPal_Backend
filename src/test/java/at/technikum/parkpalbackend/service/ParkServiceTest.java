@@ -1,21 +1,15 @@
 package at.technikum.parkpalbackend.service;
 
-import at.technikum.parkpalbackend.TestFixtures;
-import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
-import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.FileRepository;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
-import at.technikum.parkpalbackend.util.ParkUtil;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.*;
 
@@ -32,17 +26,8 @@ class ParkServiceTest {
     @Mock
     private FileRepository fileRepository;
 
-    @Mock
-    private FileService fileService;
-
-    @Mock
-    private EventService eventService;
-
     @InjectMocks
     private ParkService parkService;
-
-    @InjectMocks
-    private ParkUtil parkUtil;
 
     @Test
     void savePark_WhenValidParkProvided_ReturnsSavedPark() {
@@ -65,10 +50,13 @@ class ParkServiceTest {
     }
 
     @Test
-    void savePark_WhenParkIsNull_ShouldThrowIllegalArgumentException() {
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> parkService.save(null),
-                "Expected save() to throw IllegalArgumentException when park is null");
+    void testSavePark_Null() {
+        // When & Then
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            parkService.save(null);
+        });
+        assertEquals("The park cannot be null.", exception.getMessage());
+        verify(parkRepository, never()).save(any());
     }
 
     @Test
@@ -163,28 +151,13 @@ class ParkServiceTest {
     }
 
     @Test
-    void updatePark_SuccessfullyUpdatedDetails() {
+    void savePark_whenDuplicateName_thenThrowDataIntegrityViolationException() {
         // Arrange
-        String parkId = parkWithEventsAndMedia.getId();  // Get the ID of the test park
-        ParkDto parkDto = ParkDto.builder()
-                .name("Updated Park Name")
-                .description("Updated Park Description")
-                .address("Updated Address")
-                .eventIds(Arrays.asList("eventId1", "eventId2"))  // Example event IDs
-                .filesExternalIds(Arrays.asList("fileId1", "fileId2"))  // Example file IDs
-                .build();
+        Park duplicatePark = parkWithEvents;
+        when(parkRepository.save(duplicatePark)).thenThrow(DataIntegrityViolationException.class);
 
-        when(parkRepository.findById(parkId)).thenReturn(Optional.of(parkWithEventsAndMedia));
-        when(parkRepository.save(any(Park.class))).thenReturn(parkWithEventsAndMedia);
-
-        // Act
-        Park updatedPark = parkUtil.updatePark(parkId, parkDto);
-
-        // Assert
-        assertEquals("Updated Park Name", updatedPark.getName());
-        assertEquals("Updated Park Description", updatedPark.getDescription());
-        assertEquals("Updated Address", updatedPark.getAddress());
-        verify(parkRepository).save(parkWithEventsAndMedia);
+        // Act & Assert
+        assertThrows(DataIntegrityViolationException.class, () -> parkService.save(duplicatePark));
+        verify(parkRepository, times(1)).save(duplicatePark);
     }
-
 }

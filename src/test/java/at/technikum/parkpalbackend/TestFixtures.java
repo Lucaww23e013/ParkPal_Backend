@@ -28,35 +28,43 @@ public class TestFixtures {
 
     public static CountryDto austriaDTO = CountryDto.builder().name("AustriaDTO").iso2Code("ATDTO").build();
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
+    public static Address alternateParkAddress = berlinAddress("Haizingerstr", 5);
     public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User adminUser2 = createUser("osama1", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
 
     public static LoginUserDto adminLoginUserDto = createLoginUserDto();
-
 
     public static CreateUserDto adminCreateUserDto = createCreateUserDTO("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
     public static UserDto adminUserDto = createUserDto("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
     public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
-    public static Park parkAwesome = createParkWithOutEvents("Awesome Park");
+    public static User normalAlternateUser = createAlternateUser("p22", "paul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
+    public static Park parkAwesome = parkWithOutEvents("Awesome Park");
+    public static ParkDto parkDtoAwesome = parkDtoWithOutEvents("Awesome Park Dto");
+    public static Park parkCool = alternateParkWithOutEvents("Cool Park");
+    public static ParkDto parkCoolDto = parkDtoWithOutEvents("Cool Park");
+    public static ParkDto parkDtoWithMedia = parkDtoWithMedia("Cool Park");
+    public static CreateParkDto CreateParkCoolDto = CreateParkDtoWithOutEvents("Cool Park");
+    public static CreateParkDto CreateExpectedParkCoolDto = CreateParkDtoWithOutEvents("Cool Park");
 
     public static Park parkWithEvents = createParkWithEvents("parkWithEvents");
 
     public static Park parkWithEventsAndMedia = createParkWithEventsAndMedia("parkWithEventsAndMedia");
-    public static ParkDto parkDtoWithEventsAndMedia = createParkDtoWithEventsAndMedia("parkDtoWithEventsAndMedia");
+    public static ParkDto parkDtoWithEventsAndMediaEmpty = parkDtoWithEventsAndMedia("parkDtoWithEventsAndMedia");
 
     public static Park alternateParkWithEvents = createParkWithEvents("alternateParkWithEvents");
 
-    public static Park parkLuca = createParkWithOutEvents("Park only For Lucas");
+    public static Park parkLuca = parkWithOutEvents("Park only For Lucas");
     // TODO Check me
     /*
     public static ParkDto testParkDto = createTestParkDto("testParkDto");
     */
-    public static CreateParkDto testCreateParkDto = createCreateParkDto("testCreateParkDto");
 
    /* public static Media testMedia = createMedia();*/
    /* public static List<Media> mediaList = createMediaList();*/
 
     /*public static List<Event> eventList = createEventList();*/
     public static List<User> userList = createUserList();
+    public static List<User> alternateUserList = createUserList();
     // Events
     public static Event grilling = createEvent("grilling Biggest Steak Beef");
     public static Event pingPongGame = createEvent("pingPong Game with 4 players");
@@ -66,10 +74,15 @@ public class TestFixtures {
     public static EventTag familyEventTag = createEventTag("Family", grilling, pickNickWithYourFamily);
     public static EventTag gamesEventTag = createEventTag("Games", chessMaster, chessMaster);
 
-    public static EventDto testEventDto = createEventDto();
-    public static EventDto secondTestEventDto = createEventDto();
+    public static EventDto testEventDto = createEventDto("osama");
+    public static EventDto eventDtoWithoutMedia = createEventDtoWithoutMedia("osamaOsama");
     public static EventTagDto testEventTagDto = createEventTagDto();
     public static CreateEventTagDto testCreateEventTagDto = createEventTagDtoMusicWithNoEvents();
+    public static List<File> fileList = createMediaList();
+    public static List<String> fileIdList = createMediaIdList();
+
+    public static File file = createTestFile("file");
+    public static File file2 = createTestFile("file2");
 
     @NotNull
     private static CreateEventTagDto createEventTagDtoMusicWithNoEvents() {
@@ -78,8 +91,22 @@ public class TestFixtures {
 
     public static Set<EventDto> eventDtoSet = createEventDtoSet();
 
-
     public static CreateEventDto testCreateEventDto = createCreateEventDto(normalUser, "title1", "a description", parkWithEvents);
+    public static Event testEvent = createEvent(normalUser, "title1", "a description", parkWithEvents);
+
+    public static Event createEvent (User creator, String title, String description, Park park) {
+        Event event = Event.builder()
+                .creator(creator)
+                .title(title)
+                .description(description)
+                .startTS(LocalDateTime.now())
+                .endTS(LocalDateTime.now().plusHours(1))
+                .park(park)
+                .tags(new HashSet<>(Arrays.asList(familyEventTag, gamesEventTag)))
+                .media(new ArrayList<>(Arrays.asList(file, file2)))
+                .build();
+        return event;
+    }
 
     public static CreateEventDto createCreateEventDto (User creator, String title, String description, Park park) {
         CreateEventDto createEventDto = CreateEventDto.builder()
@@ -89,6 +116,8 @@ public class TestFixtures {
                 .startTS(LocalDateTime.now())
                 .endTS(LocalDateTime.now().plusHours(1))
                 .parkId(park.getId())
+                .eventTagsIds(new HashSet<>(Arrays.asList(familyEventTag.getId(), gamesEventTag.getId())))
+                .mediaFileExternalIds(new ArrayList<>(Arrays.asList(familyEventTag.getId(), gamesEventTag.getId())))
                 .build();
         return createEventDto;
     }
@@ -112,13 +141,18 @@ public class TestFixtures {
                 .build();
     }
 
-    private static List<User> createUserList() {
+    private static List<User> createAlternateUserList() {
         List<User> joinedUsers = new ArrayList<>();
         joinedUsers.add(normalUser);
-        joinedUsers.add(adminUser);
         return joinedUsers;
     }
 
+    private static List<User> createUserList() {
+        List<User> joinedUsers = new ArrayList<>();
+        joinedUsers.add(normalUser);
+        joinedUsers.add(normalAlternateUser);
+        return joinedUsers;
+    }
 
     private static List<Event> createEventList() {
         List<Event> eventList = new ArrayList<>();
@@ -134,22 +168,24 @@ public class TestFixtures {
         return eventIdList;
     }
 
-    private static List<String> createMediaFileIdList() {
-        List<String> mediaFileIdList = new ArrayList<>();
-        mediaFileIdList.add(UUID.randomUUID().toString());  // Simulate media file IDs as UUID strings
-        mediaFileIdList.add(UUID.randomUUID().toString());
-        return mediaFileIdList;
+    public static List<String> createMediaIdList() {
+        List<String> externalIds = new ArrayList<>();
+        externalIds.add(UUID.randomUUID().toString());  // You should implement this method to create test File objects
+        externalIds.add(UUID.randomUUID().toString());
+        return externalIds;
     }
 
-    private static List<File> createMediaList() {
+    public static List<File> createMediaList() {
         List<File> mediaList = new ArrayList<>();
-        mediaList.add(createTestFile());  // You should implement this method to create test File objects
-        mediaList.add(createTestFile());
+        mediaList.add(file);  // You should implement this method to create test File objects
+        mediaList.add(file2);
         return mediaList;
     }
 
-    private static File createTestFile() {
+    public static File createTestFile(String fileName) {
         return File.builder()
+                .id(UUID.randomUUID().toString())
+                .filename(fileName)
                 .externalId(UUID.randomUUID().toString())  // Assign a unique external ID
                 .build();
     }
@@ -169,10 +205,63 @@ public class TestFixtures {
         return event;
     }
 
-    private static Park createParkWithOutEvents(String parkName) {
+    public static CreateParkDto CreateParkDtoWithOutEvents(String parkDtoName) {
+        return CreateParkDto.builder()
+                .name(parkDtoName)
+                .description("Updated Description")
+                .address(alternateParkAddress)
+                .mediaFileExternalIds(new ArrayList<>())
+                .build();
+    }
+
+    public static CreateParkDto ExpectedCreateParkDto(String parkDtoName) {
+        return CreateParkDto.builder()
+                .name(parkDtoName)
+                .description("Updated Description")
+                .address(alternateParkAddress)
+                .mediaFileExternalIds(new ArrayList<>())
+                .build();
+    }
+
+    public static ParkDto parkDtoWithMedia(String parkDtoName) {
+        return ParkDto.builder()
+                .name(parkDtoName)
+                .description("Updated Description")
+                .address(alternateParkAddress)
+                .mediaFileExternalIds(fileIdList)
+                .build();
+    }
+
+    private static Park alternateParkWithOutEvents(String parkName) {
+        return Park.builder()
+                .name(parkName)
+                .description("Updated Description")
+                .address(alternateParkAddress)
+                .media(new ArrayList<>())
+                .build();
+    }
+
+    private static Park parkWithMedia(String parkName) {
+        return Park.builder()
+                .name(parkName)
+                .description("Updated Description")
+                .address(alternateParkAddress)
+                .media(new ArrayList<>(Arrays.asList(file, file2)))
+                .build();
+    }
+
+    private static Park parkWithOutEvents(String parkName) {
         return Park.builder()
                 .name(parkName)
                 .description("Park for Everybody")
+                .address(parkAddress)
+                .build();
+    }
+
+    private static ParkDto parkDtoWithOutEvents(String parkDtoName) {
+        return ParkDto.builder()
+                .name(parkDtoName)
+                .description("ParkDTO Test")
                 .address(parkAddress)
                 .build();
     }
@@ -198,9 +287,20 @@ public class TestFixtures {
         return Park.builder()
                 .name(parkName)
                 .description("Park for Everybody")
-                .address(parkAddress)
+                .address(alternateParkAddress)
                 .events(createEventList())
                 .build();
+    }
+
+    private static Park createAlternateParkWithEventsAndMedia(String parkName) {
+        return Park.builder()
+                .name(parkName)
+                .description("Park for Everybody")
+                .address(parkAddress)
+                .events(createEventList())  // Assuming this method returns List<Event>
+                .media(createMediaList())  // New method to create media list
+                .build();
+
     }
 
     private static Park createParkWithEventsAndMedia(String parkName) {
@@ -213,15 +313,21 @@ public class TestFixtures {
                 .build();
     }
 
-    private static ParkDto createParkDtoWithEventsAndMedia(String parkDtoName) {
+    private static ParkDto parkDtoWithEventsAndMedia(String parkDtoName) {
+        // Mock event IDs and file external IDs
+        List<String> mockEventIds = List.of(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        List<String> mockFileExternalIds = List.of("file-ext-1", "file-ext-2");
+
         return ParkDto.builder()
                 .name(parkDtoName)
-                .description("ParkDTO Test")
-                .address(parkAddress)
-                .eventIds(createEventIdList())
-                .filesExternalIds(createMediaFileIdList())
+                .description("Update Park")
+                .address(alternateParkAddress)
+                .eventIds(new ArrayList<>())
+                .mediaFileExternalIds(new ArrayList<>())
                 .build();
     }
+
+
 
     private static UserDto createUserDto(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return UserDto.builder()
@@ -278,6 +384,31 @@ public class TestFixtures {
                 .build();
     }
 
+    private static User createAlternateUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
+        return User.builder()
+                .id(UUID.randomUUID().toString())
+                .salutation(salutation)
+                .gender(gender)
+                .userName(userName)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password("eyJhbGciOiJIUzI1NiIsInR5cCI32!")
+                .country(austria)
+                .role(Role.ADMIN)
+                .joinedEvents(createEventList())
+                .build();
+    }
+
+    public static Address berlinAddress(String streetName, Integer number) {
+        return Address.builder()
+                .streetNumber(streetName)
+                .zipCode("10115")
+                .city("Berlin")
+                .country(germany)
+                .build();
+    }
+
     public static Address wien1010Address(String streetName, Integer number) {
         return Address.builder()
                 .streetNumber(streetName)
@@ -298,21 +429,36 @@ public class TestFixtures {
     }
 
     // TODO Check me
-    private static EventDto createEventDto() {
+    private static EventDto createEventDto(String creatorName) {
         return EventDto.builder()
+                .title("Title")
                 .description("Test")
-                .creatorName(TestFixtures.adminUser.getUserName())
-                .creatorUserId(TestFixtures.adminUser.getId())
-                .startTS(LocalDateTime.now())
-                .endTS(LocalDateTime.now())
-                .parkId(TestFixtures.parkWithEvents.getId())
+                .creatorName(creatorName)
+                .creatorUserId(UUID.randomUUID().toString())
+                .startTS(LocalDateTime.now().plusHours(1))
+                .endTS(LocalDateTime.now().plusHours(2))
+                .parkId(UUID.randomUUID().toString())
+                .mediaFileExternalIds(fileIdList)
+                .build();
+    }
+
+    // TODO Check me
+    private static EventDto createEventDtoWithoutMedia(String creatorName) {
+        return EventDto.builder()
+                .title("Title")
+                .description("Test")
+                .creatorName(creatorName)
+                .creatorUserId(UUID.randomUUID().toString())
+                .startTS(LocalDateTime.now().plusHours(1))
+                .endTS(LocalDateTime.now().plusHours(2))
+                .parkId(UUID.randomUUID().toString())
                 .build();
     }
 
     private static Set<EventDto> createEventDtoSet() {
         Set<EventDto> eventDtoSet = new HashSet<>();
         eventDtoSet.add(testEventDto);
-        eventDtoSet.add(secondTestEventDto);
+        eventDtoSet.add(eventDtoWithoutMedia);
         return eventDtoSet;
     }
 
