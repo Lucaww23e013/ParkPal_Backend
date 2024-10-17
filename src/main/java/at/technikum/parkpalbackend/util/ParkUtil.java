@@ -11,9 +11,13 @@ import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.FileService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class ParkUtil {
@@ -34,6 +38,10 @@ public class ParkUtil {
     }
 
     public CreateParkDto saveCreatePark(CreateParkDto createParkDto) {
+        if (parkRepository.existsByName(createParkDto.getName())) {
+            throw new EntityNotFoundException(
+                    "A park with the name '" + createParkDto.getName() + "' already exists.");
+        }
 
         if (parkRepository.existsByName(createParkDto.getName())) {
             throw new EntityAlreadyExistsException("A park with the name " +
@@ -42,30 +50,44 @@ public class ParkUtil {
 
         List<File> mediaFiles = fileService.getFileList(createParkDto.getMediaFileExternalIds());
         Park park = parkMapper.createParkDtoToEntity(createParkDto, mediaFiles);
-        park = parkRepository.save(park);
+
+        try {
+            // Save the park to the repository
+            park = parkRepository.save(park);
+        } catch (DataIntegrityViolationException e) {
+            // Handle potential unique constraint violation
+            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
+                throw new EntityNotFoundException("A park with this name already exists.");
+            }
+            throw e;
+        }
+
         fileService.setParkMedia(park, mediaFiles);
         return parkMapper.toCreateParkDto(park);
     }
 
     public Park updatePark(String parkId, ParkDto parkDto) {
-        // Check if the park exists
-        Park existingPark = parkRepository.findById(parkId).orElse(null);
+        Park existingPark = parkRepository.findById(parkId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Park not found with id: " + parkId));
         if (existingPark == null) {
             throw new EntityNotFoundException("Park not found with id " + parkId);
         }
-
-        // Check for unique park name
-        Park parkWithSameName = parkRepository.findByName(parkDto.getName()).orElse(null);
-        if (parkWithSameName != null && !parkWithSameName.getId().equals(parkId)) {
-            throw new EntityAlreadyExistsException("A park with the name " +
-                    parkDto.getName() + " already exists.");
-        }
-
         updateBasicParkDetails(existingPark, parkDto);
         updateParkEvents(existingPark, parkDto);
         updateParkMedia(existingPark, parkDto);
 
-        return parkRepository.save(existingPark);
+        try {
+            // Attempt to save the updated park
+            return parkRepository.save(existingPark);
+        } catch (DataIntegrityViolationException e) {
+            // Handle potential unique constraint violation
+            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
+                throw new EntityAlreadyExistsException(
+                        "A park with the name '" + parkDto.getName() + "' already exists.");
+            }
+            throw e;
+        }
     }
 
     private void updateBasicParkDetails(Park park, ParkDto parkDto) {
@@ -74,10 +96,14 @@ public class ParkUtil {
         park.setAddress(parkDto.getAddress());
     }
 
-    private void updateParkEvents(Park park, ParkDto parkDto) {
+    public void updateParkEvents(Park park, ParkDto parkDto) {
         if (parkDto.getEventIds() != null) {
-            List<Event> newEvents = parkDto.getEventIds().stream()
+
+            List<String> uniqueEventIds = new ArrayList<>(new HashSet<>(parkDto.getEventIds()));
+
+            List<Event> newEvents = uniqueEventIds.stream()
                     .map(eventService::findByEventId)
+                    .filter(Objects::nonNull)
                     .toList();
 
             // Remove the park from old events
@@ -96,7 +122,7 @@ public class ParkUtil {
         }
     }
 
-    private void updateParkMedia(Park park, ParkDto parkDto) {
+    void updateParkMedia(Park park, ParkDto parkDto) {
         if (parkDto.getMediaFileExternalIds() != null) {
             for (File oldFile : park.getMedia()) {
                 oldFile.setPark(null);

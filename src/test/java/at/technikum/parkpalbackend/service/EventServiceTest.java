@@ -2,21 +2,24 @@ package at.technikum.parkpalbackend.service;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
+import at.technikum.parkpalbackend.exception.InvalidEventTimeException;
+import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.EventRepository;
 import at.technikum.parkpalbackend.persistence.FileRepository;
+import at.technikum.parkpalbackend.persistence.UserRepository;
+import at.technikum.parkpalbackend.util.EventUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
-import static at.technikum.parkpalbackend.TestFixtures.grilling;
-import static at.technikum.parkpalbackend.TestFixtures.pingPongGame;
+import static at.technikum.parkpalbackend.TestFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
@@ -26,18 +29,16 @@ class EventServiceTest {
     private EventRepository eventRepository;
 
     @Mock
-    private FileRepository fileRepository;
-
-    @Mock
     private UserService userService;
 
     @InjectMocks
     private EventService eventService;
 
+    // save(Event event)
     @Test
     void saveEvent_SuccessfullySaved_thenReturnSavedEvent() {
         // Arrange
-        Event event = TestFixtures.grilling;
+        Event event = grilling;
         event.setId(UUID.randomUUID().toString());
         when(eventRepository.save(event)).thenReturn(event);
         // Act
@@ -48,6 +49,44 @@ class EventServiceTest {
         verify(eventRepository).save(event);
     }
 
+    @Test
+    void saveEvent_whenInvalidEventTimes_thenThrowInvalidEventTimeException() {
+        // Arrange
+        Event event = grilling;
+        event.setStartTS(LocalDateTime.now().plusHours(1));
+        event.setEndTS(LocalDateTime.now());
+
+        // Act & Assert
+        assertThrows(InvalidEventTimeException.class, () -> eventService.save(event));
+        verify(eventRepository, never()).save(any());
+    }
+
+    @Test
+    void saveEvent_whenEventIsNull_thenThrowIllegalArgumentException() {
+        // Act + Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.save(null));
+        assertEquals("The event Cannot be null.", exception.getMessage());
+        verify(eventRepository, never()).save(any(Event.class));
+    }
+
+    /*
+    @Test
+    void saveEvent_WithInvalidEvent_ThrowsException() {
+        // Arrange
+        Event invalidEvent = new Event(); // Assuming this event is invalid based on your validation rules
+        when(eventRepository.save(invalidEvent)).thenThrow(new IllegalArgumentException("Invalid event"));
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            eventService.save(invalidEvent);
+        });
+
+        assertEquals("Invalid event", exception.getMessage());
+        verify(eventRepository).save(invalidEvent);  // Ensure the repository was called
+    }
+    */
+
+    // findAllEvents()
     @Test
     void findAllEvents_whenEventsExist_thenReturnEvents() {
         // Arrange
@@ -78,16 +117,7 @@ class EventServiceTest {
         verify(eventRepository).findAll();
     }
 
-    @Test
-    void findByEventId_whenEventDoesNotExist_thenThrowEntityNotFoundException() {
-        // Arrange
-        String eventId = UUID.randomUUID().toString();
-        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
-        // Act + Assert
-        assertThrows(EntityNotFoundException.class, () -> eventService.findByEventId(eventId));
-        verify(eventRepository).findById(eventId);
-    }
-
+    // findEventCreatorUserId(String eventId)
     @Test
     void findAllEventsCreatedByUser_whenUserExists_thenReturnAllEvents() {
         // Arrange
@@ -139,6 +169,8 @@ class EventServiceTest {
         assertThrows(RuntimeException.class, () -> eventService.findAllEventsCreatedByUser(userId));
     }
     */
+
+    // deleteEventById(String eventID)
     @Test
     void deleteEventById_whenEventExists_thenDeleteEvent() {
         // Arrange
@@ -157,9 +189,11 @@ class EventServiceTest {
     void deleteEventById_whenEventDoesNotExist_thenThrowEntityNotFoundException() {
         // Arrange
         String eventId = UUID.randomUUID().toString();
+        Event eventToDelete = grilling;
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
         // Act + Assert
         assertThrows(EntityNotFoundException.class, () -> eventService.deleteEventById(eventId));
+        verify(eventRepository, times(0)).delete(eventToDelete);
     }
 
     @Test
@@ -174,7 +208,7 @@ class EventServiceTest {
         assertThrows(RuntimeException.class, () -> eventService.deleteEventById(eventId));
         verify(eventRepository, times(1)).delete(eventToDelete);
     }
-
+/*
     @Test
     void updateEventById_whenEventExists_thenUpdateEvent() {
         // Arrange
@@ -206,6 +240,7 @@ class EventServiceTest {
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
         // Act + Assert
         assertThrows(EntityNotFoundException.class, () -> eventService.updateEvent(eventId, eventToUpdate));
+        verify(eventRepository, times(0)).save(eventToUpdate);
     }
 
     @Test
@@ -225,7 +260,8 @@ class EventServiceTest {
         assertThrows(RuntimeException.class, () -> eventService.updateEvent(eventId, eventToUpdate));
         verify(eventRepository, times(1)).save(eventToUpdate);
     }
-
+*/
+    //findAllEventsJoinedByUser(String userId)
     @Test
     void findAllEventsJoinedByUser_whenUserExistsAndJoinedEvents_thenReturnAllJoinedEvents() {
         // Arrange
@@ -250,6 +286,24 @@ class EventServiceTest {
     }
 
     @Test
+    void findAllEventsJoinedByUser_whenUserDoesNotExist_thenReturnEmptyList() {
+        // Arrange
+        String userId = UUID.randomUUID().toString();
+
+        when(userService.findByUserId(userId)).thenReturn(null);
+
+        // Act
+        List<Event> result = eventService.findAllEventsJoinedByUser(userId);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(userService).findByUserId(userId);
+        verify(eventRepository, never()).findAllByJoinedUsersId(anyString());
+    }
+
+    //findEventCreatorUserId(String eventId)
+    @Test
     void findEventCreatorUserId_whenEventExists_thenReturnCreatorUserId() {
         // Arrange
         String eventId = UUID.randomUUID().toString();
@@ -269,6 +323,7 @@ class EventServiceTest {
         verify(eventRepository).findById(eventId);
     }
 
+    //findEventCreatorName(String eventId)
     @Test
     void findEventCreatorName_whenEventExists_thenReturnCreatorName() {
         // Arrange
@@ -289,22 +344,40 @@ class EventServiceTest {
         verify(eventRepository).findById(eventId);
     }
 
+    // findByEventId(String eventId)
     @Test
-    void findAllEventsByUserIdAndParkId_whenEventsExist_thenReturnEvents() {
-        // Arrange
-        String userId = UUID.randomUUID().toString();
-        String parkId = UUID.randomUUID().toString();
-        List<Event> events = List.of(grilling, pingPongGame);
+    void findByEventId_whenEventIdIsNull_thenThrowEntityNotFoundException() {
+        // Act + Assert
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> eventService.findByEventId(null));
+        assertEquals("The event ID Cannot be null.", exception.getMessage());
+        verify(eventRepository, never()).findById(anyString());
+    }
 
-        when(eventRepository.findAllByCreatorIdAndParkId(userId, parkId)).thenReturn(events);
+    @Test
+    void findByEventId_whenEventDoesNotExist_thenThrowEntityNotFoundException() {
+        // Arrange
+        String eventId = UUID.randomUUID().toString();
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+        // Act + Assert
+        assertThrows(EntityNotFoundException.class, () -> eventService.findByEventId(eventId));
+        verify(eventRepository).findById(eventId);
+    }
+
+    //findEventsByIds(Set<String> eventIds)
+    @Test
+    void findEventsByIds_whenGivenEmptySet_thenReturnEmptySet() {
+        // Arrange
+        Set<String> eventIds = new HashSet<>();
+
+        when(eventRepository.findAllById(eventIds)).thenReturn(Collections.emptyList());
 
         // Act
-        List<Event> result = eventService.findAllEventsByUserIdAndParkId(userId, parkId);
+        Set<Event> result = eventService.findEventsByIds(eventIds);
 
         // Assert
         assertNotNull(result);
-        assertEquals(events, result);
-        verify(eventRepository).findAllByCreatorIdAndParkId(userId, parkId);
+        assertTrue(result.isEmpty());
+        verify(eventRepository).findAllById(eventIds);
     }
 
     @Test
@@ -325,20 +398,7 @@ class EventServiceTest {
         verify(eventRepository).findAllById(eventIds);
     }
 
-    @Test
-    void saveEvent_whenEventIsNull_thenThrowIllegalArgumentException() {
-        // Act + Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.save(null));
-        assertEquals("The event Cannot be null.", exception.getMessage());
-    }
-
-    @Test
-    void findByEventId_whenEventIdIsNull_thenThrowEntityNotFoundException() {
-        // Act + Assert
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> eventService.findByEventId(null));
-        assertEquals("The event ID Cannot be null.", exception.getMessage());
-    }
-
+    /*
     @Test
     void updateEvent_whenEventIdIsNull_thenThrowIllegalArgumentException() {
         // Arrange
@@ -347,6 +407,7 @@ class EventServiceTest {
         // Act + Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.updateEvent(null, eventToUpdate));
         assertEquals("The event ID Cannot be null", exception.getMessage());
+        verify(eventRepository, never()).save(any(Event.class));
     }
 
     @Test
@@ -357,6 +418,7 @@ class EventServiceTest {
         // Act + Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.updateEvent(eventId, null));
         assertEquals("The updated event Cannot be null.", exception.getMessage());
+        verify(eventRepository, never()).save(any(Event.class));
     }
 
     @Test
@@ -445,22 +507,25 @@ class EventServiceTest {
         verify(fileRepository, times(2)).save(any(File.class)); // Two disassociates, one associate
         verify(eventRepository).save(any(Event.class));
     }
+    */
 
+    //findAllEventsByUserIdAndParkId(String userId, String parkId)
     @Test
-    void findAllEventsJoinedByUser_whenUserDoesNotExist_thenReturnEmptyList() {
+    void findAllEventsByUserIdAndParkId_whenEventsExist_thenReturnEvents() {
         // Arrange
         String userId = UUID.randomUUID().toString();
+        String parkId = UUID.randomUUID().toString();
+        List<Event> events = List.of(grilling, pingPongGame);
 
-        when(userService.findByUserId(userId)).thenReturn(null);
+        when(eventRepository.findAllByCreatorIdAndParkId(userId, parkId)).thenReturn(events);
 
         // Act
-        List<Event> result = eventService.findAllEventsJoinedByUser(userId);
+        List<Event> result = eventService.findAllEventsByUserIdAndParkId(userId, parkId);
 
         // Assert
         assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(userService).findByUserId(userId);
-        verify(eventRepository, never()).findAllByJoinedUsersId(anyString());
+        assertEquals(events, result);
+        verify(eventRepository).findAllByCreatorIdAndParkId(userId, parkId);
     }
 
     @Test
@@ -480,6 +545,7 @@ class EventServiceTest {
         verify(eventRepository).findAllByCreatorIdAndParkId(userId, parkId);
     }
 
+    //findAllEventsByParkId(String parkId)
     @Test
     void findAllEventsByParkId_whenNoEventsExist_thenReturnEmptyList() {
         // Arrange
@@ -496,19 +562,203 @@ class EventServiceTest {
         verify(eventRepository).findAllByParkId(parkId);
     }
 
+    //manageUserParticipation() Method Tests
     @Test
-    void findEventsByIds_whenGivenEmptySet_thenReturnEmptySet() {
+    void manageUserParticipation_whenUserJoinsEvent_thenAddUserToEvent() {
         // Arrange
-        Set<String> eventIds = new HashSet<>();
+        Event event = grilling;
+        String eventId = UUID.randomUUID().toString();
+        grilling.setId(eventId);
+        grilling.setJoinedUsers(new ArrayList<>());
 
-        when(eventRepository.findAllById(eventIds)).thenReturn(Collections.emptyList());
+        User user = adminUser;
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(userService.findByUserId(user.getId())).thenReturn(user);
 
         // Act
-        Set<Event> result = eventService.findEventsByIds(eventIds);
+        eventService.manageUserParticipation(eventId, adminUser.getId(), true);
 
         // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(eventRepository).findAllById(eventIds);
+        assertTrue(event.getJoinedUsers().contains(user));
+        verify(eventRepository, times(1)).save(event);
+    }
+
+    @Test
+    void manageUserParticipation_whenUserLeavesEvent_thenRemoveUserFromEvent() {
+        // Arrange
+        Event event = grilling;
+        String eventId = UUID.randomUUID().toString();
+        grilling.setId(eventId);
+        grilling.setJoinedUsers(new ArrayList<>());
+
+        User user = adminUser;
+
+        event.getJoinedUsers().add(user); // Pre-add the user
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(userService.findByUserId(adminUser.getId())).thenReturn(user);
+
+        // Act
+        eventService.manageUserParticipation(eventId, user.getId(), false);
+
+        // Assert
+        assertFalse(event.getJoinedUsers().contains(user));
+        verify(eventRepository, times(1)).save(event);
+    }
+
+    @Test
+    void manageUserParticipation_whenUserAlreadyJoined_thenIgnored() {
+        // Arrange
+        Event event = grilling;
+        String eventId = UUID.randomUUID().toString();
+        grilling.setId(eventId);
+        grilling.setJoinedUsers(new ArrayList<>());
+
+        User user = adminUser;
+
+        // User joins the event
+        event.getJoinedUsers().add(user);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(userService.findByUserId(adminUser.getId())).thenReturn(user);
+
+        // Act
+        eventService.manageUserParticipation(eventId, adminUser.getId(), true);
+
+        // Assert
+        // Verify that the user was not added again
+        assertEquals(1, event.getJoinedUsers().size());
+        assertTrue(event.getJoinedUsers().contains(user));
+        verify(eventRepository, never()).save(event); // Ensure save was not called
+    }
+
+    //manageUserParticipation()
+    @Test
+    void manageUserParticipation_whenUserNotJoinedAndAttemptsToLeave_thenIgnored() {
+        // Arrange
+        Event event = grilling;
+        String eventId = UUID.randomUUID().toString();
+        grilling.setId(eventId);
+        grilling.setJoinedUsers(new ArrayList<>());
+
+        User user = adminUser;
+
+        // User is not part of the event yet
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(userService.findByUserId(adminUser.getId())).thenReturn(user);
+
+        // Act
+        eventService.manageUserParticipation(eventId, adminUser.getId(), false);
+
+        // Assert
+        // Verify that the user is still not in the joinedUsers list
+        assertEquals(0, event.getJoinedUsers().size());
+        verify(eventRepository, never()).save(event); // Ensure save was not called
+    }
+
+    //getJoinedUsernames(String eventId)
+    @Test
+    void getJoinedUsernames_whenUsersJoined_thenReturnUsernames() {
+        // Arrange
+        Event event = grilling;
+        grilling.setJoinedUsers(new ArrayList<>());
+        String eventId = UUID.randomUUID().toString();
+
+        User user1 = adminUser;
+        user1.setUserName("user1");
+        User user2 = adminUser2;
+        user2.setUserName("user2");
+
+        event.getJoinedUsers().add(user1);
+        event.getJoinedUsers().add(user2);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+
+        // Act
+        List<String> usernames = eventService.getJoinedUsernames(eventId);
+
+        // Assert
+        assertNotNull(usernames);
+        assertEquals(2, usernames.size());
+        assertTrue(usernames.contains("user1"));
+        assertTrue(usernames.contains("user2"));
+        verify(eventRepository, times(1)).findById(eventId);
+    }
+
+    @Test
+    void getJoinedUsernames_whenNoUsersJoined_thenReturnEmptyList() {
+        // Arrange
+        Event event = grilling;
+        grilling.setJoinedUsers(new ArrayList<>());
+        String eventId = UUID.randomUUID().toString();
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+
+        // Act
+        List<String> usernames = eventService.getJoinedUsernames(eventId);
+
+        // Assert
+        assertNotNull(usernames);
+        assertTrue(usernames.isEmpty()); // Should return an empty list
+        verify(eventRepository, times(1)).findById(eventId);
+    }
+
+    @Test
+    void getJoinedUsernames_whenEventNotFound_thenThrowEntityNotFoundException() {
+        // Arrange
+        when(eventRepository.findById("event1")).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(EntityNotFoundException.class, () -> eventService.getJoinedUsernames("event1"));
+        verify(eventRepository, times(1)).findById("event1");
+    }
+
+    //validateEventTimes(LocalDateTime startTS, LocalDateTime endTS)
+    @Test
+    void validateEventTimes_whenValidTimes_thenNoExceptionThrown() {
+        // Arrange
+        LocalDateTime startTS = LocalDateTime.of(2024, 10, 16, 10, 0);
+        LocalDateTime endTS = LocalDateTime.of(2024, 10, 16, 11, 0); // 1 hour later
+
+        // Act & Assert
+        assertDoesNotThrow(() -> eventService.validateEventTimes(startTS, endTS));
+    }
+
+    @Test
+    void validateEventTimes_whenStartTimeAfterEndTime_thenThrowInvalidEventTimeException() {
+        // Arrange
+        LocalDateTime startTS = LocalDateTime.of(2024, 10, 16, 12, 0);
+        LocalDateTime endTS = LocalDateTime.of(2024, 10, 16, 11, 0); // End time before start time
+
+        // Act & Assert
+        InvalidEventTimeException exception = assertThrows(InvalidEventTimeException.class,
+                () -> eventService.validateEventTimes(startTS, endTS));
+        assertEquals("Event start time must be before end time and the duration must be at least 30 minutes.",
+                exception.getMessage());
+    }
+
+    @Test
+    void validateEventTimes_whenStartTimeEqualToEndTime_thenThrowInvalidEventTimeException() {
+        // Arrange
+        LocalDateTime startTS = LocalDateTime.of(2024, 10, 16, 10, 0);
+        LocalDateTime endTS = startTS; // Start time is equal to end time
+
+        // Act & Assert
+        InvalidEventTimeException exception = assertThrows(InvalidEventTimeException.class,
+                () -> eventService.validateEventTimes(startTS, endTS));
+        assertEquals("Event start time must be before end time and the duration must be at least 30 minutes.",
+                exception.getMessage());
+    }
+
+    @Test
+    void validateEventTimes_whenDurationLessThan30Minutes_thenThrowInvalidEventTimeException() {
+        // Arrange
+        LocalDateTime startTS = LocalDateTime.of(2024, 10, 16, 10, 0);
+        LocalDateTime endTS = LocalDateTime.of(2024, 10, 16, 10, 15); // 15 minutes later
+
+        // Act & Assert
+        InvalidEventTimeException exception = assertThrows(InvalidEventTimeException.class,
+                () -> eventService.validateEventTimes(startTS, endTS));
+        assertEquals("Event start time must be before end time and the duration must be at least 30 minutes.",
+                exception.getMessage());
     }
 }

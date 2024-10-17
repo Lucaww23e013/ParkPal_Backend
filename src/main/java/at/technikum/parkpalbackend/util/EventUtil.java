@@ -6,10 +6,16 @@ import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.persistence.EventRepository;
-import at.technikum.parkpalbackend.service.*;
+import at.technikum.parkpalbackend.persistence.ParkRepository;
+import at.technikum.parkpalbackend.service.EventTagService;
+import at.technikum.parkpalbackend.service.FileService;
+import at.technikum.parkpalbackend.service.ParkService;
+import at.technikum.parkpalbackend.service.EventService;
+import at.technikum.parkpalbackend.service.UserService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,13 +29,16 @@ public class EventUtil {
     private final ParkService parkService;
     private final UserService userService;
     private final EventService eventService;
+    private final ParkRepository parkRepository;
 
     public EventUtil(EventRepository eventRepository,
                      FileService fileService,
                      EventMapper eventMapper,
                      EventTagService eventTagService,
                      ParkService parkService,
-                     UserService userService, EventService eventService) {
+                     UserService userService,
+                     EventService eventService,
+                     ParkRepository parkRepository) {
         this.eventRepository = eventRepository;
         this.fileService = fileService;
         this.eventMapper = eventMapper;
@@ -37,6 +46,7 @@ public class EventUtil {
         this.parkService = parkService;
         this.userService = userService;
         this.eventService = eventService;
+        this.parkRepository = parkRepository;
     }
 
     public CreateEventDto saveCreateEvent(CreateEventDto createEventDto) {
@@ -82,8 +92,11 @@ public class EventUtil {
 
     private void updateEventPark(Event event, EventDto eventDto) {
         if (eventDto.getParkId() != null) {
-            Park associatedPark = parkService.findParkById(eventDto.getParkId());
-            event.setPark(associatedPark);
+            Optional<Park> optionalPark = parkRepository.findById(eventDto.getParkId());
+            if (optionalPark.isPresent()) {
+                Park associatedPark = optionalPark.get();
+                event.setPark(associatedPark);
+            }
         }
     }
 
