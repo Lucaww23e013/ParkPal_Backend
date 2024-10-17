@@ -48,7 +48,6 @@ public class AuthService {
     }
 
     public CreateUserDto register(CreateUserDto createUserDto) {
-
         if (userService.userNameExists(createUserDto.getUserName())) {
             throw new UserWithUserNameOrEmailAlreadyExists(("A user with this username %s" +
                     " already exists.").formatted(createUserDto.getUserName()));
@@ -60,9 +59,12 @@ public class AuthService {
         }
 
         User user = userMapper.toEntity(createUserDto);
-        user = userService.save(user);
+
+        // Assign profile picture before saving the user
         String profilePictureId = createUserDto.getProfilePictureId();
-        fileService.assignProfilePicture(user, profilePictureId, true);
+        fileService.assignProfilePicture(user, profilePictureId, false);
+
+        user = userService.save(user);
         return userMapper.toCreateUserDto(user);
     }
 

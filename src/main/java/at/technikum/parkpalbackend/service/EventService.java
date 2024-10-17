@@ -9,6 +9,7 @@ import at.technikum.parkpalbackend.persistence.EventRepository;
 import at.technikum.parkpalbackend.persistence.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class EventService {
         this.userService = userService;
     }
 
+    @Transactional
     public Event save(Event event) {
         if (event == null) {
             log.error("Invalid Event in save(). Event is null.");
@@ -41,6 +43,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
+    @Transactional(readOnly = true)
     public List<Event> findAllEvents() {
         return eventRepository.findAll();
     }
@@ -55,6 +58,7 @@ public class EventService {
                         .formatted(eventId)));
     }
 
+    @Transactional(readOnly = true)
     public List<Event> findAllEventsCreatedByUser(String userId) {
         if (userService.findByUserId(userId) != null) {
             return eventRepository.findAllByCreatorId(userId);
@@ -62,6 +66,7 @@ public class EventService {
         return new ArrayList<>();
     }
 
+    @Transactional(readOnly = true)
     public List<Event> findAllEventsJoinedByUser(String userId) {
         if (userService.findByUserId(userId) != null) {
             return eventRepository.findAllByJoinedUsersId(userId);
@@ -69,6 +74,7 @@ public class EventService {
         return new ArrayList<>();
     }
 
+    @Transactional(readOnly = true)
     public String findEventCreatorUserId(String eventId) {
         Event event = findByEventId(eventId);
         if (event != null) {
@@ -77,6 +83,7 @@ public class EventService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public String findEventCreatorName(String eventId) {
         Event event = findByEventId(eventId);
         if (event != null) {
@@ -85,13 +92,19 @@ public class EventService {
         return null;
     }
 
-    public Event deleteEventById(String eventID) {
-        Event eventToDelete = findByEventId(eventID);
-        eventRepository.delete(eventToDelete);
-        return eventToDelete;
+    @Transactional
+    public Event deleteEventById(String eventId) {
+        Event event = findByEventId(eventId);
+        try {
+            eventRepository.delete(event);
+        } catch (Exception e) {
+            throw new RuntimeException("Unknown error occurred while deleting event with id: " +
+                    eventId, e);
+        }
+        return event;
     }
 
-    // TODO add Files
+    @Transactional
     public Event updateEvent(String id, Event updatedEvent) {
         if (id == null) {
             log.error("Invalid Event ID in updateEvent(). Event ID is null.");
@@ -115,15 +128,17 @@ public class EventService {
         return save(existingEvent);
     }
 
+    @Transactional(readOnly = true)
     public List<Event> findAllEventsByUserIdAndParkId(String userId, String parkId) {
         return eventRepository.findAllByCreatorIdAndParkId(userId, parkId);
     }
 
+    @Transactional(readOnly = true)
     public List<Event> findAllEventsByParkId(String parkId) {
         return eventRepository.findAllByParkId(parkId);
     }
 
-
+    @Transactional(readOnly = true)
     public Set<Event> findEventsByIds(Set<String> eventIds) {
         return new HashSet<>(eventRepository.findAllById(eventIds));
     }
@@ -152,6 +167,7 @@ public class EventService {
         event.setMedia(eventMedia);
     }
 
+    @Transactional(readOnly = true)
     public List<String> findEventJoinedUserNames(String eventId) {
         Event event = findByEventId(eventId);
         if (event != null) {
@@ -162,6 +178,7 @@ public class EventService {
         return new ArrayList<>();
     }
 
+    @Transactional
     public void manageUserParticipation(String eventId, String userId, boolean isJoining) {
         Event event = findByEventId(eventId);
         User user = userService.findByUserId(userId);

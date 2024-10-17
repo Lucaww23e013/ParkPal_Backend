@@ -6,11 +6,11 @@ import at.technikum.parkpalbackend.dto.eventdtos.EventDto;
 import at.technikum.parkpalbackend.dto.eventtagdtos.CreateEventTagDto;
 import at.technikum.parkpalbackend.dto.eventtagdtos.EventTagDto;
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
-import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
 import at.technikum.parkpalbackend.model.*;
+import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.model.enums.Gender;
 import at.technikum.parkpalbackend.model.enums.Role;
 import org.jetbrains.annotations.NotNull;
@@ -79,7 +79,7 @@ public class TestFixtures {
     public static CreateEventDto testCreateEventDto = createCreateEventDto(normalUser, "title1", "a description", parkWithEvents);
 
     public static CreateEventDto createCreateEventDto (User creator, String title, String description, Park park) {
-        CreateEventDto createEventDto = CreateEventDto.builder()
+        return CreateEventDto.builder()
                 .creatorUserId(creator.getId())
                 .title(title)
                 .description(description)
@@ -87,7 +87,6 @@ public class TestFixtures {
                 .endTS(LocalDateTime.now().plusHours(1))
                 .parkId(park.getId())
                 .build();
-        return createEventDto;
     }
 
     private static List<EventTag> createEventTagListForAnEvent(Event event) {
@@ -99,10 +98,7 @@ public class TestFixtures {
 
 
     private static EventTag createEventTag(String eventTagName, Event ...events) {
-        Set<Event> eventSet = new HashSet<>();
-        for (Event event : events) {
-            eventSet.add(event);
-        }
+        Set<Event> eventSet = new HashSet<>(Arrays.asList(events));
         return EventTag.builder()
                 .name(eventTagName)
                 .events(eventSet)
@@ -310,12 +306,30 @@ public class TestFixtures {
         park.setAddress(parkAddress);
 
         // Create associated files for the park
-        List<File> files = new ArrayList<>();
-        files.add(new File(UUID.randomUUID().toString(), "file1.jpg", "image/jpeg", park));
-        files.add(new File(UUID.randomUUID().toString(), "file2.jpg", "image/jpeg", park));
-        park.setMedia(files);  // Assuming media refers to the list of files
+        filesWithPark(park);
 
         return park;
+    }
+
+    private static void filesWithPark(Park park) {
+        List<File> files = new ArrayList<>();
+        File file1 = File.builder()
+                .externalId(UUID.randomUUID().toString())
+                .filename("file1.jpg")
+                .fileType(FileType.PHOTO)
+                .park(park)
+                .assigned(true)
+                .build();
+        File file2 = File.builder()
+                .externalId(UUID.randomUUID().toString())
+                .filename("file2.jpg")
+                .fileType(FileType.PHOTO)
+                .park(park)
+                .assigned(true)
+                .build();
+        files.add(file1);
+        files.add(file2);
+        park.setMedia(files);  // Assuming media refers to the list of files
     }
 
     public static Park parkWithUpdatedFiles() {
@@ -326,10 +340,7 @@ public class TestFixtures {
         park.setAddress(parkAddress);
 
         // Create new associated files for the updated park
-        List<File> files = new ArrayList<>();
-        files.add(new File(UUID.randomUUID().toString(), "file3.jpg", "image/jpeg", park));
-        files.add(new File(UUID.randomUUID().toString(), "file4.jpg", "image/jpeg", park));
-        park.setMedia(files);
+        filesWithPark(park);
 
         return park;
     }

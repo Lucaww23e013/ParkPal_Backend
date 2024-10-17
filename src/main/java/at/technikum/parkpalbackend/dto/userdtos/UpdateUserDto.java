@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -41,7 +42,8 @@ public class UpdateUserDto {
     private String countryId;
 
     @ToString.Exclude
-    private List<String> joinedEventsIds;
+    @Builder.Default
+    private List<String> joinedEventsIds = new ArrayList<>();
 
     private String profilePictureId;
 

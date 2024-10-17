@@ -58,24 +58,29 @@ class AuthServiceTest {
 
     @Test
     void register_throwsExceptionWhenUsernameExists() {
+        // Arrange
         CreateUserDto createUserDto = CreateUserDto.builder().userName("existingUser").build();
         when(userService.userNameExists(createUserDto.getUserName())).thenReturn(true);
 
+        // Act & Assert
         assertThrows(UserWithUserNameOrEmailAlreadyExists.class, () -> authService.register(createUserDto));
         verify(userService, never()).save(any(User.class));
     }
 
     @Test
     void register_throwsExceptionWhenEmailExists() {
+        // Arrange
         CreateUserDto createUserDto = CreateUserDto.builder().email("existingEmail@test.com").build();
         when(userService.userEmailExists(createUserDto.getEmail())).thenReturn(true);
 
+        // Act & Assert
         assertThrows(UserWithUserNameOrEmailAlreadyExists.class, () -> authService.register(createUserDto));
         verify(userService, never()).save(any(User.class));
     }
 
     @Test
     void register_createsUserSuccessfully() {
+        // Arrange
         CreateUserDto createUserDto = CreateUserDto.builder().userName("newUser").email("newEmail@test.com").build();
         User user = User.builder().build();
         when(userService.userNameExists(createUserDto.getUserName())).thenReturn(false);
@@ -84,14 +89,17 @@ class AuthServiceTest {
         when(userService.save(user)).thenReturn(user);
         when(userMapper.toCreateUserDto(user)).thenReturn(createUserDto);
 
+        // Act
         CreateUserDto result = authService.register(createUserDto);
 
+        // Assert
         assertEquals(createUserDto, result);
-        verify(fileService).assignProfilePicture(user, createUserDto.getProfilePictureId(), true);
+        verify(fileService).assignProfilePicture(user, createUserDto.getProfilePictureId(), false);
     }
 
     @Test
     void login_authenticatesUserSuccessfully() {
+        // Arrange
         User user = TestFixtures.normalUser;
         LoginRequest loginRequest = LoginRequest.builder()
                 .username(user.getUserName())
@@ -111,14 +119,18 @@ class AuthServiceTest {
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
 
         HttpServletResponse response = mock(HttpServletResponse.class);
+
+        // Act
         TokenResponse tokenResponse = authService.login(loginRequest, response);
 
+        // Assert
         assertNotNull(tokenResponse);
         verify(response).addCookie(any(Cookie.class));
     }
 
     @Test
     void refresh_returnsNewToken() {
+        // Arrange
         User user = TestFixtures.adminUser;
         UserPrincipal principal = new UserPrincipal(
                 user.getId(),
@@ -131,14 +143,18 @@ class AuthServiceTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         HttpServletResponse response = mock(HttpServletResponse.class);
+
+        // Act
         TokenResponse tokenResponse = authService.refresh(response);
 
+        // Assert
         assertNotNull(tokenResponse);
         verify(response).addCookie(any(Cookie.class));
     }
 
     @Test
     void getUserInfo_returnsUserInfo() {
+        // Arrange
         HttpServletRequest request = mock(HttpServletRequest.class);
         Cookie cookie = new Cookie("token", "validToken");
         when(request.getCookies()).thenReturn(new Cookie[]{cookie});
@@ -150,38 +166,47 @@ class AuthServiceTest {
         UserResponseDto userResponseDto = UserResponseDto.builder().build();
         when(userMapper.toUserResponseDto(user)).thenReturn(userResponseDto);
 
+        // Act
         UserResponseDto result = authService.getUserInfo(request);
 
+        // Assert
         assertEquals(userResponseDto, result);
     }
 
     @Test
     void getUserInfo_throwsExceptionWhenTokenIsInvalid() {
+        // Arrange
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getCookies()).thenReturn(new Cookie[]{});
 
+        // Act & Assert
         assertThrows(InvalidJwtTokenException.class, () -> authService.getUserInfo(request));
     }
 
     @Test
     void getUserInfo_throwsExceptionWhenTokenIsMissing() {
+        // Arrange
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getCookies()).thenReturn(null);
 
+        // Act & Assert
         assertThrows(InvalidJwtTokenException.class, () -> authService.getUserInfo(request));
     }
 
     @Test
     void getUserInfo_throwsExceptionWhenTokenIsEmpty() {
+        // Arrange
         HttpServletRequest request = mock(HttpServletRequest.class);
         Cookie cookie = new Cookie("token", "");
         when(request.getCookies()).thenReturn(new Cookie[]{cookie});
 
+        // Act & Assert
         assertThrows(InvalidJwtTokenException.class, () -> authService.getUserInfo(request));
     }
 
     @Test
     void getUserInfo_throwsExceptionWhenUserNotFound() {
+        // Arrange
         HttpServletRequest request = mock(HttpServletRequest.class);
         Cookie cookie = new Cookie("token", "validToken");
         when(request.getCookies()).thenReturn(new Cookie[]{cookie});
@@ -190,6 +215,7 @@ class AuthServiceTest {
         when(decodedJWT.getSubject()).thenReturn("userId");
         when(userService.findByUserId("userId")).thenReturn(null);
 
+        // Act & Assert
         assertThrows(InvalidJwtTokenException.class, () -> authService.getUserInfo(request));
     }
 

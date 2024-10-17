@@ -26,7 +26,7 @@ public class Event {
     private String id;
 
     @Version
-    private long version;
+    private Long version;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -78,32 +78,44 @@ public class Event {
 
 
     public Event addJoinedUsers(User... users) {
+        if (users == null) {
+            return this;
+        }
         this.joinedUsers.addAll(Arrays.asList(users));
         return this;
     }
 
     public Event removeJoinedUsers(User... users) {
-        Arrays.stream(users).forEach(user -> this.joinedUsers.remove(user));
+        if (users == null) {
+            return this;
+        }
+        Set<User> usersToRemove = new HashSet<>(Arrays.asList(users));
+        this.joinedUsers.removeIf(usersToRemove::contains);
         return this;
     }
 
     public Event addEventTags(EventTag... eventTags) {
-        this.tags.addAll(Arrays.asList(eventTags));
+        if (eventTags == null) {
+            return this;
+        }
+        this.tags.addAll(new HashSet<>(Arrays.asList(eventTags)));
         return this;
     }
 
     public Event removeEventTags(EventTag... eventTags) {
-        Arrays.stream(eventTags).forEach(eventTag -> this.tags.remove(eventTag));
+        if (eventTags == null) {
+            return this;
+        }
+        Set<EventTag> eventTagsToRemove = new HashSet<>(Arrays.asList(eventTags));
+        this.tags.removeIf(eventTagsToRemove::contains);
         return this;
     }
 
     public Event addMedia(File... media) {
+        if (media == null) {
+            return this;
+        }
         this.media.addAll(Arrays.asList(media));
-        return this;
-    }
-
-    public Event removeMedia(File... media) {
-        Arrays.stream(media).forEach(med -> this.media.remove(med));
         return this;
     }
 

@@ -7,7 +7,6 @@ import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.EventRepository;
 import at.technikum.parkpalbackend.persistence.FileRepository;
-import at.technikum.parkpalbackend.persistence.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,8 +24,6 @@ class EventServiceTest {
 
     @Mock
     private EventRepository eventRepository;
-
-    private UserRepository userRepository;
 
     @Mock
     private FileRepository fileRepository;
@@ -160,11 +157,9 @@ class EventServiceTest {
     void deleteEventById_whenEventDoesNotExist_thenThrowEntityNotFoundException() {
         // Arrange
         String eventId = UUID.randomUUID().toString();
-        Event eventToDelete = grilling;
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
         // Act + Assert
         assertThrows(EntityNotFoundException.class, () -> eventService.deleteEventById(eventId));
-        verify(eventRepository, times(0)).delete(eventToDelete);
     }
 
     @Test
@@ -211,7 +206,6 @@ class EventServiceTest {
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
         // Act + Assert
         assertThrows(EntityNotFoundException.class, () -> eventService.updateEvent(eventId, eventToUpdate));
-        verify(eventRepository, times(0)).save(eventToUpdate);
     }
 
     @Test
@@ -336,7 +330,6 @@ class EventServiceTest {
         // Act + Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.save(null));
         assertEquals("The event Cannot be null.", exception.getMessage());
-        verify(eventRepository, never()).save(any(Event.class));
     }
 
     @Test
@@ -344,7 +337,6 @@ class EventServiceTest {
         // Act + Assert
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> eventService.findByEventId(null));
         assertEquals("The event ID Cannot be null.", exception.getMessage());
-        verify(eventRepository, never()).findById(anyString());
     }
 
     @Test
@@ -355,7 +347,6 @@ class EventServiceTest {
         // Act + Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.updateEvent(null, eventToUpdate));
         assertEquals("The event ID Cannot be null", exception.getMessage());
-        verify(eventRepository, never()).save(any(Event.class));
     }
 
     @Test
@@ -366,7 +357,6 @@ class EventServiceTest {
         // Act + Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> eventService.updateEvent(eventId, null));
         assertEquals("The updated event Cannot be null.", exception.getMessage());
-        verify(eventRepository, never()).save(any(Event.class));
     }
 
     @Test

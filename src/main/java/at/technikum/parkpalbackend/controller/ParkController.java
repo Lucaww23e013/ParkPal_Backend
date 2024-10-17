@@ -17,15 +17,15 @@ import java.util.List;
 @RequestMapping("/parks")
 @CrossOrigin
 
-//@AllArgsConstructor
 public class ParkController {
-    private final ParkService parkService;
 
+    private final ParkService parkService;
     private final ParkMapper parkMapper;
     private final ParkUtil parkUtil;
 
     public ParkController(ParkService parkService,
-                          ParkMapper parkMapper, ParkUtil parkUtil){
+                          ParkMapper parkMapper,
+                          ParkUtil parkUtil){
         this.parkService = parkService;
         this.parkMapper = parkMapper;
         this.parkUtil = parkUtil;
@@ -33,7 +33,7 @@ public class ParkController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateParkDto createPark(@RequestBody @Valid CreateParkDto createParkDto){
+    public CreateParkDto createNewPark(@RequestBody @Valid CreateParkDto createParkDto){
         return parkUtil.saveCreatePark(createParkDto);
     }
 
@@ -56,7 +56,7 @@ public class ParkController {
     }
 
     @PutMapping("/{parkId}")
-    public ResponseEntity<?> updateParkDto(
+    public ResponseEntity<?> updatePark(
             @RequestBody @Valid ParkDto parkDto, @PathVariable String parkId) {
         Park updatedPark = parkUtil.updatePark(parkId, parkDto);
         return ResponseEntity.ok(parkMapper.toDto(updatedPark));
