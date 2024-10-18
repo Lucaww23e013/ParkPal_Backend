@@ -73,12 +73,16 @@ public class EventMapper {
             throw new IllegalArgumentException("createEventDto cannot be null");
         }
 
+        List<User> joinedUsers = new ArrayList<>();
+        joinedUsers.add(creator);
+
         return Event.builder()
                 .title(createEventDto.getTitle())
                 .description(createEventDto.getDescription())
                 .startTS(createEventDto.getStartTS())
                 .endTS(createEventDto.getEndTS())
                 .creator(creator)
+                .joinedUsers(joinedUsers)
                 .park(park)
                 .media(mediaFiles != null ? new ArrayList<>(mediaFiles) : new ArrayList<>())
                 .tags(eventTags != null ? new HashSet<>(eventTags) : new HashSet<>())
