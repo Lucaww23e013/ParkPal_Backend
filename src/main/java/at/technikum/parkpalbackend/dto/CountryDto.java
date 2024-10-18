@@ -19,7 +19,5 @@ public class CountryDto {
     @NotBlank(message = "Country-Name not found")
     private String name;
 
-    //@Column(length = 3, unique = true)
     private String iso2Code;
-
 }

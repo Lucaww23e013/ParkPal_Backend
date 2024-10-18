@@ -18,19 +18,15 @@ import java.util.stream.Collectors;
 @Component
 public class EventTagMapper {
 
-    private final EventMapper eventMapper;
     private final EventService eventService;
     private final EventTagService eventTagService;
 
     @Autowired
-    public EventTagMapper(EventMapper eventMapper,
-                          EventService eventService,
+    public EventTagMapper(EventService eventService,
                           EventTagService eventTagService) {
-        this.eventMapper = eventMapper;
         this.eventService = eventService;
         this.eventTagService = eventTagService;
     }
-
 
     public EventTagDto toDto(EventTag eventTag) {
         return EventTagDto.builder()
@@ -91,19 +87,6 @@ public class EventTagMapper {
         return eventTag;
     }
 
-
-//    public Set<EventDto> toEventDtos(Set<Event> eventSet) {
-//        return eventSet.stream()
-//                .map(event -> eventMapper.toDto(event))
-//                .collect(Collectors.toSet());
-//    }
-
-//    public Set<Event> toEvents(Set<EventDto> eventDtoSet) {
-//        return eventDtoSet.stream()
-//                .map(eventDto -> eventMapper.toEntity(eventDto))
-//                .collect(Collectors.toSet());
-//    }
-
     private static void removeOldEventAssociations(Set<Event> currentEvents,
                                                    Set<Event> newEvents,
                                                    EventTag eventTag) {
@@ -119,5 +102,4 @@ public class EventTagMapper {
                 .filter(event -> !currentEvents.contains(event))
                 .forEach(event -> event.addEventTags(eventTag));
     }
-
 }
