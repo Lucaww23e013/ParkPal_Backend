@@ -112,6 +112,8 @@ class EventUtilTest {
 
         // Create an existing event (this would be returned by eventRepository.findById)
         Event existingEvent = grilling;
+        Park park = parkAwesome;
+        grilling.setPark(park);
         existingEvent.getPark().setId(parkId);
         existingEvent.setJoinedUsers(userList);
         existingEvent.setTags(new HashSet<>());
