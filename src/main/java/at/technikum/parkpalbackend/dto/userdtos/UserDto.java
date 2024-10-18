@@ -55,7 +55,6 @@ public class UserDto {
 
     @ToString.Exclude
     @Builder.Default
-    // TODO: need to be with ids
     private List<String> joinedEventsIds = new ArrayList<>();
 
     @ToString.Exclude

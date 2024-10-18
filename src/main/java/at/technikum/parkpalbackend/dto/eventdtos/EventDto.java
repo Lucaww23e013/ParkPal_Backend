@@ -47,7 +47,6 @@ public class EventDto {
     @NotNull(message = "Park not found. All Events need to take place in a Park")
     private String parkId;
 
-
     @NotNull(message = "Creator not found. All Events need to have been created by an User")
     private String creatorUserId;
 

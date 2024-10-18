@@ -6,8 +6,6 @@ import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.EventService;
-import at.technikum.parkpalbackend.service.ParkService;
-import at.technikum.parkpalbackend.service.UserService;
 import at.technikum.parkpalbackend.util.EventUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,8 +25,9 @@ public class EventController {
     private final EventMapper eventMapper;
 
 
-    public EventController(EventService eventService, ParkService parkService,
-                           UserService userService, EventUtil eventUtil, EventMapper eventMapper) {
+    public EventController(EventService eventService,
+                           EventUtil eventUtil,
+                           EventMapper eventMapper) {
         this.eventService = eventService;
         this.eventUtil = eventUtil;
         this.eventMapper = eventMapper;
