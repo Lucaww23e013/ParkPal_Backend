@@ -37,7 +37,7 @@ public class Park {
     @Version
     private Long version;
 
-    @Column(unique = true, length = 65535)
+    @Column(length = 65535)
     private String name;
 
     @Column(length = 65535)
