@@ -6,7 +6,6 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
 
 public class UpperLimitValidator implements ConstraintValidator<UpperLimit, LocalDateTime> {
-
     private int years;
 
     @Override

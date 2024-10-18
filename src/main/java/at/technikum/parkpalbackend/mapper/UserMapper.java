@@ -25,7 +25,9 @@ public class UserMapper {
     private final UserService userService;
 
     public UserMapper(CountryService countryService,
-                      EventService eventService, FileService fileService, UserService userService) {
+                      EventService eventService,
+                      FileService fileService,
+                      UserService userService) {
         this.countryService = countryService;
         this.eventService = eventService;
         this.fileService = fileService;
@@ -152,10 +154,10 @@ public class UserMapper {
                 .id(createUserDto.getId())
                 .gender(createUserDto.getGender())
                 .salutation(createUserDto.getSalutation())
-                .userName(createUserDto.getUserName())
+                .userName(createUserDto.getUserName().toLowerCase())
                 .firstName(createUserDto.getFirstName())
                 .lastName(createUserDto.getLastName())
-                .email(createUserDto.getEmail())
+                .email(createUserDto.getEmail().toLowerCase())
                 .role(Role.USER)
                 .password(new BCryptPasswordEncoder().encode(createUserDto.getPassword()))
                 .country(countryService.findCountryByCountryId(createUserDto.getCountryId()))
