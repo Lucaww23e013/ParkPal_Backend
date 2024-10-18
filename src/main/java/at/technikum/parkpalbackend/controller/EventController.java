@@ -48,6 +48,7 @@ public class EventController {
     @GetMapping
     public List<EventDto> getAllEvents(
             @RequestParam(required = false) String userId,
+            @RequestParam(required = false) String joinedUserId,
             @RequestParam(required = false) String parkId) {
         List<Event> events;
         if (userId != null && parkId != null) {
@@ -56,6 +57,8 @@ public class EventController {
             events = eventService.findAllEventsCreatedByUser(userId);
         } else if (parkId != null) {
             events = eventService.findAllEventsByParkId(parkId);
+        } else if (joinedUserId != null) {
+            events = eventService.findAllEventsJoinedByUser(joinedUserId);
         } else {
             events = eventService.findAllEvents();
         }

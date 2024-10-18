@@ -334,8 +334,29 @@ VALUES ('9de57aae-9658-405e-966d-01a56aaf9e13', '33333333-3333-3333-3333-3333333
 
 INSERT INTO spring.event_joined_user(event_id, user_id)
 VALUES ('00000000-0000-0000-0000-000000000000', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568263'),
+       ('00000000-0000-0000-0000-000000000000', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
        ('00000000-0000-0000-0000-000000000000', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('11111111-1111-1111-1111-111111111111', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
+       ('c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
+       ('22222222-2222-2222-2222-222222222222', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
+       ('33333333-3333-3333-3333-333333333333', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('44444444-4444-4444-4444-444444444444', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('55555555-5555-5555-5555-555555555555', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('66666666-6666-6666-6666-666666666666', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('77777777-7777-7777-7777-777777777777', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('88888888-8888-8888-8888-888888888888', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('99999999-9999-9999-9999-999999999999', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('aaetetet-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('3535a53b-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('c07cd7cb-ca44-4709-a9b6-9d8d2d568266', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
        ('c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
        ('c07cd7cb-ca44-4709-a9b6-9d8d2d568266', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
        ('c07cd7cb-ce44-4709-a9b6-9d8d2d568263', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
-       ('c07cd7cb-ca44-4709-a9b6-9d8d2d568266', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265');
+       ('c07cd7cb-ca44-4709-a9b6-9d8d2d568266', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568265'),
+       ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
+       ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
+       ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
+       ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
+       ('ffffffff-ffff-ffff-ffff-ffffffffffff', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264'),
+       ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'c07cd7cb-ce44-4709-a9b6-9d8d2d568264')
+;

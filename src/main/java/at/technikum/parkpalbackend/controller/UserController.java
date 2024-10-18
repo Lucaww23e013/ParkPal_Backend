@@ -48,7 +48,7 @@ public class UserController {
         user = userService.update(userId, user);
         return userMapper.toUpdateDto(user);
     }
-    // TODO: only user itself and admin
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
         userService.delete(userId);
