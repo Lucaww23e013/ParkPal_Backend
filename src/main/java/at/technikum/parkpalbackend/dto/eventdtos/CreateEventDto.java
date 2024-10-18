@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timestamp;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class CreateEventDto {
     private String title;
 
     @NotBlank(message = "Event Description is not valid")
+    @Length(max = 1000, message = "Event Description must not exceed 1000 characters")
     private String description;
 
     @Timestamp
