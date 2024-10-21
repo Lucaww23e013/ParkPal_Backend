@@ -28,6 +28,7 @@ public class CreateEventDto {
     private String id;
 
     @NotBlank(message = "Event title is not valid")
+    @Length(min = 3, max = 250, message = "Event title should have at least 3 characters and should not exceed 250 characters.")
     private String title;
 
     @NotBlank(message = "Event Description is not valid")
