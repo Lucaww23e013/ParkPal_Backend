@@ -1,7 +1,5 @@
 package at.technikum.parkpalbackend.dto.eventdtos;
 
-import at.technikum.parkpalbackend.dto.UpperLimit;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timestamp;
@@ -35,15 +33,11 @@ public class EventDto {
     private String description;
 
     @Timestamp
-    @FutureOrPresent(message = "Start EventTime must be now or in the Future")
     @NotNull(message="Event Start Time not found. All Events need to have a Start and End Time")
-    @UpperLimit(message = "Event Start Time must be at least 1 hour in the Future", years = 1)
     private LocalDateTime startTS;
 
     @Timestamp
-    @FutureOrPresent(message = "End EventTime must be now or in the Future")
     @NotNull(message="Event End Time not found. All Events need to have a Start and End Time")
-    @UpperLimit(message = "Event End Time must be at least 1 hour in the Future", years = 1)
     private LocalDateTime endTS;
 
     @NotNull(message = "Park not found. All Events need to take place in a Park")
