@@ -8,7 +8,6 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.persistence.FileRepository;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,9 +31,6 @@ public class FileService {
     private final FileRepository fileRepository;
     private static final String[] VALID_PICTURE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"};
     private static final String[] VALID_VIDEO_EXTENSIONS = {"mp4", "avi", "mov", "mkv", "webm"};
-
-    @Value("${file.upload.max-size-mb}")
-    private long maxFileSizeMb;
 
     public FileService(MinioService minioService,
                        EventService eventService,
@@ -60,9 +56,6 @@ public class FileService {
             String folderName = getFolderName(fileName);
             if (folderName == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Invalid file extension");
-
-            ResponseEntity<String> badRequest = checkMaxFileSizeAndSendResponse(file);
-            if (badRequest != null) return badRequest;
 
             String uuid = UUID.randomUUID().toString();
             String objectName = uploadToMinio(file, folderName, uuid);
@@ -100,17 +93,6 @@ public class FileService {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Internal server error");
         }
-    }
-
-
-    @Nullable
-    private ResponseEntity<String> checkMaxFileSizeAndSendResponse(MultipartFile file) {
-        long maxFileSize = maxFileSizeMb * 1024 * 1024; // Convert MB to bytes
-        if (file.getSize() > maxFileSize) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("File size exceeds the maximum limit.");
-        }
-        return null;
     }
 
     /**

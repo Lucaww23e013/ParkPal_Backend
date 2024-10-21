@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,25 +64,6 @@ class FileServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Invalid file", response.getBody());
     }
-
-    @Test
-    void uploadFile_whenFileSizeExceedsLimit_thenBadRequest() throws NoSuchFieldException, IllegalAccessException {
-        MultipartFile mockFile = mock(MultipartFile.class);
-        Field maxFileSizeField = fileService.getClass().getDeclaredField("maxFileSizeMb");
-        maxFileSizeField.setAccessible(true);
-        when(mockFile.getOriginalFilename()).thenReturn("valid_image.jpg");
-        int maxFileSizeMb = 5; // Example value
-        when(mockFile.getSize()).thenReturn((long) ((maxFileSizeMb * 1024 * 1024) + 1));
-
-        ResponseEntity<String> response = fileService.uploadFile(mockFile, FileType.OTHER, null);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("File size exceeds the maximum limit.", response.getBody());
-    }
-
-    // Assuming the method signature is something like:
-
 
     @Test
     void uploadFile_whenFileValid_thenSuccess() throws Exception {
