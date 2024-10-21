@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class UpdateUserDto {
     private String salutation;
 
     @NotBlank(message = "Enter a Username")
+    @Length(min = 5, max = 255, message = "Username should have at least 5 characters" +
+            "and should not exceed 255 characters.")
     private String userName;
 
     @NotBlank(message = "Enter a your Firstname")
