@@ -34,7 +34,8 @@ public class Event {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Length(min = 3, max = 250, message = "Event title should have at least 3 characters and should not exceed 250 characters.")
+    @Length(min = 3, max = 250, message = "Event title should have at least 3 characters" +
+            "and should not exceed 250 characters.")
     private String title;
 
     @Length(max = 1000, message = "Description is too long")
