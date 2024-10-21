@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ public class UserDto {
     private String salutation;
 
     @NotBlank(message = "Enter a Username")
+    @Length(min = 5, max = 255, message = "Username should have at least 5 characters" +
+            "and should not exceed 255 characters.")
     private String userName;
 
     @NotBlank(message = "Enter a your Firstname")
