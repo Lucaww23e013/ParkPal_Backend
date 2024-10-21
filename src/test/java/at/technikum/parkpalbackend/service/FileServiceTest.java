@@ -8,11 +8,11 @@ import at.technikum.parkpalbackend.persistence.FileRepository;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.junit.jupiter.api.Test;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -42,6 +42,9 @@ class FileServiceTest {
     FileRepository fileRepository;
 
     @Mock
+    UserService userService;
+
+    @Mock
     MinioService minioService;
 
     @Value("${minio.bucket-name}")
@@ -56,7 +59,7 @@ class FileServiceTest {
     void uploadFile_whenInvalidFileExtension_thenBadRequest() {
         MultipartFile mockFile = mock(MultipartFile.class);
 
-        ResponseEntity<String> response = fileService.uploadFile(mockFile, FileType.OTHER);
+        ResponseEntity<String> response = fileService.uploadFile(mockFile, FileType.OTHER, null);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -72,7 +75,7 @@ class FileServiceTest {
         int maxFileSizeMb = 5; // Example value
         when(mockFile.getSize()).thenReturn((long) ((maxFileSizeMb * 1024 * 1024) + 1));
 
-        ResponseEntity<String> response = fileService.uploadFile(mockFile, FileType.OTHER);
+        ResponseEntity<String> response = fileService.uploadFile(mockFile, FileType.OTHER, null);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());

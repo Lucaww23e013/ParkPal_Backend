@@ -30,12 +30,14 @@ public class FileController {
     @PostMapping
     public ResponseEntity<String> uploadPictureOrVideo(
             @RequestParam("file") MultipartFile file,
-            @RequestParam(value = "fileType",
-                    required = false, defaultValue = "OTHER") FileType fileType) {
+            @RequestParam(value = "fileType", required = false,
+                    defaultValue = "OTHER") FileType fileType,
+            @RequestParam(value = "userId", required = false) String userId
+    ) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("File is empty");
         }
-        return fileService.uploadFile(file, fileType);
+        return fileService.uploadFile(file, fileType, userId);
     }
 
     @GetMapping("/{externalId}")
