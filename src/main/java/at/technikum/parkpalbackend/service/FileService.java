@@ -38,7 +38,8 @@ public class FileService {
 
     public FileService(MinioService minioService,
                        EventService eventService,
-                       ParkService parkService, UserService userService,
+                       ParkService parkService,
+                       UserService userService,
                        FileRepository fileRepository) {
         this.minioService = minioService;
         this.eventService = eventService;
@@ -48,7 +49,9 @@ public class FileService {
     }
 
     @Transactional
-    public ResponseEntity<String> uploadFile(MultipartFile file, FileType fileType) {
+    public ResponseEntity<String> uploadFile(MultipartFile file,
+                                             FileType fileType,
+                                             @Nullable String userId) {
         try {
             String fileName = getFileName(file);
             if (fileName == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -64,7 +67,12 @@ public class FileService {
             String uuid = UUID.randomUUID().toString();
             String objectName = uploadToMinio(file, folderName, uuid);
             saveFileDetails(fileName, objectName, uuid, fileType);
-
+            if (userId != null) {
+                User user = userService.findByUserId(userId);
+                if (user != null) {
+                    assignProfilePicture(user, uuid, true);
+                }
+            }
             return ResponseEntity.status(HttpStatus.OK)
                     .body(objectName.split("/")[1]);
         } catch (Exception e) {
