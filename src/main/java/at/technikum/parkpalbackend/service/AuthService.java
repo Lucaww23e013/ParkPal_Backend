@@ -60,10 +60,6 @@ public class AuthService {
 
         User user = userMapper.toEntity(createUserDto);
 
-        // Assign profile picture before saving the user
-        String profilePictureId = createUserDto.getProfilePictureId();
-        fileService.assignProfilePicture(user, profilePictureId, false);
-
         user = userService.save(user);
         return userMapper.toCreateUserDto(user);
     }
