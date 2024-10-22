@@ -57,6 +57,4 @@ public class CreateUserDto {
     @NotBlank(message = "Enter a Country")
     private String countryId;
 
-    private String profilePictureId;
-
 }

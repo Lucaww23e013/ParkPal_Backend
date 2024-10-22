@@ -141,10 +141,9 @@ public class UserMapper {
                 .email(user.getEmail())
                 .countryId(user.getCountry().getId())
                 .password(user.getPassword())
-                .profilePictureId(user.getMedia().isEmpty()
-                        ? null : user.getMedia().getFirst().getExternalId())
                 .build();
     }
+
     public User toEntity(CreateUserDto createUserDto) {
         if (createUserDto == null) {
             throw new IllegalArgumentException("CreateUserDto or its fields cannot be null");

@@ -94,7 +94,6 @@ class AuthServiceTest {
 
         // Assert
         assertEquals(createUserDto, result);
-        verify(fileService).assignProfilePicture(user, createUserDto.getProfilePictureId(), false);
     }
 
     @Test

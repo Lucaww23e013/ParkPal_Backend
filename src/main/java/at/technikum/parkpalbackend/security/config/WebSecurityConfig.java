@@ -93,9 +93,9 @@ public class WebSecurityConfig {
             AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager
     ) throws Exception {
         http.authorizeHttpRequests(registry -> registry
-                .requestMatchers(HttpMethod.PUT,"/users/{userId}")
+                .requestMatchers(HttpMethod.PUT, "/users/{userId}")
                 .access(customAuthorizationManager)
-                .requestMatchers(HttpMethod.DELETE,"/users/{userId}")
+                .requestMatchers(HttpMethod.DELETE, "/users/{userId}")
                 .access(customAuthorizationManager)
                 .requestMatchers("/users/**").permitAll()
         );
@@ -145,6 +145,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests(registry -> registry
                 .requestMatchers(HttpMethod.DELETE, "/files/{externalId}")
                 .access(customAuthorizationManager)
+                .requestMatchers(HttpMethod.POST, "/files").authenticated()
                 .requestMatchers("/files/**").permitAll()
         );
     }
