@@ -101,14 +101,7 @@ public class UserMapper {
         if (updateUserDto == null) {
             throw new IllegalArgumentException("updateUserDto or its fields cannot be null");
         }
-        List<File> existingMedia = new ArrayList<>();
-
         User existingUser = userService.findByUserId(userid);
-
-        if (existingUser != null && existingUser.getMedia() != null) {
-            existingMedia.addAll(existingUser.getMedia());
-        }
-
         User user = User.builder()
                 .id(userid)
                 .gender(updateUserDto.getGender())
@@ -119,7 +112,7 @@ public class UserMapper {
                 .email(updateUserDto.getEmail())
                 .country(countryService.findCountryByCountryId(updateUserDto.getCountryId()))
                 .joinedEvents(eventService.findAllEventsJoinedByUser(userid))
-                .media(existingMedia)
+                .media(existingUser.getMedia())
                 .build();
 
         fileService.assignProfilePicture(user, updateUserDto.getProfilePictureId(), false);
