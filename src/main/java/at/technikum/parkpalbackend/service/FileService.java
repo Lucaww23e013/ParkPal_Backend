@@ -187,14 +187,17 @@ public class FileService {
     @Transactional
     public void assignProfilePicture(User user, String profilePictureId, boolean saveUser) {
         if (profilePictureId != null && !profilePictureId.isEmpty()) {
-            // Remove existing profile picture if any
+            // Remove all existing profile pictures from the database
             List<File> media = user.getMedia();
             if (media != null) {
-                media.removeIf(file -> file.getFileType() == FileType.PROFILE_PICTURE);
+                List<File> profilePictures = media.stream()
+                        .filter(file -> file.getFileType() == FileType.PROFILE_PICTURE)
+                        .toList();
+                fileRepository.deleteAll(profilePictures);
+                media.removeAll(profilePictures);
             } else {
                 media = new ArrayList<>();
             }
-
             // Assign new profile picture
             File profilePicture = this
                     .retrieveAndAssignFileById(profilePictureId, user.getId(), null, null, true);
