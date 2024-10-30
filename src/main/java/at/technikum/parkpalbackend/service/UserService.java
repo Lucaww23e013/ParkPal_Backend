@@ -49,6 +49,9 @@ public class UserService {
 
 
     public User findByUserId(String userId) {
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("User Id is not valid");
+        }
         return userRepository.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException("User with Id %s not found "
                         .formatted(userId)));
@@ -72,6 +75,12 @@ public class UserService {
     public User save(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
+        }
+        if (userEmailExists(user.getEmail())) {
+            throw new EntityAlreadyExistsException("A user with the email " + user.getEmail() + " already exists.");
+        }
+        if (userNameExists(user.getUserName())) {
+            throw new EntityAlreadyExistsException("A user with the username " + user.getUserName() + " already exists.");
         }
         return userRepository.save(user);
     }

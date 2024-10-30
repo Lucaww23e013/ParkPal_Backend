@@ -29,20 +29,18 @@ public class AuthService {
     private final JwtIssuer jwtIssuer;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final FileService fileService;
     private final UserMapper userMapper;
     private final JwtDecoder jwtDecoder;
 
     public AuthService(
             JwtIssuer jwtIssuer,
             AuthenticationManager authenticationManager,
-            UserService userService, FileService fileService,
+            UserService userService,
             UserMapper userMapper,
             JwtDecoder jwtDecoder) {
         this.jwtIssuer = jwtIssuer;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
-        this.fileService = fileService;
         this.userMapper = userMapper;
         this.jwtDecoder = jwtDecoder;
     }

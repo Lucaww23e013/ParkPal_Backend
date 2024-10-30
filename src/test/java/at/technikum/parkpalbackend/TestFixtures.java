@@ -24,21 +24,21 @@ import java.util.stream.Collectors;
 
 public class TestFixtures {
 
-    public static Country austria = Country.builder().id("c07cd7cb-ce44-4709-a9b6-9d8d2d568263").name("Austria").iso2Code("AT").build();
-    public static Country germany = Country.builder().name("Germany").iso2Code("AT").build();
+    public static Country austria = Country.builder().name("Austria").iso2Code("AT").build();
+    public static Country germany = Country.builder().name("Germany").iso2Code("DE").build();
 
     public static CountryDto austriaDTO = CountryDto.builder().name("AustriaDTO").iso2Code("ATDTO").build();
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
     public static Address alternateParkAddress = berlinAddress("Haizingerstr", 5);
-    public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
-    public static User adminUser2 = createUser("osama1", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User adminUser = createUser("osama235", "sw3534643@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User adminUser2 = createUser("osama1", "festesdfsetesf@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
 
     public static LoginUserDto adminLoginUserDto = createLoginUserDto();
 
-    public static CreateUserDto adminCreateUserDto = createCreateUserDTO("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
-    public static UserDto adminUserDto = createUserDto("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
-    public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
-    public static User normalAlternateUser = createAlternateUser("p22", "paul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
+    public static CreateUserDto adminCreateUserDto = createCreateUserDTO("osama235", "estsegdzr@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static UserDto adminUserDto = createUserDto("osama235etet", "festes@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User normalUser = createUser("r221", "raul35@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
+    public static User normalAlternateUser = createAlternateUser("p22fef", "paul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
     public static Park parkAwesome = parkWithOutEvents("Awesome Park");
     public static ParkDto parkDtoAwesome = parkDtoWithOutEvents("Awesome Park Dto");
     public static Park parkCool = alternateParkWithOutEvents("Cool Park");
@@ -68,6 +68,7 @@ public class TestFixtures {
     public static List<User> alternateUserList = createUserList();
     // Events
     public static Event grilling = createEvent("grilling Biggest Steak Beef");
+    public static Event eventAwesome = createEvent(adminUser, "Awesome Event", "This is an awesome event", parkAwesome);
     public static Event pingPongGame = createEvent("pingPong Game with 4 players");
     public static Event chessMaster = createEvent("Chess Master only for the best players");
     public static Event pickNickWithYourFamily = createEvent("Pick Nick With Your Family");
@@ -100,8 +101,8 @@ public class TestFixtures {
                 .creator(creator)
                 .title(title)
                 .description(description)
-                .startTS(LocalDateTime.now())
-                .endTS(LocalDateTime.now().plusHours(1))
+                .startTS(LocalDateTime.now().withNano(0))
+                .endTS(LocalDateTime.now().plusHours(1).withNano(0))
                 .park(park)
                 .tags(new HashSet<>(Arrays.asList(familyEventTag, gamesEventTag)))
                 .media(new ArrayList<>(Arrays.asList(file, file2)))
@@ -114,8 +115,8 @@ public class TestFixtures {
                 .creatorUserId(creator.getId())
                 .title(title)
                 .description(description)
-                .startTS(LocalDateTime.now())
-                .endTS(LocalDateTime.now().plusHours(1))
+                .startTS(LocalDateTime.now().withNano(0))
+                .endTS(LocalDateTime.now().plusHours(1).withNano(0))
                 .parkId(park.getId())
                 .eventTagsIds(new HashSet<>(Arrays.asList(familyEventTag.getId(), gamesEventTag.getId())))
                 .mediaFileExternalIds(new ArrayList<>(Arrays.asList(familyEventTag.getId(), gamesEventTag.getId())))
@@ -189,6 +190,7 @@ public class TestFixtures {
 
     private static Event createEvent(String title) {
         Event event = Event.builder()
+                .version(0L)
                 .title(title)
                 .description("Runaway Park")
                 .startTS(LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.MINUTES))
@@ -249,6 +251,7 @@ public class TestFixtures {
 
     private static Park parkWithOutEvents(String parkName) {
         return Park.builder()
+                .version(0L)
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
@@ -366,7 +369,7 @@ public class TestFixtures {
 
     private static User createUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return User.builder()
-                .id(UUID.randomUUID().toString())
+                .version(0L)
                 .salutation(salutation)
                 .gender(gender)
                 .userName(userName)
@@ -383,6 +386,7 @@ public class TestFixtures {
     private static User createAlternateUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return User.builder()
                 .id(UUID.randomUUID().toString())
+                .version(0L)
                 .salutation(salutation)
                 .gender(gender)
                 .userName(userName)
@@ -431,8 +435,8 @@ public class TestFixtures {
                 .description("Test")
                 .creatorName(creatorName)
                 .creatorUserId(UUID.randomUUID().toString())
-                .startTS(LocalDateTime.now().plusHours(1))
-                .endTS(LocalDateTime.now().plusHours(2))
+                .startTS(LocalDateTime.now().plusHours(1).withNano(0))
+                .endTS(LocalDateTime.now().plusHours(2).withNano(0))
                 .parkId(UUID.randomUUID().toString())
                 .mediaFileExternalIds(fileIdList)
                 .build();
@@ -445,8 +449,8 @@ public class TestFixtures {
                 .description("Test")
                 .creatorName(creatorName)
                 .creatorUserId(UUID.randomUUID().toString())
-                .startTS(LocalDateTime.now().plusHours(1))
-                .endTS(LocalDateTime.now().plusHours(2))
+                .startTS(LocalDateTime.now().plusHours(1).withNano(0))
+                .endTS(LocalDateTime.now().plusHours(2).withNano(0))
                 .parkId(UUID.randomUUID().toString())
                 .build();
     }
@@ -479,7 +483,9 @@ public class TestFixtures {
 
 
     public static Park parkWithFiles() {
-        Park park = Park.builder().build();
+        Park park = Park.builder()
+                .version(0L)
+                .build();
         park.setId(UUID.randomUUID().toString());
         park.setName("Test Park with Files");
         park.setDescription("This is a park with files.");
@@ -495,6 +501,7 @@ public class TestFixtures {
         List<File> files = new ArrayList<>();
         File file1 = File.builder()
                 .externalId(UUID.randomUUID().toString())
+                .version(0L)
                 .filename("file1.jpg")
                 .fileType(FileType.PHOTO)
                 .park(park)
@@ -502,6 +509,7 @@ public class TestFixtures {
                 .build();
         File file2 = File.builder()
                 .externalId(UUID.randomUUID().toString())
+                .version(0L)
                 .filename("file2.jpg")
                 .fileType(FileType.PHOTO)
                 .park(park)
@@ -513,7 +521,9 @@ public class TestFixtures {
     }
 
     public static Park parkWithUpdatedFiles() {
-        Park park = Park.builder().build();
+        Park park = Park.builder()
+                .version(0L)
+                .build();
         park.setId(UUID.randomUUID().toString());
         park.setName("Updated Park with Files");
         park.setDescription("This is an updated park with new files.");
