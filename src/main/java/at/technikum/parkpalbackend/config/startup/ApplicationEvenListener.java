@@ -18,10 +18,12 @@ public class ApplicationEvenListener {
 
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReadyEvent() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new org.springframework.core.io.ClassPathResource("data.sql"));
-        populator.execute(dataSource);
-        log.info("ApplicationReadyEvent fired Now");
+        String activeProfile = System.getProperty("spring.profiles.active");
+        if (activeProfile == null || !activeProfile.equalsIgnoreCase("test")) {
+            ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+            populator.addScript(new org.springframework.core.io.ClassPathResource("data.sql"));
+            populator.execute(dataSource);
+            log.info("Database populated.");
+        }
     }
-
 }
