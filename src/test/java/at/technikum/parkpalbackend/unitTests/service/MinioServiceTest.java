@@ -1,7 +1,8 @@
-package at.technikum.parkpalbackend.service;
+package at.technikum.parkpalbackend.unitTests.service;
 
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
 import at.technikum.parkpalbackend.model.File;
+import at.technikum.parkpalbackend.service.MinioService;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.messages.ErrorResponse;
@@ -24,6 +25,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class MinioServiceTest {
 
@@ -157,7 +159,6 @@ class MinioServiceTest {
         // Verify that getObject was called once
         verify(minioClient, times(1)).getObject(any(GetObjectArgs.class));
     }
-
 
 
     @Test

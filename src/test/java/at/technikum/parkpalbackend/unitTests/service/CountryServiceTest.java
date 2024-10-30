@@ -1,9 +1,10 @@
-package at.technikum.parkpalbackend.service;
+package at.technikum.parkpalbackend.unitTests.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Country;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.CountryRepository;
+import at.technikum.parkpalbackend.service.CountryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import static at.technikum.parkpalbackend.TestFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class CountryServiceTest {
 

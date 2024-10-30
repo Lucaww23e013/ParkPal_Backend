@@ -1,15 +1,13 @@
-package at.technikum.parkpalbackend.service;
+package at.technikum.parkpalbackend.unitTests.service;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.exception.InvalidEventTimeException;
-import at.technikum.parkpalbackend.mapper.EventMapper;
 import at.technikum.parkpalbackend.model.Event;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.persistence.EventRepository;
-import at.technikum.parkpalbackend.persistence.FileRepository;
-import at.technikum.parkpalbackend.persistence.UserRepository;
-import at.technikum.parkpalbackend.util.EventUtil;
+import at.technikum.parkpalbackend.service.EventService;
+import at.technikum.parkpalbackend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +20,7 @@ import java.util.*;
 import static at.technikum.parkpalbackend.TestFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class EventServiceTest {
 
@@ -208,59 +207,60 @@ class EventServiceTest {
         assertThrows(RuntimeException.class, () -> eventService.deleteEventById(eventId));
         verify(eventRepository, times(1)).delete(eventToDelete);
     }
-/*
-    @Test
-    void updateEventById_whenEventExists_thenUpdateEvent() {
-        // Arrange
-        // prepare data
-        String eventId = UUID.randomUUID().toString();
-        Event oldEvent = grilling;
-        Event eventToUpdate = grilling;
-        eventToUpdate.setDescription("professional grilling");
-        eventToUpdate.setStartTS(oldEvent.getStartTS().plusHours(3));
-        eventToUpdate.setEndTS(oldEvent.getEndTS().plusHours(7));
 
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEvent));
-        when(eventRepository.save(any(Event.class))).thenReturn(eventToUpdate);
-        // Act
-        Event updatedEvent = eventService.updateEvent(eventId, eventToUpdate);
-        // Assert
-        assertNotNull(updatedEvent);
-        assertEquals(eventToUpdate, updatedEvent);
-        verify(eventRepository).save(eventToUpdate);
-    }
+    /*
+        @Test
+        void updateEventById_whenEventExists_thenUpdateEvent() {
+            // Arrange
+            // prepare data
+            String eventId = UUID.randomUUID().toString();
+            Event oldEvent = grilling;
+            Event eventToUpdate = grilling;
+            eventToUpdate.setDescription("professional grilling");
+            eventToUpdate.setStartTS(oldEvent.getStartTS().plusHours(3));
+            eventToUpdate.setEndTS(oldEvent.getEndTS().plusHours(7));
 
-    @Test
-    void updateEventById_whenEventDoesNotExist_thenThrowEntityNotFoundException() {
-        // Arrange
-        // prepare data
-        String eventId = UUID.randomUUID().toString();
-        Event eventToUpdate = grilling;
+            when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEvent));
+            when(eventRepository.save(any(Event.class))).thenReturn(eventToUpdate);
+            // Act
+            Event updatedEvent = eventService.updateEvent(eventId, eventToUpdate);
+            // Assert
+            assertNotNull(updatedEvent);
+            assertEquals(eventToUpdate, updatedEvent);
+            verify(eventRepository).save(eventToUpdate);
+        }
 
-        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
-        // Act + Assert
-        assertThrows(EntityNotFoundException.class, () -> eventService.updateEvent(eventId, eventToUpdate));
-        verify(eventRepository, times(0)).save(eventToUpdate);
-    }
+        @Test
+        void updateEventById_whenEventDoesNotExist_thenThrowEntityNotFoundException() {
+            // Arrange
+            // prepare data
+            String eventId = UUID.randomUUID().toString();
+            Event eventToUpdate = grilling;
 
-    @Test
-    void updateEventById_whenUnknownError_thenThrowRuntimeException() {
-        // Arrange
-        // prepare data
-        String eventId = UUID.randomUUID().toString();
-        Event oldEvent = grilling;
-        Event eventToUpdate = grilling;
-        eventToUpdate.setDescription("professional grilling");
-        eventToUpdate.setStartTS(oldEvent.getStartTS().plusHours(3));
-        eventToUpdate.setEndTS(oldEvent.getEndTS().plusHours(7));
+            when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+            // Act + Assert
+            assertThrows(EntityNotFoundException.class, () -> eventService.updateEvent(eventId, eventToUpdate));
+            verify(eventRepository, times(0)).save(eventToUpdate);
+        }
 
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEvent));
-        when(eventRepository.save(any(Event.class))).thenThrow(new RuntimeException());
-        // Act + Assert
-        assertThrows(RuntimeException.class, () -> eventService.updateEvent(eventId, eventToUpdate));
-        verify(eventRepository, times(1)).save(eventToUpdate);
-    }
-*/
+        @Test
+        void updateEventById_whenUnknownError_thenThrowRuntimeException() {
+            // Arrange
+            // prepare data
+            String eventId = UUID.randomUUID().toString();
+            Event oldEvent = grilling;
+            Event eventToUpdate = grilling;
+            eventToUpdate.setDescription("professional grilling");
+            eventToUpdate.setStartTS(oldEvent.getStartTS().plusHours(3));
+            eventToUpdate.setEndTS(oldEvent.getEndTS().plusHours(7));
+
+            when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEvent));
+            when(eventRepository.save(any(Event.class))).thenThrow(new RuntimeException());
+            // Act + Assert
+            assertThrows(RuntimeException.class, () -> eventService.updateEvent(eventId, eventToUpdate));
+            verify(eventRepository, times(1)).save(eventToUpdate);
+        }
+    */
     //findAllEventsJoinedByUser(String userId)
     @Test
     void findAllEventsJoinedByUser_whenUserExistsAndJoinedEvents_thenReturnAllJoinedEvents() {

@@ -1,10 +1,13 @@
-package at.technikum.parkpalbackend.service;
+package at.technikum.parkpalbackend.unitTests.service;
 
 import at.technikum.parkpalbackend.exception.FileNotFoundException;
 import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.FileType;
 import at.technikum.parkpalbackend.persistence.FileRepository;
+import at.technikum.parkpalbackend.service.FileService;
+import at.technikum.parkpalbackend.service.MinioService;
+import at.technikum.parkpalbackend.service.UserService;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import org.junit.jupiter.api.BeforeEach;

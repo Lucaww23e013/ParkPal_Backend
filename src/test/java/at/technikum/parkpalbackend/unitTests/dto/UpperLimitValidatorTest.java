@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.dto;
+package at.technikum.parkpalbackend.unitTests.dto;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
