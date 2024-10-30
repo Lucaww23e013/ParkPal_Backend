@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.komponentTests.service;
+package at.technikum.parkpalbackend.componentTests.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Park;
@@ -8,9 +8,8 @@ import at.technikum.parkpalbackend.service.ParkService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +17,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+//@DataJpaTest
+@SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-@Import(ParkService.class)
+//@Import(ParkService.class)
 class ParkServiceComponentTest {
 
     @Autowired
