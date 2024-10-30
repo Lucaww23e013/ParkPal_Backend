@@ -1,5 +1,6 @@
-package at.technikum.parkpalbackend.controller;
+package at.technikum.parkpalbackend.unitTests.controller;
 
+import at.technikum.parkpalbackend.controller.AuthController;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginRequest;
 import at.technikum.parkpalbackend.dto.userdtos.TokenResponse;

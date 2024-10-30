@@ -1,9 +1,10 @@
-package at.technikum.parkpalbackend.service;
+package at.technikum.parkpalbackend.unitTests.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.exception.ResourceAccessException;
 import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.persistence.EventTagRepository;
+import at.technikum.parkpalbackend.service.EventTagService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,7 +44,7 @@ class EventTagServiceTest {
 
     @Test
     void findAllEventTagSet_successfullyReturned_thenReturnList() {
-       // Arrange
+        // Arrange
         List<EventTag> eventTagList = new ArrayList<>();
         eventTagList.add(familyEventTag);
         eventTagList.add(gamesEventTag);

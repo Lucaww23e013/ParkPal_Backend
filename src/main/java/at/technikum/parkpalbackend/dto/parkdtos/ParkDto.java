@@ -19,7 +19,7 @@ import java.util.List;
 @Valid
 public class ParkDto {
 
-    private String id;
+    private String parkId;
 
     @NotBlank(message = "Park name not found. All parks need a name")
     private String name;

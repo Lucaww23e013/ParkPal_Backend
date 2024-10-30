@@ -186,27 +186,33 @@ public class FileService {
 
     @Transactional
     public void assignProfilePicture(User user, String profilePictureId, boolean saveUser) {
-        if (profilePictureId != null && !profilePictureId.isEmpty()) {
-            // Remove all existing profile pictures from the database
-            List<File> media = user.getMedia();
-            if (media != null) {
-                List<File> profilePictures = media.stream()
-                        .filter(file -> file.getFileType() == FileType.PROFILE_PICTURE)
-                        .toList();
-                fileRepository.deleteAll(profilePictures);
-                media.removeAll(profilePictures);
-            } else {
-                media = new ArrayList<>();
-            }
-            // Assign new profile picture
-            File profilePicture = this
-                    .retrieveAndAssignFileById(profilePictureId, user.getId(), null, null, true);
-            profilePicture.setFileType(FileType.PROFILE_PICTURE);
-            media.add(profilePicture);
-            user.setMedia(media);
-            if (saveUser) {
-                userService.save(user);
-            }
+        if (profilePictureId == null || profilePictureId.isEmpty()) {
+            return;
+        }
+        // Retrieve the existing profile picture ID
+        String existingProfilePictureId = user.getMedia().stream()
+                .filter(file -> file.getFileType() == FileType.PROFILE_PICTURE)
+                .map(File::getExternalId)
+                .findFirst()
+                .orElse(null);
+        if (existingProfilePictureId != null && existingProfilePictureId.equals(profilePictureId)) {
+            return;
+        }
+        // Remove all existing profile pictures from the database
+        List<File> media = user.getMedia();
+        List<File> profilePictures = media.stream()
+                .filter(file -> file.getFileType() == FileType.PROFILE_PICTURE)
+                .toList();
+        fileRepository.deleteAll(profilePictures);
+        media.removeAll(profilePictures);
+        // Assign new profile picture
+        File profilePicture = this
+                .retrieveAndAssignFileById(profilePictureId, user.getId(), null, null, true);
+        profilePicture.setFileType(FileType.PROFILE_PICTURE);
+        media.add(profilePicture);
+        user.setMedia(media);
+        if (saveUser) {
+            userService.save(user);
         }
     }
 

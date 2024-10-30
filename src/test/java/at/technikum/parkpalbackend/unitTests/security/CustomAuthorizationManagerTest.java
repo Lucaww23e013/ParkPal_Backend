@@ -1,8 +1,9 @@
-package at.technikum.parkpalbackend.security;
+package at.technikum.parkpalbackend.unitTests.security;
 
 import at.technikum.parkpalbackend.exception.BadRequestException;
 import at.technikum.parkpalbackend.model.File;
 import at.technikum.parkpalbackend.model.User;
+import at.technikum.parkpalbackend.security.CustomAuthorizationManager;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.FileService;
@@ -26,7 +27,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CustomAuthorizationManagerTest {

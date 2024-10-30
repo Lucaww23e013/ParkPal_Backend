@@ -18,7 +18,7 @@ public class ParkMapper {
             throw new IllegalArgumentException("Park entity or its fields cannot be null");
         }
         return ParkDto.builder()
-                .id(park.getId())
+                .parkId(park.getId())
                 .name(park.getName())
                 .description(park.getDescription())
                 .address(park.getAddress())

@@ -1,4 +1,4 @@
-package at.technikum.parkpalbackend.service;
+package at.technikum.parkpalbackend.unitTests.service;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
@@ -12,6 +12,9 @@ import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.security.jwt.JwtDecoder;
 import at.technikum.parkpalbackend.security.jwt.JwtIssuer;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
+import at.technikum.parkpalbackend.service.AuthService;
+import at.technikum.parkpalbackend.service.FileService;
+import at.technikum.parkpalbackend.service.UserService;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

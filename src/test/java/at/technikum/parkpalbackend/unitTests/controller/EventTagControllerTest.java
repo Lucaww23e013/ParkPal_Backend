@@ -1,6 +1,7 @@
-package at.technikum.parkpalbackend.controller;
+package at.technikum.parkpalbackend.unitTests.controller;
 
 import at.technikum.parkpalbackend.TestFixtures;
+import at.technikum.parkpalbackend.controller.EventTagController;
 import at.technikum.parkpalbackend.dto.eventtagdtos.CreateEventTagDto;
 import at.technikum.parkpalbackend.dto.eventtagdtos.EventTagDto;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
@@ -144,7 +145,7 @@ public class EventTagControllerTest {
                 .andExpect(content().json("{\"id\":\"1\",\"name\":\"Sample Event Tag\"}"));
     }
 
-@Test
+    @Test
     public void testGetEventTagByIdNotFound() throws Exception {
         // Arrange
         Mockito.when(eventTagService.findTagById(eq("1"))).thenThrow(new EntityNotFoundException("Tag not found"));
