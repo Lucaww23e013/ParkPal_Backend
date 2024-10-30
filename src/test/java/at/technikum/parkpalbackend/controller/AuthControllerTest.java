@@ -48,7 +48,7 @@ public class AuthControllerTest {
         ResponseEntity<?> responseEntity = authController.register(createUserDto);
 
         // Assert
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         verify(authService, times(1)).register(any(CreateUserDto.class));
     }
 
