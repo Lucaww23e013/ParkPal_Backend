@@ -1,18 +1,18 @@
-package at.technikum.parkpalbackend.mapper;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+package at.technikum.parkpalbackend.unitTests.mapper;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.dto.CountryDto;
+import at.technikum.parkpalbackend.mapper.CountryMapper;
 import at.technikum.parkpalbackend.model.Country;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class CountryMapperTest {
@@ -58,6 +58,7 @@ public class CountryMapperTest {
         assertEquals(countryDto.getName(), country.getName());
         assertEquals(countryDto.getIso2Code(), country.getIso2Code());
     }
+
     @Test
     public void whenDTONull_toEntity_thenThrowIllegalArgumentException() {
         // Arrange

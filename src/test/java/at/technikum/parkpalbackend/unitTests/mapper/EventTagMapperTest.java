@@ -1,7 +1,9 @@
-package at.technikum.parkpalbackend.mapper;
+package at.technikum.parkpalbackend.unitTests.mapper;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.dto.eventtagdtos.EventTagDto;
+import at.technikum.parkpalbackend.mapper.EventMapper;
+import at.technikum.parkpalbackend.mapper.EventTagMapper;
 import at.technikum.parkpalbackend.model.EventTag;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.EventTagService;
@@ -13,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(MockitoExtension.class)
 class EventTagMapperTest {
 

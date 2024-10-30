@@ -1,5 +1,6 @@
-package at.technikum.parkpalbackend.dto;
+package at.technikum.parkpalbackend.unitTests.dto;
 
+import at.technikum.parkpalbackend.dto.UpperLimit;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -13,4 +14,5 @@ public class TestEntity {
 
     public TestEntity(LocalDateTime date) {
         this.date = date;
-    }}
+    }
+}

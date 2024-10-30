@@ -1,7 +1,8 @@
-package at.technikum.parkpalbackend.security;
+package at.technikum.parkpalbackend.unitTests.security;
 
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.model.enums.Role;
+import at.technikum.parkpalbackend.security.CustomUserDetailService;
 import at.technikum.parkpalbackend.security.principal.UserPrincipal;
 import at.technikum.parkpalbackend.service.UserService;
 import org.junit.jupiter.api.Test;

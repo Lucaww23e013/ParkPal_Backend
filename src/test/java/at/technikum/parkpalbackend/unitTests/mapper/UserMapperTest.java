@@ -1,9 +1,10 @@
-package at.technikum.parkpalbackend.mapper;
+package at.technikum.parkpalbackend.unitTests.mapper;
 
 import at.technikum.parkpalbackend.TestFixtures;
 import at.technikum.parkpalbackend.dto.userdtos.CreateUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.LoginUserDto;
 import at.technikum.parkpalbackend.dto.userdtos.UserDto;
+import at.technikum.parkpalbackend.mapper.UserMapper;
 import at.technikum.parkpalbackend.model.User;
 import at.technikum.parkpalbackend.service.CountryService;
 import at.technikum.parkpalbackend.service.EventService;
