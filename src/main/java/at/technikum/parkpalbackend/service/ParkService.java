@@ -20,9 +20,12 @@ public class ParkService {
     }
 
     public Park findParkById(String parkId) {
+        if (parkId == null) {
+            throw new IllegalArgumentException("The park ID cannot be null");
+        }
 
         return parkRepository.findById(parkId)
-                .orElseThrow(() -> new EntityNotFoundException("Park with id %s not found "
+                .orElseThrow(() -> new EntityNotFoundException("Park with id %s not found"
                         .formatted(parkId)));
     }
 
