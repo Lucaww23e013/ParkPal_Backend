@@ -163,4 +163,90 @@ class ParkServiceComponentTest {
 
         assertTrue(exception.getMessage().contains("Park with id  not found"));
     }
+
+    @Test
+    void testSave_NullPark_ShouldThrowIllegalArgumentException() {
+        // Arrange
+        Park nullPark = null;
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> parkService.save(nullPark),
+                "Expected IllegalArgumentException for a null park");
+        assertEquals("The park cannot be null.", exception.getMessage());
+    }
+
+    @Test
+    void testSave_ValidPark_ShouldSaveAndReturnPark() {
+        // Arrange
+        Park park = Park.builder()
+                .name("Test Park")
+                .description("Description of Test Park")
+                .build();
+
+        // Act
+        Park savedPark = parkService.save(park);
+
+        // Assert
+        assertNotNull(savedPark.getId(), "Saved park should have an ID assigned");
+        assertEquals("Test Park", savedPark.getName(), "Saved park name should match");
+    }
+
+    @Test
+    void testSave_EmptyFields_ShouldSaveParkWithMinimalDetails() {
+        // Arrange
+        Park park = Park.builder()
+                .name("Minimal Park")
+                .build();
+
+        // Act
+        Park savedPark = parkService.save(park);
+
+        // Assert
+        assertNotNull(savedPark.getId(), "Saved park should have an ID");
+        assertEquals("Minimal Park", savedPark.getName(), "Saved park name should match");
+    }
+
+    @Test
+    void testDeleteParkByParkId_NullId_ShouldThrowIllegalArgumentException() {
+        // Arrange
+        String nullId = null;
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> parkService.deleteParkByParkId(nullId),
+                "Expected IllegalArgumentException for a null park ID");
+
+        assertEquals("The park ID cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteParkByParkId_NonExistentId_ShouldThrowEntityNotFoundException() {
+        // Arrange
+        String nonExistentId = "non-existent-id";
+
+        // Act & Assert
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> parkService.deleteParkByParkId(nonExistentId),
+                "Expected EntityNotFoundException for a non-existent park ID");
+
+        assertTrue(exception.getMessage().contains("Park with id non-existent-id not found"));
+    }
+
+    @Test
+    void testDeleteParkByParkId_ExistingId_ShouldDeletePark() {
+        // Arrange
+        Park park = Park.builder()
+                .name("Park to Delete")
+                .description("This park will be deleted.")
+                .build();
+        Park savedPark = parkService.save(park);
+
+        // Act
+        Park deletedPark = parkService.deleteParkByParkId(savedPark.getId());
+
+        // Assert
+        assertEquals(savedPark.getId(), deletedPark.getId(), "Deleted park ID should match");
+        assertFalse(parkRepository.existsById(savedPark.getId()), "Deleted park should no longer exist in the repository");
+    }
 }

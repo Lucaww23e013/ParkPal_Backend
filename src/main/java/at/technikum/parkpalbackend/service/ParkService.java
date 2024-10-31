@@ -37,6 +37,10 @@ public class ParkService {
     }
 
     public Park deleteParkByParkId(String parkId) {
+        if (parkId == null) {
+            throw new IllegalArgumentException("The park ID cannot be null");
+        }
+
         Park park = parkRepository.findById(parkId).orElseThrow(
                 () -> new EntityNotFoundException("Park with id %s not found "
                         .formatted(parkId)));
