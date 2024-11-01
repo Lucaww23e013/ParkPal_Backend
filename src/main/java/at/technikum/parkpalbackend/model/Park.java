@@ -18,9 +18,11 @@ import java.util.List;
 @Builder
 
 @Entity
-@Table(name = "park", uniqueConstraints = {
-    @UniqueConstraint(name = "unique_parkName", columnNames = "name")
-})
+@Table(
+    name = "park",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "unique_parkName", columnNames = "name")
+    })
 public class Park {
 
     @Id

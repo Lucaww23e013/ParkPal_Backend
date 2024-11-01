@@ -1,8 +1,10 @@
 package at.technikum.parkpalbackend.service;
 
+import at.technikum.parkpalbackend.exception.EntityAlreadyExistsException;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +35,15 @@ public class ParkService {
         if (park == null) {
             throw new IllegalArgumentException("The park cannot be null.");
         }
-        return parkRepository.save(park);
+        try {
+            return parkRepository.save(park);
+        } catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
+                throw new EntityAlreadyExistsException(
+                        "A park with the name '" + park.getName() + "' already exists.");
+            }
+            throw e; // rethrow if it's a different exception
+        }
     }
 
     public Park deleteParkByParkId(String parkId) {

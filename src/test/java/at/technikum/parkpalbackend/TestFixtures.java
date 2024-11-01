@@ -24,26 +24,30 @@ import java.util.stream.Collectors;
 
 public class TestFixtures {
 
-    public static Country austria = Country.builder().id("c07cd7cb-ce44-4709-a9b6-9d8d2d568263").name("Austria").iso2Code("AT").build();
-    public static Country germany = Country.builder().name("Germany").iso2Code("AT").build();
+    public static Country austria = Country.builder().name("Austria").iso2Code("AT").build();
+    public static Country germany = Country.builder().name("Germany").iso2Code("DE").build();
 
     public static CountryDto austriaDTO = CountryDto.builder().name("AustriaDTO").iso2Code("ATDTO").build();
     public static Address parkAddress = wien1010Address("mariahilfe Str.", 5);
     public static Address alternateParkAddress = berlinAddress("Haizingerstr", 5);
-    public static User adminUser = createUser("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
-    public static User adminUser2 = createUser("osama1", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
-
+    public static User adminUser = createUser("osama235", "sw436436@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User adminUser2 = createUser("osama1", "sw24@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User simpleUser = createSimpleUser("luca ", "luca1234@gmail.com", "Luca", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static User simpleUser2 = createSimpleUser("luca2 ", "luca123w222224@gmail.com", "Luca", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
     public static LoginUserDto adminLoginUserDto = createLoginUserDto();
 
     public static CreateUserDto adminCreateUserDto = createCreateUserDTO("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
-    public static UserDto adminUserDto = createUserDto("osama235", "sw@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
+    public static UserDto adminUserDto = createUserDto("osama235", "sw354364364@gmail.com", "Osama", "Mac", Role.ADMIN, Gender.MALE, "Mr.");
     public static User normalUser = createUser("r221", "raul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
+    public static User newUser = createUser("r22112121", "Princeraul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
     public static User normalAlternateUser = createAlternateUser("p22", "paul@gmail.com", "Raul", "Gonzo", Role.USER, Gender.MALE, "Mr.");
     public static Park parkAwesome = parkWithOutEvents("Awesome Park");
     public static ParkDto parkDtoAwesome = parkDtoWithOutEvents("Awesome Park Dto");
     public static Park parkCool = alternateParkWithOutEvents("Cool Park");
+    public static Park alternatePark = alternateParkWithOutEvents("Existing Park Name");
     public static ParkDto parkCoolDto = parkDtoWithOutEvents("Cool Park");
     public static ParkDto parkDtoWithMedia = parkDtoWithMedia("Cool Park");
+    public static Park parkWithMedia = parkWithMedia("Media Park");
     public static CreateParkDto CreateParkCoolDto = CreateParkDtoWithOutEvents("Cool Park");
     public static CreateParkDto CreateExpectedParkCoolDto = CreateParkDtoWithOutEvents("Cool Park");
 
@@ -82,8 +86,8 @@ public class TestFixtures {
     public static List<File> fileList = createMediaList();
     public static List<String> fileIdList = createMediaIdList();
 
-    public static File file = createTestFile("file");
-    public static File file2 = createTestFile("file2");
+    public static File file = createTestFile("file", adminUser);
+    public static File file2 = createTestFile("file2", normalUser);
 
     @NotNull
     private static CreateEventTagDto createEventTagDtoMusicWithNoEvents() {
@@ -95,8 +99,9 @@ public class TestFixtures {
     public static CreateEventDto testCreateEventDto = createCreateEventDto(normalUser, "title1", "a description", parkWithEvents);
     public static Event testEvent = createEvent(normalUser, "title1", "a description", parkWithEvents);
 
+
     public static Event createEvent(User creator, String title, String description, Park park) {
-        Event event = Event.builder()
+        Event event = Event.builder().version(0L)
                 .creator(creator)
                 .title(title)
                 .description(description)
@@ -132,7 +137,7 @@ public class TestFixtures {
 
     private static EventTag createEventTag(String eventTagName, Event... events) {
         Set<Event> eventSet = new HashSet<>(Arrays.asList(events));
-        return EventTag.builder()
+        return EventTag.builder().version(0L)
                 .name(eventTagName)
                 .events(eventSet)
                 .build();
@@ -179,22 +184,23 @@ public class TestFixtures {
         return mediaList;
     }
 
-    public static File createTestFile(String fileName) {
-        return File.builder()
-                .id(UUID.randomUUID().toString())
+    public static File createTestFile(String fileName, User username) {
+        return File.builder().version(0L)
+                .id(UUID.randomUUID().toString())  // Assign a unique ID
                 .filename(fileName)
+                .user(username)  // Assign the admin user as the creator
                 .externalId(UUID.randomUUID().toString())  // Assign a unique external ID
                 .build();
     }
 
     private static Event createEvent(String title) {
-        Event event = Event.builder()
+        Event event = Event.builder().version(0L)
                 .title(title)
                 .description("Runaway Park")
                 .startTS(LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.MINUTES))
                 .endTS(LocalDateTime.now().plusHours(2).truncatedTo(ChronoUnit.MINUTES))
                 .park(parkAwesome)
-                .creator(adminUser)
+                .creator(simpleUser)
                 .joinedUsers(createUserList())
                 .build();
         List<EventTag> eventTags = createEventTagListForAnEvent(event);
@@ -231,6 +237,7 @@ public class TestFixtures {
 
     private static Park alternateParkWithOutEvents(String parkName) {
         return Park.builder()
+                .version(0L)
                 .name(parkName)
                 .description("Updated Description")
                 .address(alternateParkAddress)
@@ -240,15 +247,18 @@ public class TestFixtures {
 
     private static Park parkWithMedia(String parkName) {
         return Park.builder()
+                .version(0L)
+                .id(UUID.randomUUID().toString())
                 .name(parkName)
                 .description("Updated Description")
                 .address(alternateParkAddress)
-                .media(new ArrayList<>(Arrays.asList(file, file2)))
+                .media(createMediaList())
                 .build();
     }
 
     private static Park parkWithOutEvents(String parkName) {
         return Park.builder()
+                .version(0L)
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
@@ -282,6 +292,7 @@ public class TestFixtures {
 
     private static Park createParkWithEvents(String parkName) {
         return Park.builder()
+                .version(0L)
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(alternateParkAddress)
@@ -291,6 +302,7 @@ public class TestFixtures {
 
     private static Park createAlternateParkWithEventsAndMedia(String parkName) {
         return Park.builder()
+                .version(0L)
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
@@ -302,6 +314,7 @@ public class TestFixtures {
 
     private static Park createParkWithEventsAndMedia(String parkName) {
         return Park.builder()
+                .version(0L)
                 .name(parkName)
                 .description("Park for Everybody")
                 .address(parkAddress)
@@ -364,9 +377,23 @@ public class TestFixtures {
 
     }
 
+    private static User createSimpleUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
+        return User.builder()
+                .version(0L)
+                .salutation(salutation)
+                .gender(gender)
+                .userName(userName)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password("eyJhbGciOiJIUzI1NiIsInR5cCI32!")
+                .role(Role.ADMIN)
+                .build();
+    }
+
     private static User createUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return User.builder()
-                .id(UUID.randomUUID().toString())
+                .version(0L)
                 .salutation(salutation)
                 .gender(gender)
                 .userName(userName)
@@ -383,6 +410,7 @@ public class TestFixtures {
     private static User createAlternateUser(String userName, String email, String firstName, String lastName, Role role, Gender gender, String salutation) {
         return User.builder()
                 .id(UUID.randomUUID().toString())
+                .version(0L)
                 .salutation(salutation)
                 .gender(gender)
                 .userName(userName)
@@ -479,7 +507,7 @@ public class TestFixtures {
 
 
     public static Park parkWithFiles() {
-        Park park = Park.builder().build();
+        Park park = Park.builder().version(0L).build();
         park.setId(UUID.randomUUID().toString());
         park.setName("Test Park with Files");
         park.setDescription("This is a park with files.");
@@ -495,6 +523,7 @@ public class TestFixtures {
         List<File> files = new ArrayList<>();
         File file1 = File.builder()
                 .externalId(UUID.randomUUID().toString())
+                .version(0L)
                 .filename("file1.jpg")
                 .fileType(FileType.PHOTO)
                 .park(park)
@@ -502,6 +531,7 @@ public class TestFixtures {
                 .build();
         File file2 = File.builder()
                 .externalId(UUID.randomUUID().toString())
+                .version(0L)
                 .filename("file2.jpg")
                 .fileType(FileType.PHOTO)
                 .park(park)
@@ -513,7 +543,7 @@ public class TestFixtures {
     }
 
     public static Park parkWithUpdatedFiles() {
-        Park park = Park.builder().build();
+        Park park = Park.builder().version(0L).build();
         park.setId(UUID.randomUUID().toString());
         park.setName("Updated Park with Files");
         park.setDescription("This is an updated park with new files.");

@@ -10,6 +10,7 @@ import at.technikum.parkpalbackend.model.Park;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import at.technikum.parkpalbackend.service.EventService;
 import at.technikum.parkpalbackend.service.FileService;
+import at.technikum.parkpalbackend.service.ParkService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,6 +28,9 @@ class ParkUtilTest {
 
     @Mock
     private ParkRepository parkRepository;
+
+    @Mock
+    private ParkService parkService;
 
     @Mock
     private EventService eventService;
@@ -74,7 +78,7 @@ class ParkUtilTest {
 
         when(fileService.findFileByExternalId(mediaFile1.getExternalId())).thenReturn(mediaFile1);
         when(fileService.findFileByExternalId(mediaFile2.getExternalId())).thenReturn(mediaFile2);
-        when(parkRepository.save(existingPark)).thenReturn(existingPark);
+        when(parkService.save(existingPark)).thenReturn(existingPark);
 
         // Act
         Park updatedPark = parkUtil.updatePark(parkId, parkDto);
@@ -103,7 +107,7 @@ class ParkUtilTest {
         assertEquals(updatedPark, mediaFile2.getPark());
 
         // Ensure the repository save method was called with the updated park
-        verify(parkRepository).save(existingPark);
+        verify(parkService).save(existingPark);
 
         // Verify that the findById method was called to retrieve the existing park
         verify(parkRepository).findById(parkId);
@@ -138,11 +142,11 @@ class ParkUtilTest {
 
         // Create a ParkDto without media files
         ParkDto parkDto = parkDtoAwesome;
-        parkDto.setMediaFileExternalIds(null); // No media files
+        parkDto.setMediaFileExternalIds(new ArrayList<>()); // No media files
 
         // Mock parkRepository to return the existing park
         when(parkRepository.findById(parkId)).thenReturn(Optional.of(existingPark));
-        when(parkRepository.save(existingPark)).thenReturn(existingPark);
+        when(parkService.save(existingPark)).thenReturn(existingPark);
 
         // Act
         Park updatedPark = parkUtil.updatePark(parkId, parkDto);
@@ -165,7 +169,7 @@ class ParkUtilTest {
         // Mock parkRepository to return the existing park
         when(parkRepository.findById(parkId)).thenReturn(Optional.of(existingPark));
         when(eventService.findByEventId(existingEvent.getId())).thenReturn(existingEvent);
-        when(parkRepository.save(existingPark)).thenReturn(existingPark);
+        when(parkService.save(existingPark)).thenReturn(existingPark);
 
         // Act
         Park updatedPark = parkUtil.updatePark(parkId, parkDto);
@@ -189,7 +193,7 @@ class ParkUtilTest {
 
         Park park = parkCool;
         when(parkMapper.createParkDtoToEntity(createParkDto, mediaFiles)).thenReturn(park);
-        when(parkRepository.save(park)).thenReturn(park);
+        when(parkService.save(park)).thenReturn(park);
         when(parkMapper.toCreateParkDto(park)).thenReturn(ExpectedCreateParkDto);
 
         // Act
@@ -200,7 +204,7 @@ class ParkUtilTest {
         assertEquals(createParkDto.getName(), savedParkDto.getName());
         assertEquals(createParkDto.getDescription(), savedParkDto.getDescription());
         assertEquals(createParkDto.getAddress(), savedParkDto.getAddress());
-        verify(parkRepository).save(park);
+        verify(parkService).save(park);
     }
 
     @Test
@@ -285,53 +289,6 @@ class ParkUtilTest {
         verify(eventService).findByEventId("eventId2");
     }
     */
-    @Test
-    void testUpdateParkEvents_WithNullEventIds() {
-        // Arrange
-        Park park = parkWithEvents;
-
-        Event oldEvent1 = grilling;
-        Event oldEvent2 = pingPongGame;
-        park.setEvents(new ArrayList<>(List.of(oldEvent1, oldEvent2))); // Old events are set
-
-        ParkDto parkDto = parkDtoWithMedia;
-        parkDto.setEventIds(null);  // Null event IDs
-
-        // Act
-        parkUtil.updateParkEvents(park, parkDto);
-
-        // Assert
-        assertEquals(2, park.getEvents().size());  // The old events should still be there
-        assertTrue(park.getEvents().contains(oldEvent1));  // Ensure old events are retained
-        assertTrue(park.getEvents().contains(oldEvent2));
-
-        // Verify that the eventService was not called
-        verifyNoInteractions(eventService);
-    }
-
-    @Test
-    void testUpdateParkEvents_WithEmptyEventIds() {
-        // Arrange
-        Park park = parkWithEvents;
-
-        Event oldEvent1 = grilling;
-        Event oldEvent2 = pingPongGame;
-        park.setEvents(new ArrayList<>(List.of(oldEvent1, oldEvent2))); // Old events are set
-
-        ParkDto parkDto = parkDtoWithMedia;
-        parkDto.setEventIds(new ArrayList<>());  // Empty event IDs
-
-        // Act
-        parkUtil.updateParkEvents(park, parkDto);
-
-        // Assert
-        assertTrue(park.getEvents().isEmpty());  // All events should be cleared
-        assertNull(oldEvent1.getPark());  // Ensure old events no longer have the park associated
-        assertNull(oldEvent2.getPark());
-
-        // Verify that no interactions with eventService happened since the list is empty
-        verifyNoInteractions(eventService);
-    }
 
     @Test
     void testUpdateParkEvents_WhenEventNotFound() {

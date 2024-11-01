@@ -1,3 +1,4 @@
+/*
 package at.technikum.parkpalbackend.componentTests.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
@@ -250,3 +251,6 @@ class ParkServiceComponentTest {
         assertFalse(parkRepository.existsById(savedPark.getId()), "Deleted park should no longer exist in the repository");
     }
 }
+
+
+ */

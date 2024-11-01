@@ -24,10 +24,13 @@ import java.util.List;
 @Builder
 
 @Entity
-@Table(name = "user", uniqueConstraints = {
-    @UniqueConstraint(name = "unique_username", columnNames = "user_name"),
-    @UniqueConstraint(name = "unique_email", columnNames = "email")
-})
+@Table(
+    name = "pal",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "unique_username", columnNames = "user_name"),
+        @UniqueConstraint(name = "unique_email", columnNames = "email")
+    }
+)
 public class User {
 
     @Id
@@ -49,7 +52,7 @@ public class User {
 
     private String salutation;
 
-    @Column(unique = true, name = "user_name")
+    @Column(name = "user_name")
     private String userName;
 
     private String firstName;
@@ -61,12 +64,12 @@ public class User {
     private String email;
 
     @Pattern(regexp = "^(?=.*[a-z])" +
-            "(?=.*\\d)" +
-            "(?=.*[A-Z])" +
-            "(?=.*[@#$%^&+=!])" +
-            "(?=\\S+$).+$",
-            message = "Password must contain at least one lowercase letter & one uppercase letter."
-                    + "One number and one special character")
+        "(?=.*\\d)" +
+        "(?=.*[A-Z])" +
+        "(?=.*[@#$%^&+=!])" +
+        "(?=\\S+$).+$",
+        message = "Password must contain at least one lowercase letter & one uppercase letter."
+            + "One number and one special character")
     @Size(min = 12, message = "Password must be at least 12 characters long")
     private String password;
 
@@ -80,7 +83,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(mappedBy = "joinedUsers",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(mappedBy = "joinedUsers", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Builder.Default
     @ToString.Exclude
     @JsonIgnore

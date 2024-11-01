@@ -121,7 +121,9 @@ class EventUtilTest {
         EventDto eventDto = eventDtoWithoutMedia;
         eventDto.setParkId(parkId2);
         User newUser1 = adminUser;
+        newUser1.setId(UUID.randomUUID().toString());
         User newUser2 = adminUser2;
+        newUser2.setId(UUID.randomUUID().toString());
         List<String> newJoinedUserIds = Arrays.asList(newUser1.getId(), newUser2.getId());
         eventDto.setJoinedUserIds(newJoinedUserIds);
 
