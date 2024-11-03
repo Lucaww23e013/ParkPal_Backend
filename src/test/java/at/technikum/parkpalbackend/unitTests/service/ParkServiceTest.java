@@ -2,6 +2,7 @@ package at.technikum.parkpalbackend.unitTests.service;
 
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Park;
+import at.technikum.parkpalbackend.persistence.EventRepository;
 import at.technikum.parkpalbackend.persistence.FileRepository;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import at.technikum.parkpalbackend.service.ParkService;
@@ -27,6 +28,9 @@ class ParkServiceTest {
 
     @Mock
     private ParkRepository parkRepository;
+
+    @Mock
+    private EventRepository eventRepository;
 
     @Mock
     private FileRepository fileRepository;

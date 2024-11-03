@@ -3,6 +3,7 @@ package at.technikum.parkpalbackend.service;
 import at.technikum.parkpalbackend.exception.EntityAlreadyExistsException;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.model.Park;
+import at.technikum.parkpalbackend.persistence.EventRepository;
 import at.technikum.parkpalbackend.persistence.ParkRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,11 @@ import java.util.List;
 @Service
 public class ParkService {
     private final ParkRepository parkRepository;
+    private final EventRepository eventRepository;
 
-    public ParkService(ParkRepository parkRepository) {
+    public ParkService(ParkRepository parkRepository, EventRepository eventRepository) {
         this.parkRepository = parkRepository;
+        this.eventRepository = eventRepository;
     }
 
     public List<Park> findAllParks() {
@@ -50,10 +53,13 @@ public class ParkService {
         if (parkId == null) {
             throw new IllegalArgumentException("The park ID cannot be null");
         }
-
         Park park = parkRepository.findById(parkId).orElseThrow(
                 () -> new EntityNotFoundException("Park with id %s not found "
                         .formatted(parkId)));
+
+        // Delete related events first
+        eventRepository.deleteAll(park.getEvents());
+
         parkRepository.delete(park);
         return park;
     }
