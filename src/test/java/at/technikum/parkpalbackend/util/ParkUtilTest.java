@@ -2,6 +2,7 @@ package at.technikum.parkpalbackend.util;
 
 import at.technikum.parkpalbackend.dto.parkdtos.CreateParkDto;
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
+import at.technikum.parkpalbackend.exception.EntityAlreadyExistsException;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
 import at.technikum.parkpalbackend.mapper.ParkMapper;
 import at.technikum.parkpalbackend.model.Event;
@@ -215,12 +216,12 @@ class ParkUtilTest {
         when(parkRepository.existsByName(createParkDto.getName())).thenReturn(true);
 
         // Act & Assert
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+        EntityAlreadyExistsException exception = assertThrows(EntityAlreadyExistsException.class, () -> {
             parkUtil.saveCreatePark(createParkDto);
         });
 
         // Verify exception message
-        assertEquals("A park with the name 'Cool Park' already exists.", exception.getMessage());
+        assertEquals("A park with the name Cool Park already exists.", exception.getMessage());
         verify(parkRepository).existsByName(createParkDto.getName());
         verify(parkRepository, never()).save(any());
     }

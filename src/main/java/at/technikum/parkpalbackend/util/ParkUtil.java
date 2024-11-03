@@ -14,7 +14,6 @@ import at.technikum.parkpalbackend.service.FileService;
 import at.technikum.parkpalbackend.service.ParkService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,11 +42,6 @@ public class ParkUtil {
 
     public CreateParkDto saveCreatePark(CreateParkDto createParkDto) {
         if (parkRepository.existsByName(createParkDto.getName())) {
-            throw new EntityNotFoundException(
-                "A park with the name '" + createParkDto.getName() + "' already exists.");
-        }
-
-        if (parkRepository.existsByName(createParkDto.getName())) {
             throw new EntityAlreadyExistsException("A park with the name " +
                 createParkDto.getName() + " already exists.");
         }
@@ -70,7 +64,7 @@ public class ParkUtil {
         return parkMapper.toCreateParkDto(park);
     }
 
-    @Transactional
+    //@Transactional
     public Park updatePark(String parkId, ParkDto parkDto) {
         Park existingPark = parkRepository.findById(parkId)
             .orElseThrow(() ->

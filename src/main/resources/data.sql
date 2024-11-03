@@ -2,7 +2,7 @@
 USE spring;
 
 INSERT INTO country (country_Id, name, iso2Code)
-VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8e', 'Aruba', 'AW'),
+VALUES ('3a756548-f66b-45d4-935c-3ee5bdb6bf8f', 'Aruba', 'AW'),
        ('b029f0b9-c983-48dd-a19b-043065c39581', 'Afghanistan', 'AF'),
        ('de27ae30-4c40-4421-bc89-c839bbef360f', 'Angola', 'AO'),
        ('f2c2c95b-f12f-4ccb-b98f-2c1f38ab75d2', 'Anguilla', 'AI'),
