@@ -2,10 +2,7 @@ package at.technikum.parkpalbackend.IntegrationTests.util;
 
 import at.technikum.parkpalbackend.dto.parkdtos.ParkDto;
 import at.technikum.parkpalbackend.exception.EntityNotFoundException;
-import at.technikum.parkpalbackend.model.Address;
-import at.technikum.parkpalbackend.model.Country;
-import at.technikum.parkpalbackend.model.Event;
-import at.technikum.parkpalbackend.model.Park;
+import at.technikum.parkpalbackend.model.*;
 import at.technikum.parkpalbackend.persistence.*;
 import at.technikum.parkpalbackend.service.*;
 import at.technikum.parkpalbackend.util.ParkUtil;
@@ -33,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 @Transactional
-class ParkIntegrationTest {
+class AParkIntegrationTest {
 
     @MockBean
     private MinioService minioService;
@@ -103,36 +100,36 @@ class ParkIntegrationTest {
             .build();
     }
 
-//    @Test
-//    public void testUpdatePark_UpdateMediaFiles_ShouldReplaceOldMedia() {
-//        //Arrange
-//        User user2 = userService.save(simpleUser);
-//
-//        Address address = parkAddress;
-//        address.setCountry(country);
-//
-//        File parkFile = file;
-//        parkFile.setUser(user2);
-//        parkFile = fileService.save(parkFile);
-//
-//        File alternateParkFile = file2;
-//        alternateParkFile.setUser(user2);
-//        alternateParkFile = fileService.save(alternateParkFile);
-//
-//        // Update with new media
-//        ParkDto initialDto = sampleParkDto;
-//        initialDto.setName("Unique Park Name 1"); // Ensure unique name
-//        initialDto.setAddress(address);
-//        initialDto.setMediaFileExternalIds(List.of(alternateParkFile.getExternalId(), parkFile.getExternalId()));
-//
-//        // Act: Apply the update
-//        Park finalUpdatedPark = parkUtil.updatePark(park.getId(), initialDto);
-//
-//        // Assert
-//        assertEquals(2, finalUpdatedPark.getMedia().size());
-//        assertTrue(finalUpdatedPark.getMedia().contains(alternateParkFile));
-//        assertTrue(finalUpdatedPark.getMedia().contains(parkFile));
-//    }
+    @Test
+    public void testUpdatePark_UpdateMediaFiles_ShouldReplaceOldMedia() {
+        //Arrange
+        User user2 = userService.save(simpleUser);
+
+        Address address = parkAddress;
+        address.setCountry(country);
+
+        File parkFile = file;
+        parkFile.setUser(user2);
+        parkFile = fileService.save(parkFile);
+
+        File alternateParkFile = file2;
+        alternateParkFile.setUser(user2);
+        alternateParkFile = fileService.save(alternateParkFile);
+
+        // Update with new media
+        ParkDto initialDto = sampleParkDto;
+        initialDto.setName("Unique Park Name 1"); // Ensure unique name
+        initialDto.setAddress(address);
+        initialDto.setMediaFileExternalIds(List.of(alternateParkFile.getExternalId(), parkFile.getExternalId()));
+
+        // Act: Apply the update
+        Park finalUpdatedPark = parkUtil.updatePark(park.getId(), initialDto);
+
+        // Assert
+        assertEquals(2, finalUpdatedPark.getMedia().size());
+        assertTrue(finalUpdatedPark.getMedia().contains(alternateParkFile));
+        assertTrue(finalUpdatedPark.getMedia().contains(parkFile));
+    }
 
     @Test
     void testUpdatePark_AddEvents_ShouldAssociateEvents() {
